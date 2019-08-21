@@ -85,7 +85,6 @@
 				F2F284B46A4E345834F76D4D /* Pods-MovieFinderTests.debug.xcconfig */,
 				DA7B79630A1EEDB393A3AF07 /* Pods-MovieFinderTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
