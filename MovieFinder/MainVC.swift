@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainVC.swift
 //  MovieFinder
 //
 //  Created by Yosif Iliev on 21.08.19.
@@ -8,8 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainVC: UIViewController {
 
+    let mainView = MainView()
+    override func loadView() { view = mainView }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
