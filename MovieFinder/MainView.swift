@@ -10,19 +10,40 @@ import UIKit
 
 class MainView: UIView {
 
+    var backgroundView: BackgroundMoviesView!
+    
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        createSubviews()
+        setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        createSubviews()
+        setup()
     }
     
-    private func createSubviews() {
+    private func setup() {
         
-        backgroundColor = .orange
+        setupBackgroundView()
     }
 
+    
+    // MARK: - Setup Views
+    
+    private func setupBackgroundView() {
+        
+        backgroundView = BackgroundMoviesView(frame: frame)
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(backgroundView)
+        backgroundView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        backgroundView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        backgroundView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        if let image = UIImage(named: "Background") {
+            backgroundView.setImage(image: image)
+        }
+    }
+    
 }
