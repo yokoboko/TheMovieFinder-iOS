@@ -111,13 +111,12 @@
 		F10D9555230D302B00D48239 /* MovieFinder */ = {
 			isa = PBXGroup;
 			children = (
-				F10D9556230D302B00D48239 /* AppDelegate.swift */,
-				F10D9558230D302B00D48239 /* ViewController.swift */,
-				F10D955A230D302B00D48239 /* Main.storyboard */,
-				F10D9560230D303500D48239 /* Assets.xcassets */,
-				F10D9562230D303500D48239 /* LaunchScreen.storyboard */,
-				F10D9565230D303500D48239 /* Info.plist */,
-				F10D955D230D302B00D48239 /* MovieFinder.xcdatamodeld */,
+				F10D9579230D580A00D48239 /* Application */,
+				F10D957A230D583F00D48239 /* Assets */,
+				F10D957E230D589C00D48239 /* Networking */,
+				F10D957B230D585200D48239 /* Model */,
+				F10D957C230D585900D48239 /* View */,
+				F10D957D230D586100D48239 /* ViewController */,
 			);
 			path = MovieFinder;
 			sourceTree = "<group>";
@@ -129,6 +128,55 @@
 				F10D9570230D303500D48239 /* Info.plist */,
 			);
 			path = MovieFinderTests;
+			sourceTree = "<group>";
+		};
+		F10D9579230D580A00D48239 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				F10D9565230D303500D48239 /* Info.plist */,
+				F10D9556230D302B00D48239 /* AppDelegate.swift */,
+				F10D9562230D303500D48239 /* LaunchScreen.storyboard */,
+				F10D955A230D302B00D48239 /* Main.storyboard */,
+			);
+			name = Application;
+			sourceTree = "<group>";
+		};
+		F10D957A230D583F00D48239 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F10D955D230D302B00D48239 /* MovieFinder.xcdatamodeld */,
+				F10D9560230D303500D48239 /* Assets.xcassets */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		F10D957B230D585200D48239 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		F10D957C230D585900D48239 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		F10D957D230D586100D48239 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F10D9558230D302B00D48239 /* ViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		F10D957E230D589C00D48239 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
