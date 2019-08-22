@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  MovieFinder
+
+  Created by Yosif Iliev on 22.08.19.
+  Copyright © 2019 Yosif Iliev. All rights reserved.
+*/
+
+"movies" = "Movies";
+"tv" = "TV Shows";
+"favourites" = "Favourites";
+
+"popular" = "Popular";
+"top_rated" = "Top Rated";
+"upcoming" = "Upcoming";
+"trending" = "Trending";
+"on_the_air" = "On The Air";

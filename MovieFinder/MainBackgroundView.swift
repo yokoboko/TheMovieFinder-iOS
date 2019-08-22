@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Nuke
 
 class BackgroundMoviesView: UIView {
     
@@ -38,8 +39,8 @@ class BackgroundMoviesView: UIView {
         addSubview(imageView)
         imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 3).isActive = true
-        imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 3).isActive = true
+        imageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
+        imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 2).isActive = true
 
         let blurEffect = UIBlurEffect(style: .regular)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -82,6 +83,19 @@ class BackgroundMoviesView: UIView {
                                   animations: {
                                     self.imageView.image = saturated
                 }, completion: nil)
+            }
+        }
+    }
+    
+    private weak var imageTask: ImageTask?
+    
+    func loadImage(url: URL) {
+        
+        imageTask?.cancel()
+        imageTask = ImagePipeline.shared.loadImage(with: url, progress: nil) { [weak self] (imageResponse, error) in
+            guard let self = self else { return }
+            if let imageResponse = imageResponse {
+                self.setImage(image: imageResponse.image)
             }
         }
     }
