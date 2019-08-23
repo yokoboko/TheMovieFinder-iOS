@@ -32,6 +32,7 @@ class MainVC: UIViewController {
         mainView.sectionLabel.text = "movies".localized
         mainView.filterLabel.text = "top_rated".localized
         
+        mainView.scrollToTopBtn.alpha = 0.5
         mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
         mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
         mainView.filtersBtn.addTarget(self, action: #selector(filtersAction), for: .touchUpInside)
@@ -52,7 +53,9 @@ class MainVC: UIViewController {
 extension MainVC {
     
     @objc private func scrollToTopAction(_ sender: Any) {
-        
+        if mainView.collectionView.contentOffset.x >= mainView.collectionView.bounds.width {
+            mainView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        }
     }
     
     @objc private func toggleLayoutAction(_ sender: Any) {
@@ -60,7 +63,7 @@ extension MainVC {
     }
     
     @objc private func filtersAction(_ sender: Any) {
-        
+
     }
 }
 
@@ -75,6 +78,14 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if mainView.collectionView.contentOffset.x >= mainView.collectionView.bounds.width {
+              mainView.scrollToTopBtn.alpha = 1
+        } else {
+              mainView.scrollToTopBtn.alpha = 0.5
+        }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
