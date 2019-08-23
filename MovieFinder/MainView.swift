@@ -36,7 +36,7 @@ class MainView: UIView {
         super.init(coder: aDecoder)
         setupViews()
     }
-    
+
     private func setupViews() {
         
         setupBackgroundView()
@@ -46,7 +46,8 @@ class MainView: UIView {
     }
 }
 
-    // MARK: - Setup Views
+// MARK: - Setup Views
+
 extension MainView {
     
     private func setupBackgroundView() {
@@ -69,7 +70,7 @@ extension MainView {
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(sectionLabel)
         sectionLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        sectionLabel.topAnchor.constraint(equalTo: safeTopAnchor, constant: 16).isActive = true
+        sectionLabel.topAnchor.constraint(equalTo: safeTopAnchor, constant: 20).isActive = true
         
         filterLabel = UILabel(frame: .zero)
         filterLabel.textColor = UIColor.movieFinder.tertiery

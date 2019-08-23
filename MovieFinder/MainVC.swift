@@ -36,6 +36,8 @@ class MainVC: UIViewController {
         mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
         mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
         mainView.filtersBtn.addTarget(self, action: #selector(filtersAction), for: .touchUpInside)
+        
+        print("Has notch: \(UIDevice.current.hasNotch)")
     }
     
     override func loadView() {
