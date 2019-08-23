@@ -52,9 +52,7 @@ class MainView: UIView {
         backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         backgroundView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         backgroundView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        if let image = UIImage(named: "Background") {
-            backgroundView.setImage(image: image)
-        }
+        //if let image = UIImage(named: "Background") { backgroundView.setImage(image: image) } // Load default background
     }
     
     private func setupSectionAndFilterView() {
