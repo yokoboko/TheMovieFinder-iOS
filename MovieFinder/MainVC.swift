@@ -31,6 +31,10 @@ class MainVC: UIViewController {
         
         mainView.sectionLabel.text = "movies".localized
         mainView.filterLabel.text = "top_rated".localized
+        
+        mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
+        mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
+        mainView.filtersBtn.addTarget(self, action: #selector(filtersAction), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -43,7 +47,25 @@ class MainVC: UIViewController {
     }
 }
 
+// MARK: - Actions
 
+extension MainVC {
+    
+    @objc private func scrollToTopAction(_ sender: Any) {
+        
+    }
+    
+    @objc private func toggleLayoutAction(_ sender: Any) {
+        mainView.collectionViewToggleLayout()
+    }
+    
+    @objc private func filtersAction(_ sender: Any) {
+        
+    }
+}
+
+
+// MARK: - Collection View Delegate
 
 extension MainVC: UICollectionViewDelegateFlowLayout {
     

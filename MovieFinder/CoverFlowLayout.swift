@@ -126,5 +126,13 @@ class CoverFlowLayout: UICollectionViewFlowLayout {
         
         return CGPoint(x: newHorizontalOffset, y: proposedContentOffset.y)
     }
+    
+    func updateFocused() {
+        
+        guard let collectionView = collectionView else { return }
+        let pageWidth = itemSize.width + minimumLineSpacing
+        let approximatePage = collectionView.contentOffset.x / pageWidth
+        delegate?.coverFlowFocused(pageIndex: Int(approximatePage))
+    }
 }
 

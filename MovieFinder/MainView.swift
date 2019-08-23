@@ -13,6 +13,11 @@ class MainView: UIView {
     var backgroundView: BackgroundMoviesView!
     var sectionLabel: UILabel!
     var filterLabel: UILabel!
+    var scrollToTopBtn: UIButton!
+    var toggleLayoutBtn: UIButton!
+    var filtersBtn: UIButton!
+    private let buttonMargin: CGFloat = 40.0
+    
     var collectionView: UICollectionView!
     var coverFlowLayout = CoverFlowLayout()
     private var flowLayout = UICollectionViewFlowLayout()
@@ -37,11 +42,12 @@ class MainView: UIView {
         setupBackgroundView()
         setupSectionAndFilterView()
         setupCollectionView()
+        setupButtons()
     }
+}
 
- 
-    
     // MARK: - Setup Views
+extension MainView {
     
     private func setupBackgroundView() {
         
@@ -99,8 +105,35 @@ class MainView: UIView {
         collectionView.register(PosterBigCell.self, forCellWithReuseIdentifier: PosterBigCell.reuseIdentifier)
     }
     
+    private func setupButtons() {
+        
+        scrollToTopBtn = UIButton(type: .custom)
+        scrollToTopBtn.translatesAutoresizingMaskIntoConstraints = false
+        scrollToTopBtn.setImage(UIImage(named: "btn_scroll_to_top"), for: .normal)
+        addSubview(scrollToTopBtn)
+        scrollToTopBtn.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: buttonMargin - 13).isActive = true
+        scrollToTopBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
+        
+        toggleLayoutBtn = UIButton(type: .custom)
+        toggleLayoutBtn.translatesAutoresizingMaskIntoConstraints = false
+        toggleLayoutBtn.setImage(UIImage(named: "btn_layout_coverflow"), for: .normal)
+        addSubview(toggleLayoutBtn)
+        toggleLayoutBtn.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        toggleLayoutBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
+        
+        filtersBtn = UIButton(type: .custom)
+        filtersBtn.translatesAutoresizingMaskIntoConstraints = false
+        filtersBtn.setImage(UIImage(named: "btn_filters"), for: .normal)
+        addSubview(filtersBtn)
+        filtersBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -buttonMargin + 16).isActive = true
+        filtersBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
+    }
     
-    // MARK: - Cell sizes and Toggle Layout
+}
+
+// MARK: - Cell sizes and Toggle Layout
+
+extension MainView {
     
     // Call on viewDidLayoutSubviews
     func updateItemSize() {
@@ -114,6 +147,9 @@ class MainView: UIView {
         let visibleItems = collectionView.indexPathsForVisibleItems.sorted { $0.item < $1.item } //.compactMap { collectionView.cellForItem(at: $0) }
         
         isCoverflowMode.toggle()
+        
+        toggleLayoutBtn.setImage(UIImage(named: isCoverflowMode ? "btn_layout_coverflow" : "btn_layout_flow"), for: .normal)
+        
         collectionView.setCollectionViewLayout(isCoverflowMode ? coverFlowLayout : flowLayout, animated: false)
         collectionView.decelerationRate = isCoverflowMode ? .fast : .normal
         
@@ -124,6 +160,11 @@ class MainView: UIView {
             if !isCoverflowMode, collectionView.contentOffset.x > collectionView.contentOffset.x - flowLayoutHorizontalInsets - 0.5 {
                 collectionView.contentOffset.x -= flowLayoutHorizontalInsets  - 0.5
             }
+        }
+        
+        if isCoverflowMode {
+            collectionView.reloadData()
+            coverFlowLayout.updateFocused()
         }
     }
     
