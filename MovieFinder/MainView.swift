@@ -21,11 +21,15 @@ class MainView: UIView {
     var collectionView: UICollectionView!
     var coverFlowLayout = CoverFlowLayout()
     private var flowLayout = UICollectionViewFlowLayout()
+    
     private let coverFlowLayoutHorizontalInsets: CGFloat = 40.0
     private let flowLayoutHorizontalInsets: CGFloat = 24.0
-    
-    private let posterRatio: CGFloat = 24 / 36 //24.3 / 36
+    private let posterRatio: CGFloat = 24 / 36
     private var isCoverflowMode = true
+    
+    let scrollToTopBtnAlpha: CGFloat = 0.5
+    
+    private var logoImageView: UIImageView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,19 +40,21 @@ class MainView: UIView {
         super.init(coder: aDecoder)
         setupViews()
     }
-
-    private func setupViews() {
-        
-        setupBackgroundView()
-        setupSectionAndFilterView()
-        setupCollectionView()
-        setupButtons()
-    }
 }
 
 // MARK: - Setup Views
 
 extension MainView {
+    
+    private func setupViews() {
+        
+        self.backgroundColor = .black
+        setupBackgroundView()
+        setupSectionAndFilterView()
+        setupCollectionView()
+        setupButtons()
+        hideViewsAndShowLogoWhileLoadingOnAppLaunch()
+    }
     
     private func setupBackgroundView() {
         
@@ -59,7 +65,6 @@ extension MainView {
         backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         backgroundView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         backgroundView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        //if let image = UIImage(named: "Background") { backgroundView.setImage(image: image) } // Load default background
     }
     
     private func setupSectionAndFilterView() {
@@ -130,7 +135,88 @@ extension MainView {
         filtersBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
     }
     
+    
 }
+
+// MARK: - Animations
+
+extension MainView {
+ 
+    private func hideViewsAndShowLogoWhileLoadingOnAppLaunch() {
+        
+        guard logoImageView == nil else { return }
+        
+        self.isUserInteractionEnabled = false
+        
+        logoImageView = UIImageView(image: UIImage(named: "launchscreen_logo"))
+        if let logoImageView = logoImageView {
+            logoImageView.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(logoImageView)
+            logoImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+            logoImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -32).isActive = true
+        }
+        
+        backgroundView.alpha = 0
+        sectionLabel.alpha = 0
+        filterLabel.alpha = 0
+        collectionView.alpha = 0
+        scrollToTopBtn.alpha = 0
+        toggleLayoutBtn.alpha = 0
+        filtersBtn.alpha = 0
+    }
+    
+    func showViewsAfterLoadingDataOnAppLaunch() {
+        
+        guard let logoImageView = logoImageView  else { return }
+        
+        UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: {
+            logoImageView.alpha = 0
+            logoImageView.transform = CGAffineTransform(translationX: 0, y: -64)
+        }) { (success) in
+            self.removeLogo()
+        }
+        
+        sectionLabel.transform = CGAffineTransform(translationX: 0, y: 32)
+        filterLabel.transform = CGAffineTransform(translationX: 0, y: 32)
+        collectionView.transform = CGAffineTransform(translationX: 0, y: 56)
+        scrollToTopBtn.transform = CGAffineTransform(translationX: 0, y: 74)
+        toggleLayoutBtn.transform = CGAffineTransform(translationX: 0, y: 74)
+        filtersBtn.transform = CGAffineTransform(translationX: 0, y: 74)
+        
+        UIView.animate(withDuration: 0.8, delay: 0.6, options: [.curveEaseOut], animations: {
+            self.sectionLabel.alpha = 1
+            self.sectionLabel.transform = .identity
+            self.filterLabel.alpha = 1
+            self.filterLabel.transform = .identity
+            self.collectionView.alpha = 1
+            self.collectionView.transform = .identity
+            self.scrollToTopBtn.alpha = self.scrollToTopBtnAlpha
+            self.scrollToTopBtn.transform = .identity
+            self.toggleLayoutBtn.alpha = 1
+            self.toggleLayoutBtn.transform = .identity
+            self.filtersBtn.alpha = 1
+            self.filtersBtn.transform = .identity
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 1.2, delay: 1, options: [.curveEaseOut], animations: {
+            self.backgroundView.alpha = 1
+        }) { (success) in
+            self.isUserInteractionEnabled = true
+        }
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { self.hideViewsAndShowLogoWhileLoadingOnAppLaunch() }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.showViewsAfterLoadingDataOnAppLaunch() }
+    }
+    
+    private func removeLogo() {
+        
+        guard let logoImageView = logoImageView  else { return }
+        willRemoveSubview(logoImageView)
+        self.logoImageView = nil
+    }
+}
+
+
 
 // MARK: - Cell sizes and Toggle Layout
 

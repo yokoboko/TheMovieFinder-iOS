@@ -36,6 +36,7 @@
 		F10D95AF230D7EA000D48239 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D95AE230D7EA000D48239 /* GradientView.swift */; };
 		F10D95B2230D7EDC00D48239 /* UIImage+Saturation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */; };
 		F10D95B4230D819F00D48239 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F10D95B3230D819F00D48239 /* Application.xcassets */; };
+		F1669D9D2313D80F00ADC675 /* GenresData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1669D9C2313D80F00ADC675 /* GenresData.swift */; };
 		F1907EFF231014780097E9DB /* UIDevice+Notch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1907EFE231014770097E9DB /* UIDevice+Notch.swift */; };
 		F1A14658230E88FF00A874DA /* MovieDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A14657230E88FF00A874DA /* MovieDataSource.swift */; };
 		F1A1465D230E8E1000A874DA /* PosterBigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A1465C230E8E1000A874DA /* PosterBigCell.swift */; };
@@ -95,6 +96,7 @@
 		F10D95AE230D7EA000D48239 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Saturation.swift"; sourceTree = "<group>"; };
 		F10D95B3230D819F00D48239 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
+		F1669D9C2313D80F00ADC675 /* GenresData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenresData.swift; sourceTree = "<group>"; };
 		F1907EFE231014770097E9DB /* UIDevice+Notch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Notch.swift"; sourceTree = "<group>"; };
 		F1A14657230E88FF00A874DA /* MovieDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDataSource.swift; sourceTree = "<group>"; };
 		F1A1465C230E8E1000A874DA /* PosterBigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterBigCell.swift; sourceTree = "<group>"; };
@@ -325,8 +327,9 @@
 		F1A14659230E8DB600A874DA /* Data Source */ = {
 			isa = PBXGroup;
 			children = (
-				F1A14657230E88FF00A874DA /* MovieDataSource.swift */,
 				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
+				F1A14657230E88FF00A874DA /* MovieDataSource.swift */,
+				F1669D9C2313D80F00ADC675 /* GenresData.swift */,
 			);
 			name = "Data Source";
 			sourceTree = "<group>";
@@ -543,6 +546,7 @@
 				F10D955F230D302B00D48239 /* MovieFinder.xcdatamodeld in Sources */,
 				F1A1465F230E8E8800A874DA /* CoverFlowLayout.swift in Sources */,
 				F10D95B2230D7EDC00D48239 /* UIImage+Saturation.swift in Sources */,
+				F1669D9D2313D80F00ADC675 /* GenresData.swift in Sources */,
 				F10D958F230D6FE100D48239 /* MovieVideosResponse.swift in Sources */,
 				F10D9591230D701900D48239 /* MovieVideo.swift in Sources */,
 				F10D959B230D70F700D48239 /* Genre.swift in Sources */,

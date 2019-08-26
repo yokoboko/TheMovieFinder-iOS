@@ -15,29 +15,11 @@ class MainVC: UIViewController {
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!
     
-   
+    private var dataLoaded = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        mainView.collectionView.delegate = self
-        
-        movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
-        movieDataSource.delegate = self
-        
-        mainView.collectionView.dataSource = movieDataSource
-        mainView.collectionView.prefetchDataSource = movieDataSource
-        mainView.coverFlowLayout.delegate = movieDataSource
-        
-        
-        mainView.sectionLabel.text = "movies".localized
-        mainView.filterLabel.text = "top_rated".localized
-        
-        mainView.scrollToTopBtn.alpha = 0.5
-        mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
-        mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
-        mainView.filtersBtn.addTarget(self, action: #selector(filtersAction), for: .touchUpInside)
-        
-        print("Has notch: \(UIDevice.current.hasNotch)")
+        loadGenres()
     }
     
     override func loadView() {
@@ -48,7 +30,44 @@ class MainVC: UIViewController {
         super.viewDidLayoutSubviews()
         mainView.updateItemSize()
     }
+    
+    private func loadGenres() {
+        
+        GenresData.loadGenres { [weak self] (result) in
+            
+            guard let self = self else { return }
+            switch result {
+            case .success(_): self.setupVC()
+            case .failure(let error):
+                print(error.localizedDescription)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: { self.loadGenres() })
+            }
+        }
+    }
+
+    private func setupVC() {
+        
+        // Header
+        mainView.sectionLabel.text = "movies".localized
+        mainView.filterLabel.text = "top_rated".localized
+        
+        // Default data source(Movies)
+        movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
+        movieDataSource.delegate = self
+        
+        // CollectionView setup
+        mainView.collectionView.delegate = self
+        mainView.collectionView.dataSource = movieDataSource
+        mainView.collectionView.prefetchDataSource = movieDataSource
+        mainView.coverFlowLayout.delegate = movieDataSource
+        
+        // Button actions
+        mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
+        mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
+        mainView.filtersBtn.addTarget(self, action: #selector(filtersAction), for: .touchUpInside)
+    }
 }
+
 
 // MARK: - Actions
 
@@ -86,7 +105,7 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
         if mainView.collectionView.contentOffset.x >= mainView.collectionView.bounds.width {
               mainView.scrollToTopBtn.alpha = 1
         } else {
-              mainView.scrollToTopBtn.alpha = 0.5
+              mainView.scrollToTopBtn.alpha = mainView.scrollToTopBtnAlpha
         }
     }
     
@@ -95,12 +114,22 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
+
 extension MainVC: DataSourceDelegate {
     
-    func movieOnFocus(title: String, voteAverage: Double?, genreIds: [Int]?, imageURL: URL?) {
+    func movieOnFocus(title: String, voteAverage: Double?, genres: [String], imageURL: URL?) {
+        
+        // On App Launch after load data
+        if !dataLoaded {
+            dataLoaded = true
+            mainView.showViewsAfterLoadingDataOnAppLaunch()
+        }
+        
+        // Load background image
         if let imageURL = imageURL {
             mainView.backgroundView.loadImage(url: imageURL)
         }
-        // TODO - show info
+        
+        // TODO - set and show info
     }
 }

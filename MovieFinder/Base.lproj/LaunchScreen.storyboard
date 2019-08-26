@@ -17,7 +17,16 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="launchscreen_logo" translatesAutoresizingMaskIntoConstraints="NO" id="gpy-u5-GA5">
+                                <rect key="frame" x="117" y="326" width="180" height="180"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="gpy-u5-GA5" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="r6N-yb-Vri"/>
+                            <constraint firstItem="gpy-u5-GA5" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-32" id="wIh-XC-VdB"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
@@ -26,4 +35,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="launchscreen_logo" width="180" height="180"/>
+    </resources>
 </document>
