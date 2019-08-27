@@ -75,7 +75,7 @@ class BackgroundMoviesView: UIView {
     
     func setImage(image: UIImage) {
         DispatchQueue.global(qos: .userInteractive).async {
-            let saturated = image.withSaturationAdjustment(byVal: 5)
+            let saturated = image.withSaturationAdjustment(byVal: 4)
             DispatchQueue.main.async {
                 UIView.transition(with: self.imageView,
                                   duration: 0.3,
@@ -92,10 +92,11 @@ class BackgroundMoviesView: UIView {
     func loadImage(url: URL) {
         
         imageTask?.cancel()
-        imageTask = ImagePipeline.shared.loadImage(with: url, progress: nil) { [weak self] (imageResponse, error) in
+        imageTask = ImagePipeline.shared.loadImage(with: url, progress: nil) { [weak self] (result) in
             guard let self = self else { return }
-            if let imageResponse = imageResponse {
-                self.setImage(image: imageResponse.image)
+            switch result {
+            case .success(let imageResponse): self.setImage(image: imageResponse.image)
+            default: break
             }
         }
     }

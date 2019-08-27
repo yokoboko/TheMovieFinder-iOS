@@ -6,7 +6,7 @@ target 'MovieFinder' do
   use_frameworks!
 
   # Pods for MovieFinder
-  pod 'Nuke', '~> 7.0'
+  pod 'Nuke', '~> 8.0'
 
   target 'MovieFinderTests' do
     inherit! :search_paths

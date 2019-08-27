@@ -37,6 +37,7 @@
 		F10D95B2230D7EDC00D48239 /* UIImage+Saturation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */; };
 		F10D95B4230D819F00D48239 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F10D95B3230D819F00D48239 /* Application.xcassets */; };
 		F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */; };
+		F1142B2F23153E5D006D7A5F /* UIPaddedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1142B2E23153E5D006D7A5F /* UIPaddedLabel.swift */; };
 		F1669D9D2313D80F00ADC675 /* GenresData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1669D9C2313D80F00ADC675 /* GenresData.swift */; };
 		F1907EFF231014780097E9DB /* UIDevice+Notch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1907EFE231014770097E9DB /* UIDevice+Notch.swift */; };
 		F1A14658230E88FF00A874DA /* MovieDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A14657230E88FF00A874DA /* MovieDataSource.swift */; };
@@ -98,6 +99,7 @@
 		F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Saturation.swift"; sourceTree = "<group>"; };
 		F10D95B3230D819F00D48239 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
 		F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterSmallCell.swift; sourceTree = "<group>"; };
+		F1142B2E23153E5D006D7A5F /* UIPaddedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPaddedLabel.swift; sourceTree = "<group>"; };
 		F1669D9C2313D80F00ADC675 /* GenresData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenresData.swift; sourceTree = "<group>"; };
 		F1907EFE231014770097E9DB /* UIDevice+Notch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Notch.swift"; sourceTree = "<group>"; };
 		F1A14657230E88FF00A874DA /* MovieDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDataSource.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 				F1A1465B230E8DF100A874DA /* Cell */,
 				F10D95AE230D7EA000D48239 /* GradientView.swift */,
 				F1A1465E230E8E8800A874DA /* CoverFlowLayout.swift */,
+				F1142B2E23153E5D006D7A5F /* UIPaddedLabel.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -374,7 +377,7 @@
 				F10D954F230D302B00D48239 /* Sources */,
 				F10D9550230D302B00D48239 /* Frameworks */,
 				F10D9551230D302B00D48239 /* Resources */,
-				6A4DF6FBE501E4C63214D2C6 /* [CP] Embed Pods Frameworks */,
+				1935FC6A8855A5E046C4614C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -464,6 +467,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1935FC6A8855A5E046C4614C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MovieFinder/Pods-MovieFinder-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MovieFinder/Pods-MovieFinder-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MovieFinder/Pods-MovieFinder-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		666E0EE3194F33E34F093C9F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -484,23 +504,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6A4DF6FBE501E4C63214D2C6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MovieFinder/Pods-MovieFinder-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MovieFinder/Pods-MovieFinder-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MovieFinder/Pods-MovieFinder-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		960519B605CD16703C2681D0 /* [CP] Check Pods Manifest.lock */ = {
@@ -536,6 +539,7 @@
 				F10D9589230D6F8900D48239 /* Movie.swift in Sources */,
 				F10D95AF230D7EA000D48239 /* GradientView.swift in Sources */,
 				F10D95A6230D72A900D48239 /* MovieImagePath.swift in Sources */,
+				F1142B2F23153E5D006D7A5F /* UIPaddedLabel.swift in Sources */,
 				F1907EFF231014780097E9DB /* UIDevice+Notch.swift in Sources */,
 				F10D9559230D302B00D48239 /* MainVC.swift in Sources */,
 				F10D959F230D713B00D48239 /* TVShow.swift in Sources */,

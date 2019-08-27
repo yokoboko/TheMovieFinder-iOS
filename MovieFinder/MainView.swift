@@ -26,11 +26,9 @@ class MainView: UIView {
     var coverFlowLayout = CoverFlowLayout()
     private var flowLayout = UICollectionViewFlowLayout()
 
-    private let coverFlowLayoutHorizontalInsets: CGFloat = 40.0
-    private let flowLayoutHorizontalInsets: CGFloat = 24.0
+    private let collectionViewHorizontalInsets: CGFloat = 40.0
     private let posterRatio: CGFloat = 24 / 36
-    private let buttonMargin: CGFloat = 40.0
-    
+    private let infoBottomMargin: CGFloat = 40.0
     
     private var collectionViewTopConstraint: NSLayoutConstraint!
     private var collectionViewBottomConstraint: NSLayoutConstraint!
@@ -38,7 +36,7 @@ class MainView: UIView {
     private let collectionViewTopMarginFilters: CGFloat = 92
     private let collectionViewBottomMarginFilters: CGFloat = -256
     private let collectionViewBottomMarginCoverFlow: CGFloat = -128
-    private let collectionViewBottomMarginFlow: CGFloat = -72
+    private let collectionViewBottomMarginFlow: CGFloat = -56
     
     private var isCoverflowMode = true
     
@@ -165,9 +163,10 @@ extension MainView {
         
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 24
-        flowLayout.minimumInteritemSpacing = 32
+        flowLayout.minimumInteritemSpacing = 20
         
         collectionView.register(PosterBigCell.self, forCellWithReuseIdentifier: PosterBigCell.reuseIdentifier)
+        collectionView.register(PosterSmallCell.self, forCellWithReuseIdentifier: PosterSmallCell.reuseIdentifier)
     }
 
     private func setupInfoView() {
@@ -197,14 +196,14 @@ extension MainView {
 
         NSLayoutConstraint.activate([
             infoGenresLabel.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -64),
-            infoGenresLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: buttonMargin),
-            infoGenresLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -buttonMargin),
+            infoGenresLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin),
+            infoGenresLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin),
             
             infoRatingLabel.centerYAnchor.constraint(equalTo: infoNameLabel.centerYAnchor, constant: 2),
-            infoRatingLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -buttonMargin),
+            infoRatingLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin),
             
             infoNameLabel.bottomAnchor.constraint(equalTo: infoGenresLabel.topAnchor, constant: -2),
-            infoNameLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: buttonMargin),
+            infoNameLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin),
             infoNameLabel.rightAnchor.constraint(equalTo: infoRatingLabel.leftAnchor, constant: -16)
         ])
     }
@@ -215,7 +214,7 @@ extension MainView {
         scrollToTopBtn.translatesAutoresizingMaskIntoConstraints = false
         scrollToTopBtn.setImage(UIImage(named: "btn_scroll_to_top"), for: .normal)
         addSubview(scrollToTopBtn)
-        scrollToTopBtn.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: buttonMargin - 13).isActive = true
+        scrollToTopBtn.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin - 13).isActive = true
         scrollToTopBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
         
         toggleLayoutBtn = UIButton(type: .custom)
@@ -229,7 +228,7 @@ extension MainView {
         filtersBtn.translatesAutoresizingMaskIntoConstraints = false
         filtersBtn.setImage(UIImage(named: "btn_filters"), for: .normal)
         addSubview(filtersBtn)
-        filtersBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -buttonMargin + 16).isActive = true
+        filtersBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin + 16).isActive = true
         filtersBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
     }
     
@@ -396,18 +395,20 @@ extension MainView {
         collectionView.decelerationRate = isCoverflowMode ? .fast : .normal
         
         if visibleItems.count > 0 {
-            let indexPathToScroll = !isCoverflowMode && visibleItems.count > 2 ? visibleItems[1] : visibleItems[0]
+            var indexPathToScroll = visibleItems[0]
+            if indexPathToScroll.item != 0 {
+                if isCoverflowMode, visibleItems.count > 2 {
+                    indexPathToScroll = visibleItems[2]
+                } else if !isCoverflowMode, visibleItems.count > 1{
+                    indexPathToScroll = visibleItems[1]
+                }
+            }
             collectionView.scrollToItem(at: indexPathToScroll, at: isCoverflowMode ? .centeredHorizontally : .left, animated: false)
             collectionView.collectionViewLayout.invalidateLayout()
-            if !isCoverflowMode, collectionView.contentOffset.x > collectionView.contentOffset.x - flowLayoutHorizontalInsets - 0.5 {
-                collectionView.contentOffset.x -= flowLayoutHorizontalInsets  - 0.5
-            }
+            if !isCoverflowMode { collectionView.contentOffset.x -= collectionViewHorizontalInsets }
         }
-        
-        if isCoverflowMode {
-            collectionView.reloadData()
-            coverFlowLayout.updateFocused()
-        }
+        collectionView.reloadData()
+        if isCoverflowMode { coverFlowLayout.updateFocused() }
     }
     
     var collectionViewInsets: UIEdgeInsets {
@@ -415,7 +416,7 @@ extension MainView {
             let leftRightInset = (collectionView.frame.width - cellSizeCoverFlowLayout.width)/2
             return UIEdgeInsets(top: 0, left: leftRightInset, bottom: 0, right: leftRightInset)
         } else {
-            return UIEdgeInsets(top: 0, left: flowLayoutHorizontalInsets, bottom: 0, right: flowLayoutHorizontalInsets)
+            return UIEdgeInsets(top: 0, left: collectionViewHorizontalInsets, bottom: 0, right: collectionViewHorizontalInsets)
         }
     }
     
@@ -429,7 +430,7 @@ extension MainView {
     
     // For single row coverFlowLayout - fit to height and left/right margin of 40
     private var cellSizeCoverFlowLayout: CGSize {
-        var width: CGFloat = frame.width - coverFlowLayoutHorizontalInsets * 2
+        var width: CGFloat = frame.width - collectionViewHorizontalInsets * 2
         var height = width / posterRatio
         if height > collectionView.frame.height {
             height = collectionView.frame.height
@@ -440,8 +441,10 @@ extension MainView {
     
     // For 2 rows flowLayout
     private var cellSizeFlowLayout: CGSize {
+        let footerHeight: CGFloat = 38
         let height = (collectionView.frame.height - flowLayout.minimumInteritemSpacing) / 2
-        let width = height * posterRatio
+        let posterHeight = height - footerHeight
+        let width = posterHeight * posterRatio
         return CGSize(width: width , height: height)
     }
 }

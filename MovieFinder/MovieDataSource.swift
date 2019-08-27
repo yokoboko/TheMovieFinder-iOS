@@ -84,8 +84,27 @@ extension MovieDataSource: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterBigCell.reuseIdentifier, for: indexPath) as! PosterBigCell
-        if let posterPath = items[indexPath.item].posterPath {
+        
+        if let _ = collectionView.collectionViewLayout as? CoverFlowLayout {
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterBigCell.reuseIdentifier, for: indexPath) as! PosterBigCell
+            if let posterPath = items[indexPath.item].posterPath {
+                cell.loadImage(imageURL: imageURLForPosterPath(posterPath))
+            }
+            return cell
+        }
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterSmallCell.reuseIdentifier, for: indexPath) as! PosterSmallCell
+        let item = items[indexPath.item]
+        cell.title.text = item.title
+        cell.genres.text = GenresData.movieGenreNames(ids: item.genreIds).joined(separator: ", ")
+        if let rating = item.voteAverage {
+            cell.rating.text = String(rating)
+            cell.rating.isHidden = false
+        } else {
+            cell.rating.isHidden = true
+        }
+        if let posterPath = item.posterPath {
             cell.loadImage(imageURL: imageURLForPosterPath(posterPath))
         }
         return cell
