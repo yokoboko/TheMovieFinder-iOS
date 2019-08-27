@@ -56,7 +56,7 @@ class MainView: UIView {
         setupViews()
     }
     
-    func setInfo(name: String, rating: Double?, genres: [String], year: String?) {
+    func setInfo(name: String, rating: Double?, genres: [String], date: String?) {
         
         infoNameLabel.text = name
         
@@ -80,12 +80,18 @@ class MainView: UIView {
         var genresString = ""
         if genres.count > 0 {
             genresString = genres.joined(separator: ", ")
-            if year != nil {
+            if date != nil {
                 genresString += " | "
             }
         }
-        if let year = year {
-            genresString += year
+        if var date = date {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            if let dateObject = dateFormatter.date(from: date) {
+                dateFormatter.dateFormat = "dd-MM-yyyy"
+                date = dateFormatter.string(from: dateObject)
+            }
+            genresString += date
         }
         infoGenresLabel.text = genresString
     }

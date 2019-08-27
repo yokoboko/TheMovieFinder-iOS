@@ -133,6 +133,6 @@ extension MainVC: DataSourceDelegate {
         }
         
         // Set info
-        mainView.setInfo(name: name, rating: voteAverage, genres: genres, year: year)
+        mainView.setInfo(name: name, rating: voteAverage, genres: genres, date: year)
     }
 }

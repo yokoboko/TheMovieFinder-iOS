@@ -1,15 +1,15 @@
 //
-//  PosterBigCell.swift
+//  PosterSmallCell.swift
 //  MovieFinder
 //
-//  Created by Yosif Iliev on 22.08.19.
+//  Created by Yosif Iliev on 27.08.19.
 //  Copyright © 2019 Yosif Iliev. All rights reserved.
 //
 
 import UIKit
 import Nuke
 
-class PosterBigCell: UICollectionViewCell {
+class PosterSmallCell: UICollectionViewCell {
     
     var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -49,24 +49,25 @@ class PosterBigCell: UICollectionViewCell {
             imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])
+        
     }
     
-//    override var isHighlighted: Bool {
-//        didSet {
-//            shrink(down: isHighlighted)
-//        }
-//    }
-//    
-//    private func shrink(down: Bool) {
-//        
-//        UIView.animate(withDuration: 0.15, delay: 0.0, options: [.allowUserInteraction, .curveEaseOut], animations: {
-//            if down {
-//                self.transform = CGAffineTransform(scaleX: 0.96, y: 0.96)
-//            } else {
-//                self.transform = .identity
-//            }
-//        }, completion: nil)
-//    }
+    //    override var isHighlighted: Bool {
+    //        didSet {
+    //            shrink(down: isHighlighted)
+    //        }
+    //    }
+    //
+    //    private func shrink(down: Bool) {
+    //
+    //        UIView.animate(withDuration: 0.15, delay: 0.0, options: [.allowUserInteraction, .curveEaseOut], animations: {
+    //            if down {
+    //                self.transform = CGAffineTransform(scaleX: 0.96, y: 0.96)
+    //            } else {
+    //                self.transform = .identity
+    //            }
+    //        }, completion: nil)
+    //    }
     
     override func prepareForReuse() {
         imageView.image = nil
@@ -78,3 +79,4 @@ class PosterBigCell: UICollectionViewCell {
                        into: imageView)
     }
 }
+
