@@ -134,5 +134,9 @@ class CoverFlowLayout: UICollectionViewFlowLayout {
         let approximatePage = collectionView.contentOffset.x / pageWidth
         delegate?.coverFlowFocused(pageIndex: Int(approximatePage))
     }
+    
+    func updateFocusedToFirstItem() {
+        delegate?.coverFlowFocused(pageIndex: 0)
+    }
 }
 

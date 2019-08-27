@@ -74,9 +74,7 @@ class MainVC: UIViewController {
 extension MainVC {
     
     @objc private func scrollToTopAction(_ sender: Any) {
-        if mainView.collectionView.contentOffset.x >= mainView.collectionView.bounds.width {
-            mainView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-        }
+        mainView.scrollToTop()
     }
     
     @objc private func toggleLayoutAction(_ sender: Any) {
@@ -110,14 +108,18 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        // TODO - hide info
+        mainView.hideInfo()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        mainView.showInfo()
     }
 }
 
 
 extension MainVC: DataSourceDelegate {
     
-    func movieOnFocus(title: String, voteAverage: Double?, genres: [String], imageURL: URL?) {
+    func movieOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?) {
         
         // On App Launch after load data
         if !dataLoaded {
@@ -130,6 +132,7 @@ extension MainVC: DataSourceDelegate {
             mainView.backgroundView.loadImage(url: imageURL)
         }
         
-        // TODO - set and show info
+        // Set info
+        mainView.setInfo(name: name, rating: voteAverage, genres: genres, year: year)
     }
 }

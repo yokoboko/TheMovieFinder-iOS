@@ -66,7 +66,7 @@ class MovieDataSource: NSObject {
             posterURL = MovieImagePath.medium.path(poster: posterPath)
         }
         
-        delegate?.movieOnFocus(title: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), imageURL: posterURL)
+        delegate?.movieOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.releaseDate, imageURL: posterURL)
     }
     
     private func imageURLForPosterPath(_ path: String) -> URL {

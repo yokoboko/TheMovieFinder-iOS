@@ -13,18 +13,33 @@ class MainView: UIView {
     var backgroundView: BackgroundMoviesView!
     var sectionLabel: UILabel!
     var filterLabel: UILabel!
+    
+    var infoNameLabel: UILabel!
+    var infoRatingLabel: UILabel!
+    var infoGenresLabel: UILabel!
+    
     var scrollToTopBtn: UIButton!
     var toggleLayoutBtn: UIButton!
     var filtersBtn: UIButton!
-    private let buttonMargin: CGFloat = 40.0
     
     var collectionView: UICollectionView!
     var coverFlowLayout = CoverFlowLayout()
     private var flowLayout = UICollectionViewFlowLayout()
-    
+
     private let coverFlowLayoutHorizontalInsets: CGFloat = 40.0
     private let flowLayoutHorizontalInsets: CGFloat = 24.0
     private let posterRatio: CGFloat = 24 / 36
+    private let buttonMargin: CGFloat = 40.0
+    
+    
+    private var collectionViewTopConstraint: NSLayoutConstraint!
+    private var collectionViewBottomConstraint: NSLayoutConstraint!
+    private let collectionViewTopMargin: CGFloat = 92
+    private let collectionViewTopMarginFilters: CGFloat = 92
+    private let collectionViewBottomMarginFilters: CGFloat = -256
+    private let collectionViewBottomMarginCoverFlow: CGFloat = -128
+    private let collectionViewBottomMarginFlow: CGFloat = -72
+    
     private var isCoverflowMode = true
     
     let scrollToTopBtnAlpha: CGFloat = 0.5
@@ -40,6 +55,40 @@ class MainView: UIView {
         super.init(coder: aDecoder)
         setupViews()
     }
+    
+    func setInfo(name: String, rating: Double?, genres: [String], year: String?) {
+        
+        infoNameLabel.text = name
+        
+        if let rating = rating {
+            let ratingString = String(rating)
+            let ratingAttributes = [
+                NSAttributedString.Key.foregroundColor: UIColor.movieFinder.secondary,
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
+            ]
+            let ratingMaxAttributes = [
+                NSAttributedString.Key.foregroundColor: UIColor.movieFinder.tertiery,
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.ultraLight)
+            ]
+            let ratingAttributedString = NSMutableAttributedString(string: ratingString, attributes: ratingAttributes)
+            ratingAttributedString.append(NSAttributedString(string: "/10", attributes: ratingMaxAttributes))
+            infoRatingLabel.attributedText = ratingAttributedString
+        } else {
+            infoRatingLabel.text = ""
+        }
+        
+        var genresString = ""
+        if genres.count > 0 {
+            genresString = genres.joined(separator: ", ")
+            if year != nil {
+                genresString += " | "
+            }
+        }
+        if let year = year {
+            genresString += year
+        }
+        infoGenresLabel.text = genresString
+    }
 }
 
 // MARK: - Setup Views
@@ -51,6 +100,7 @@ extension MainView {
         self.backgroundColor = .black
         setupBackgroundView()
         setupSectionAndFilterView()
+        setupInfoView()
         setupCollectionView()
         setupButtons()
         hideViewsAndShowLogoWhileLoadingOnAppLaunch()
@@ -94,9 +144,13 @@ extension MainView {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.clipsToBounds = false
         addSubview(collectionView)
+        
+        collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: safeTopAnchor, constant: collectionViewTopMarginFilters)
+        collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: collectionViewBottomMarginCoverFlow)
+        
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: safeTopAnchor, constant: 92),
-            collectionView.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -128),
+            collectionViewTopConstraint,
+            collectionViewBottomConstraint,
             collectionView.leftAnchor.constraint(equalTo: safeLeftAnchor),
             collectionView.rightAnchor.constraint(equalTo: safeRightAnchor),
         ])
@@ -107,8 +161,46 @@ extension MainView {
         flowLayout.minimumLineSpacing = 24
         flowLayout.minimumInteritemSpacing = 32
         
-
         collectionView.register(PosterBigCell.self, forCellWithReuseIdentifier: PosterBigCell.reuseIdentifier)
+    }
+
+    private func setupInfoView() {
+        
+        infoGenresLabel = UILabel(frame: .zero)
+        infoGenresLabel.textColor = UIColor.movieFinder.tertiery
+        infoGenresLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
+        infoGenresLabel.translatesAutoresizingMaskIntoConstraints = false
+        infoGenresLabel.adjustsFontSizeToFitWidth = true
+        infoGenresLabel.minimumScaleFactor = 0.75
+        addSubview(infoGenresLabel)
+        
+        infoRatingLabel = UILabel(frame: .zero)
+        infoRatingLabel.textColor = UIColor.movieFinder.secondary
+        infoRatingLabel.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
+        infoRatingLabel.translatesAutoresizingMaskIntoConstraints = false
+        infoRatingLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        addSubview(infoRatingLabel)
+        
+        infoNameLabel = UILabel(frame: .zero)
+        infoNameLabel.textColor = UIColor.movieFinder.secondary
+        infoNameLabel.font = UIFont.systemFont(ofSize: 26, weight: UIFont.Weight.semibold)
+        infoNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        infoNameLabel.adjustsFontSizeToFitWidth = true
+        infoNameLabel.minimumScaleFactor = 0.7
+        addSubview(infoNameLabel)
+
+        NSLayoutConstraint.activate([
+            infoGenresLabel.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -64),
+            infoGenresLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: buttonMargin),
+            infoGenresLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -buttonMargin),
+            
+            infoRatingLabel.centerYAnchor.constraint(equalTo: infoNameLabel.centerYAnchor, constant: 2),
+            infoRatingLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -buttonMargin),
+            
+            infoNameLabel.bottomAnchor.constraint(equalTo: infoGenresLabel.topAnchor, constant: -2),
+            infoNameLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: buttonMargin),
+            infoNameLabel.rightAnchor.constraint(equalTo: infoRatingLabel.leftAnchor, constant: -16)
+        ])
     }
     
     private func setupButtons() {
@@ -160,6 +252,9 @@ extension MainView {
         sectionLabel.alpha = 0
         filterLabel.alpha = 0
         collectionView.alpha = 0
+        infoNameLabel.alpha = 0
+        infoRatingLabel.alpha = 0
+        infoGenresLabel.alpha = 0
         scrollToTopBtn.alpha = 0
         toggleLayoutBtn.alpha = 0
         filtersBtn.alpha = 0
@@ -179,9 +274,12 @@ extension MainView {
         sectionLabel.transform = CGAffineTransform(translationX: 0, y: 32)
         filterLabel.transform = CGAffineTransform(translationX: 0, y: 32)
         collectionView.transform = CGAffineTransform(translationX: 0, y: 56)
-        scrollToTopBtn.transform = CGAffineTransform(translationX: 0, y: 74)
-        toggleLayoutBtn.transform = CGAffineTransform(translationX: 0, y: 74)
-        filtersBtn.transform = CGAffineTransform(translationX: 0, y: 74)
+        infoNameLabel.transform = CGAffineTransform(translationX: 0, y: 66)
+        infoRatingLabel.transform = CGAffineTransform(translationX: 0, y: 66)
+        infoGenresLabel.transform = CGAffineTransform(translationX: 0, y: 74)
+        scrollToTopBtn.transform = CGAffineTransform(translationX: 0, y: 80)
+        toggleLayoutBtn.transform = CGAffineTransform(translationX: 0, y: 80)
+        filtersBtn.transform = CGAffineTransform(translationX: 0, y: 80)
         
         UIView.animate(withDuration: 0.8, delay: 0.6, options: [.curveEaseOut], animations: {
             self.sectionLabel.alpha = 1
@@ -190,6 +288,12 @@ extension MainView {
             self.filterLabel.transform = .identity
             self.collectionView.alpha = 1
             self.collectionView.transform = .identity
+            self.infoNameLabel.alpha = 1
+            self.infoNameLabel.transform = .identity
+            self.infoRatingLabel.alpha = 1
+            self.infoRatingLabel.transform = .identity
+            self.infoGenresLabel.alpha = 1
+            self.infoGenresLabel.transform = .identity
             self.scrollToTopBtn.alpha = self.scrollToTopBtnAlpha
             self.scrollToTopBtn.transform = .identity
             self.toggleLayoutBtn.alpha = 1
@@ -204,6 +308,7 @@ extension MainView {
             self.isUserInteractionEnabled = true
         }
         
+        // For testing fade in animation on app launch
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { self.hideViewsAndShowLogoWhileLoadingOnAppLaunch() }
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.showViewsAfterLoadingDataOnAppLaunch() }
     }
@@ -214,11 +319,48 @@ extension MainView {
         willRemoveSubview(logoImageView)
         self.logoImageView = nil
     }
+    
+    func showInfo() {
+        
+        guard isCoverflowMode else { return }
+        stopInfoAnimation()
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+            self.infoNameLabel.alpha = 1
+            self.infoRatingLabel.alpha = 1
+            self.infoGenresLabel.alpha = 1
+            self.infoNameLabel.transform = .identity
+            self.infoRatingLabel.transform = .identity
+            self.infoGenresLabel.transform = .identity
+        })
+    }
+    
+    func hideInfo() {
+        
+        guard isCoverflowMode else { return }
+        stopInfoAnimation()
+        
+        UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut], animations: {
+            self.infoNameLabel.alpha = 0
+            self.infoRatingLabel.alpha = 0
+            self.infoGenresLabel.alpha = 0
+            self.infoNameLabel.transform = CGAffineTransform(translationX: 0, y: 8)
+            self.infoRatingLabel.transform = CGAffineTransform(translationX: 0, y: 8)
+            self.infoGenresLabel.transform = CGAffineTransform(translationX: 0, y: 8)
+        })
+    }
+    
+    private func stopInfoAnimation() {
+        
+        infoNameLabel.layer.removeAllAnimations()
+        infoRatingLabel.layer.removeAllAnimations()
+        infoGenresLabel.layer.removeAllAnimations()
+    }
 }
 
 
 
-// MARK: - Cell sizes and Toggle Layout
+// MARK: - CollectionView Cell Size and Actions
 
 extension MainView {
     
@@ -233,9 +375,16 @@ extension MainView {
         
         let visibleItems = collectionView.indexPathsForVisibleItems.sorted { $0.item < $1.item } //.compactMap { collectionView.cellForItem(at: $0) }
         
+        hideInfo()
         isCoverflowMode.toggle()
+        showInfo()
         
         toggleLayoutBtn.setImage(UIImage(named: isCoverflowMode ? "btn_layout_coverflow" : "btn_layout_flow"), for: .normal)
+    
+        collectionViewBottomConstraint.constant = isCoverflowMode ? collectionViewBottomMarginCoverFlow : collectionViewBottomMarginFlow
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
+        updateItemSize()
         
         collectionView.setCollectionViewLayout(isCoverflowMode ? coverFlowLayout : flowLayout, animated: false)
         collectionView.decelerationRate = isCoverflowMode ? .fast : .normal
@@ -263,7 +412,15 @@ extension MainView {
             return UIEdgeInsets(top: 0, left: flowLayoutHorizontalInsets, bottom: 0, right: flowLayoutHorizontalInsets)
         }
     }
-        
+    
+    func scrollToTop() {
+        if collectionView.contentOffset.x >= collectionView.bounds.width {
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+            if isCoverflowMode { coverFlowLayout.updateFocusedToFirstItem() }
+        }
+    }
+    
+    
     // For single row coverFlowLayout - fit to height and left/right margin of 40
     private var cellSizeCoverFlowLayout: CGSize {
         var width: CGFloat = frame.width - coverFlowLayoutHorizontalInsets * 2
