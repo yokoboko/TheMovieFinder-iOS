@@ -38,8 +38,13 @@ class MainView: UIView {
     private let collectionViewBottomMarginCoverFlow: CGFloat = -128
     private let collectionViewBottomMarginFlow: CGFloat = -56
     
-    private var isCoverflowMode = true
-    
+    private var coverFlowLayoutMode = true
+    var isCoverFlowLayout: Bool {
+        get {
+            return coverFlowLayoutMode
+        }
+    }
+
     let scrollToTopBtnAlpha: CGFloat = 0.5
     
     private var logoImageView: UIImageView?
@@ -76,7 +81,7 @@ class MainView: UIView {
         }
         
         var genresString = ""
-        if genres.count > 0 {
+        if !genres.isEmpty {
             genresString = genres.joined(separator: ", ")
             if date != nil {
                 genresString += " | "
@@ -327,7 +332,7 @@ extension MainView {
     
     func showInfo() {
         
-        guard isCoverflowMode else { return }
+        guard coverFlowLayoutMode else { return }
         stopInfoAnimation()
         
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
@@ -342,7 +347,7 @@ extension MainView {
     
     func hideInfo() {
         
-        guard isCoverflowMode else { return }
+        guard coverFlowLayoutMode else { return }
         stopInfoAnimation()
         
         UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut], animations: {
@@ -381,38 +386,38 @@ extension MainView {
         let visibleItems = collectionView.indexPathsForVisibleItems.sorted { $0.item < $1.item } //.compactMap { collectionView.cellForItem(at: $0) }
         
         hideInfo()
-        isCoverflowMode.toggle()
+        coverFlowLayoutMode.toggle()
         showInfo()
         
-        toggleLayoutBtn.setImage(UIImage(named: isCoverflowMode ? "btn_layout_coverflow" : "btn_layout_flow"), for: .normal)
+        toggleLayoutBtn.setImage(UIImage(named: coverFlowLayoutMode ? "btn_layout_coverflow" : "btn_layout_flow"), for: .normal)
     
-        collectionViewBottomConstraint.constant = isCoverflowMode ? collectionViewBottomMarginCoverFlow : collectionViewBottomMarginFlow
+        collectionViewBottomConstraint.constant = coverFlowLayoutMode ? collectionViewBottomMarginCoverFlow : collectionViewBottomMarginFlow
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
         updateItemSize()
         
-        collectionView.setCollectionViewLayout(isCoverflowMode ? coverFlowLayout : flowLayout, animated: false)
-        collectionView.decelerationRate = isCoverflowMode ? .fast : .normal
+        collectionView.setCollectionViewLayout(coverFlowLayoutMode ? coverFlowLayout : flowLayout, animated: false)
+        collectionView.decelerationRate = coverFlowLayoutMode ? .fast : .normal
         
-        if visibleItems.count > 0 {
+        if !visibleItems.isEmpty {
             var indexPathToScroll = visibleItems[0]
             if indexPathToScroll.item != 0 {
-                if isCoverflowMode, visibleItems.count > 2 {
+                if coverFlowLayoutMode, visibleItems.count > 2 {
                     indexPathToScroll = visibleItems[2]
-                } else if !isCoverflowMode, visibleItems.count > 1{
+                } else if !coverFlowLayoutMode, visibleItems.count > 1{
                     indexPathToScroll = visibleItems[1]
                 }
             }
-            collectionView.scrollToItem(at: indexPathToScroll, at: isCoverflowMode ? .centeredHorizontally : .left, animated: false)
+            collectionView.scrollToItem(at: indexPathToScroll, at: coverFlowLayoutMode ? .centeredHorizontally : .left, animated: false)
             collectionView.collectionViewLayout.invalidateLayout()
-            if !isCoverflowMode { collectionView.contentOffset.x -= collectionViewHorizontalInsets }
+            if !coverFlowLayoutMode { collectionView.contentOffset.x -= collectionViewHorizontalInsets }
         }
         collectionView.reloadData()
-        if isCoverflowMode { coverFlowLayout.updateFocused() }
+        if coverFlowLayoutMode { coverFlowLayout.updateFocused() }
     }
     
     var collectionViewInsets: UIEdgeInsets {
-        if isCoverflowMode {
+        if coverFlowLayoutMode {
             let leftRightInset = (collectionView.frame.width - cellSizeCoverFlowLayout.width)/2
             return UIEdgeInsets(top: 0, left: leftRightInset, bottom: 0, right: leftRightInset)
         } else {
@@ -423,7 +428,7 @@ extension MainView {
     func scrollToTop() {
         if collectionView.contentOffset.x >= collectionView.bounds.width {
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-            if isCoverflowMode { coverFlowLayout.updateFocusedToFirstItem() }
+            if coverFlowLayoutMode { coverFlowLayout.updateFocusedToFirstItem() }
         }
     }
     

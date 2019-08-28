@@ -19,42 +19,104 @@ class MovieDataSource: NSObject {
     private var totalPages = 0
     private var items = [Movie]()
 
+    private var isFetching = false
+
     private var itemOnFocus = -1
     
     private var firstLoad = true
     
     private let preheater = ImagePreheater()
-    
+
+    private var movieFilter: MovieFilter = .popular
+
+    private weak var dataTask: URLSessionDataTask?
+
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
         super.init()
-        
-        fetch()
+        loadWith(movieFilter: MovieFilter.popular) // loadWith(movieFilter: MovieFilter.search("Kill"))
     }
-    
-    private func fetch() {
-        
-            MovieAPI.shared.GET(endpoint: .moviePopular,
-                                 params: ["page": "\(page + 1)"],
+
+    func loadWith(movieFilter: MovieFilter) {
+
+        self.movieFilter = movieFilter
+        itemOnFocus = -1
+        page = 0
+        totalPages = 0
+        fetchData()
+    }
+
+    func tryToFetchMore(indexPath: IndexPath, itemsTreshold: Int) {
+        if !isFetching,
+            indexPath.item > max(0, items.count - 1 - itemsTreshold),
+            page + 1 <= totalPages,
+            items.count >= itemsTreshold {
+            fetchData()
+        }
+    }
+
+    private func fetchData() {
+
+        var endpoint: MovieAPIEndpoint!
+        var params = ["page": "\(page + 1)"]
+
+        switch movieFilter {
+
+        case .popular: endpoint = .movieTopRated
+        case .trending: endpoint = .movieTrending
+        case .topRated: endpoint = .movieTopRated
+        case .upcoming: endpoint = .movieUpcoming
+
+        case .genres(let genres):
+            endpoint = .movieDiscover
+            params["with_genres"] = genres.map { String($0.id) }.joined(separator: ",")
+
+        case .search(let searchTerm):
+            endpoint = .movieSearch
+            params["query"] = searchTerm
+        }
+
+        isFetching = true
+        dataTask?.cancel()
+        dataTask = MovieAPI.shared.GET(endpoint: endpoint,
+                                 params: params,
                                  printDebug: true) { [weak self] (result: Result<MovieResponse, MovieAPIError>) in
     
                                     guard let self = self else { return }
-                                    
+
+
                                     switch result {
                                     case .success(let response):
                                         
                                         self.page = response.page
                                         self.totalPages = response.totalPages
-                                        self.items = response.results
-                                        self.collectionView.reloadData()
-                                        
-                                        if self.itemOnFocus == -1 && self.items.count > 0 {
+
+                                        // First load
+                                        if self.page == 1, !self.items.isEmpty {
+                                            self.items.removeAll()
+                                            self.collectionView.reloadData()
+                                        }
+
+                                        self.collectionView.performBatchUpdates({
+                                            self.items.append(contentsOf: response.results)
+                                            var insertedItemsIndex = [IndexPath]()
+                                            let end = self.items.count
+                                            let start = end - response.results.count
+                                            for i in start..<end {
+                                                insertedItemsIndex.append(IndexPath(item: i, section: 0))
+                                            }
+                                            self.collectionView.insertItems(at: insertedItemsIndex)
+                                        }, completion: nil)
+
+                                        if self.itemOnFocus == -1 && !self.items.isEmpty {
                                             self.itemOnFocus = 0
                                             self.callOnFocusDelegate()
                                         }
                                     case .failure(let error):
                                         print("Error: \(error)")
                                     }
+
+                                    self.isFetching = false
             }
     }
 

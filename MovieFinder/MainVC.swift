@@ -32,7 +32,7 @@ class MainVC: UIViewController {
     }
     
     private func loadGenres() {
-        
+
         GenresData.loadGenres { [weak self] (result) in
             
             guard let self = self else { return }
@@ -54,7 +54,7 @@ class MainVC: UIViewController {
         // Default data source(Movies)
         movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
         movieDataSource.delegate = self
-        
+
         // CollectionView setup
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = movieDataSource
@@ -106,7 +106,12 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
               mainView.scrollToTopBtn.alpha = mainView.scrollToTopBtnAlpha
         }
     }
-    
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let fetchMoreItemsTreshold = mainView.isCoverFlowLayout ? 5 :  10
+        movieDataSource.tryToFetchMore(indexPath: indexPath, itemsTreshold: fetchMoreItemsTreshold)
+    }
+
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         mainView.hideInfo()
     }
