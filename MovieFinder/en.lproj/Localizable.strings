@@ -7,11 +7,13 @@
 */
 
 "movies" = "Movies";
-"tv" = "TV Shows";
+"tvShows" = "TV Shows";
 "favourites" = "Favourites";
 
 "popular" = "Popular";
-"top_rated" = "Top Rated";
-"upcoming" = "Upcoming";
 "trending" = "Trending";
-"on_the_air" = "On The Air";
+"topRated" = "Top Rated";
+"upcoming" = "Upcoming";
+"onTheAir" = "On The Air";
+"genres" = "Genres";
+"search" = "Search";

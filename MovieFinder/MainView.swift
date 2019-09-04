@@ -13,7 +13,11 @@ class MainView: UIView {
     var backgroundView: BackgroundMoviesView!
     var sectionLabel: UILabel!
     var filterLabel: UILabel!
-    
+
+    var collectionView: UICollectionView!
+    var coverFlowLayout = CoverFlowLayout()
+    var flowLayout = UICollectionViewFlowLayout()
+
     var infoNameLabel: UILabel!
     var infoRatingLabel: UILabel!
     var infoGenresLabel: UILabel!
@@ -21,22 +25,28 @@ class MainView: UIView {
     var scrollToTopBtn: UIButton!
     var toggleLayoutBtn: UIButton!
     var filtersBtn: UIButton!
-    
-    var collectionView: UICollectionView!
-    var coverFlowLayout = CoverFlowLayout()
-    private var flowLayout = UICollectionViewFlowLayout()
+
+    var filterView: MainFilterView!
+    var filterViewTopConstraint: NSLayoutConstraint!
+    var isFilterHidden = true
+    var filterStartDrag = false
+    var filterDragShift: CGFloat = 0.0
+    var filterDragDirectionUp = false
 
     private let collectionViewHorizontalInsets: CGFloat = 40.0
     private let posterRatio: CGFloat = 24 / 36
     private let infoBottomMargin: CGFloat = 40.0
     
-    private var collectionViewTopConstraint: NSLayoutConstraint!
-    private var collectionViewBottomConstraint: NSLayoutConstraint!
-    private let collectionViewTopMargin: CGFloat = 92
-    private let collectionViewTopMarginFilters: CGFloat = 92
-    private let collectionViewBottomMarginFilters: CGFloat = -256
-    private let collectionViewBottomMarginCoverFlow: CGFloat = -128
-    private let collectionViewBottomMarginFlow: CGFloat = -56
+    var collectionViewHeightConstraint: NSLayoutConstraint!
+    var collectionViewBottomConstraint: NSLayoutConstraint!
+    let collectionViewHeightCoverFlowMargin: CGFloat = 220
+    let collectionViewHeightFlowMargin: CGFloat = 160
+    let collectionViewHeightFlowFiltersMargin: CGFloat = 220
+    let collectionViewBottomMarginFilters: CGFloat = -16
+    let collectionViewBottomMarginCoverFlow: CGFloat = -128
+    let collectionViewBottomMarginFlow: CGFloat = -64
+
+    let filterViewMargin: CGFloat = 24
     
     private var coverFlowLayoutMode = true
     var isCoverFlowLayout: Bool {
@@ -47,7 +57,7 @@ class MainView: UIView {
 
     let scrollToTopBtnAlpha: CGFloat = 0.5
     
-    private var logoImageView: UIImageView?
+    var logoImageView: UIImageView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -103,11 +113,15 @@ class MainView: UIView {
 // MARK: - Setup Views
 
 extension MainView {
-    
+
     private func setupViews() {
-        
+
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleFilterShowHidePanGesture))
+        addGestureRecognizer(panGestureRecognizer)
+
         self.backgroundColor = .black
         setupBackgroundView()
+        setupBottomFilterView()
         setupSectionAndFilterView()
         setupInfoView()
         setupCollectionView()
@@ -153,17 +167,6 @@ extension MainView {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.clipsToBounds = false
         addSubview(collectionView)
-        
-        collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: safeTopAnchor, constant: collectionViewTopMarginFilters)
-        collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: collectionViewBottomMarginCoverFlow)
-        
-        NSLayoutConstraint.activate([
-            collectionViewTopConstraint,
-            collectionViewBottomConstraint,
-            collectionView.leftAnchor.constraint(equalTo: safeLeftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: safeRightAnchor),
-        ])
-        
         collectionView.isPrefetchingEnabled = true
         
         flowLayout.scrollDirection = .horizontal
@@ -172,6 +175,21 @@ extension MainView {
         
         collectionView.register(PosterBigCell.self, forCellWithReuseIdentifier: PosterBigCell.reuseIdentifier)
         collectionView.register(PosterSmallCell.self, forCellWithReuseIdentifier: PosterSmallCell.reuseIdentifier)
+    }
+
+    func constraintCollectionView() {
+
+        guard collectionViewHeightConstraint == nil else { return }
+
+        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: safeAreaFrame.height - collectionViewHeightCoverFlowMargin)
+        collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: collectionViewBottomMarginCoverFlow)
+
+        NSLayoutConstraint.activate([
+            collectionViewHeightConstraint,
+            collectionViewBottomConstraint,
+            collectionView.leftAnchor.constraint(equalTo: safeLeftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: safeRightAnchor),
+            ])
     }
 
     private func setupInfoView() {
@@ -200,7 +218,7 @@ extension MainView {
         addSubview(infoNameLabel)
 
         NSLayoutConstraint.activate([
-            infoGenresLabel.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -64),
+            infoGenresLabel.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -64),
             infoGenresLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin),
             infoGenresLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin),
             
@@ -219,155 +237,43 @@ extension MainView {
         scrollToTopBtn.translatesAutoresizingMaskIntoConstraints = false
         scrollToTopBtn.setImage(UIImage(named: "btn_scroll_to_top"), for: .normal)
         addSubview(scrollToTopBtn)
-        scrollToTopBtn.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin - 13).isActive = true
-        scrollToTopBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
         
         toggleLayoutBtn = UIButton(type: .custom)
         toggleLayoutBtn.translatesAutoresizingMaskIntoConstraints = false
         toggleLayoutBtn.setImage(UIImage(named: "btn_layout_coverflow"), for: .normal)
         addSubview(toggleLayoutBtn)
-        toggleLayoutBtn.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        toggleLayoutBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
-        
+
         filtersBtn = UIButton(type: .custom)
         filtersBtn.translatesAutoresizingMaskIntoConstraints = false
         filtersBtn.setImage(UIImage(named: "btn_filters"), for: .normal)
         addSubview(filtersBtn)
-        filtersBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin + 16).isActive = true
-        filtersBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6).isActive = true
-    }
-    
-    
-}
 
-// MARK: - Animations
+        NSLayoutConstraint.activate([
+            scrollToTopBtn.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin - 13),
+            scrollToTopBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
+            toggleLayoutBtn.centerXAnchor.constraint(equalTo: centerXAnchor),
+            toggleLayoutBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
+            filtersBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin + 16),
+            filtersBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
+            ])
+    }
+    
+    private func setupBottomFilterView() {
 
-extension MainView {
- 
-    private func hideViewsAndShowLogoWhileLoadingOnAppLaunch() {
-        
-        guard logoImageView == nil else { return }
-        
-        self.isUserInteractionEnabled = false
-        
-        logoImageView = UIImageView(image: UIImage(named: "launchscreen_logo"))
-        if let logoImageView = logoImageView {
-            logoImageView.translatesAutoresizingMaskIntoConstraints = false
-            addSubview(logoImageView)
-            logoImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-            logoImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -32).isActive = true
-        }
-        
-        backgroundView.alpha = 0
-        sectionLabel.alpha = 0
-        filterLabel.alpha = 0
-        collectionView.alpha = 0
-        infoNameLabel.alpha = 0
-        infoRatingLabel.alpha = 0
-        infoGenresLabel.alpha = 0
-        scrollToTopBtn.alpha = 0
-        toggleLayoutBtn.alpha = 0
-        filtersBtn.alpha = 0
-    }
-    
-    func showViewsAfterLoadingDataOnAppLaunch() {
-        
-        guard let logoImageView = logoImageView  else { return }
-        
-        UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: {
-            logoImageView.alpha = 0
-            logoImageView.transform = CGAffineTransform(translationX: 0, y: -64)
-        }) { (success) in
-            self.removeLogo()
-        }
-        
-        sectionLabel.transform = CGAffineTransform(translationX: 0, y: 32)
-        filterLabel.transform = CGAffineTransform(translationX: 0, y: 32)
-        collectionView.transform = CGAffineTransform(translationX: 0, y: 56)
-        infoNameLabel.transform = CGAffineTransform(translationX: 0, y: 66)
-        infoRatingLabel.transform = CGAffineTransform(translationX: 0, y: 66)
-        infoGenresLabel.transform = CGAffineTransform(translationX: 0, y: 74)
-        scrollToTopBtn.transform = CGAffineTransform(translationX: 0, y: 80)
-        toggleLayoutBtn.transform = CGAffineTransform(translationX: 0, y: 80)
-        filtersBtn.transform = CGAffineTransform(translationX: 0, y: 80)
-        
-        UIView.animate(withDuration: 0.8, delay: 0.6, options: [.curveEaseOut], animations: {
-            self.sectionLabel.alpha = 1
-            self.sectionLabel.transform = .identity
-            self.filterLabel.alpha = 1
-            self.filterLabel.transform = .identity
-            self.collectionView.alpha = 1
-            self.collectionView.transform = .identity
-            self.infoNameLabel.alpha = 1
-            self.infoNameLabel.transform = .identity
-            self.infoRatingLabel.alpha = 1
-            self.infoRatingLabel.transform = .identity
-            self.infoGenresLabel.alpha = 1
-            self.infoGenresLabel.transform = .identity
-            self.scrollToTopBtn.alpha = self.scrollToTopBtnAlpha
-            self.scrollToTopBtn.transform = .identity
-            self.toggleLayoutBtn.alpha = 1
-            self.toggleLayoutBtn.transform = .identity
-            self.filtersBtn.alpha = 1
-            self.filtersBtn.transform = .identity
-        }, completion: nil)
-        
-        UIView.animate(withDuration: 1.2, delay: 1, options: [.curveEaseOut], animations: {
-            self.backgroundView.alpha = 1
-        }) { (success) in
-            self.isUserInteractionEnabled = true
-        }
-        
-        // For testing fade in animation on app launch
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { self.hideViewsAndShowLogoWhileLoadingOnAppLaunch() }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.showViewsAfterLoadingDataOnAppLaunch() }
-    }
-    
-    private func removeLogo() {
-        
-        guard let logoImageView = logoImageView  else { return }
-        willRemoveSubview(logoImageView)
-        self.logoImageView = nil
-    }
-    
-    func showInfo() {
-        
-        guard coverFlowLayoutMode else { return }
-        stopInfoAnimation()
-        
-        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
-            self.infoNameLabel.alpha = 1
-            self.infoRatingLabel.alpha = 1
-            self.infoGenresLabel.alpha = 1
-            self.infoNameLabel.transform = .identity
-            self.infoRatingLabel.transform = .identity
-            self.infoGenresLabel.transform = .identity
-        })
-    }
-    
-    func hideInfo() {
-        
-        guard coverFlowLayoutMode else { return }
-        stopInfoAnimation()
-        
-        UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut], animations: {
-            self.infoNameLabel.alpha = 0
-            self.infoRatingLabel.alpha = 0
-            self.infoGenresLabel.alpha = 0
-            self.infoNameLabel.transform = CGAffineTransform(translationX: 0, y: 8)
-            self.infoRatingLabel.transform = CGAffineTransform(translationX: 0, y: 8)
-            self.infoGenresLabel.transform = CGAffineTransform(translationX: 0, y: 8)
-        })
-    }
-    
-    private func stopInfoAnimation() {
-        
-        infoNameLabel.layer.removeAllAnimations()
-        infoRatingLabel.layer.removeAllAnimations()
-        infoGenresLabel.layer.removeAllAnimations()
+        filterView = MainFilterView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        filterView.translatesAutoresizingMaskIntoConstraints = false
+        filterView.alpha = 0
+        filterView.isUserInteractionEnabled = false
+        addSubview(filterView)
+
+        filterViewTopConstraint = filterView.topAnchor.constraint(equalTo: safeBottomAnchor, constant: 0)
+        NSLayoutConstraint.activate([
+                filterViewTopConstraint,
+                filterView.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -collectionViewHorizontalInsets),
+                filterView.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: collectionViewHorizontalInsets)
+            ])
     }
 }
-
 
 
 // MARK: - CollectionView Cell Size and Actions
@@ -390,7 +296,9 @@ extension MainView {
         showInfo()
         
         toggleLayoutBtn.setImage(UIImage(named: coverFlowLayoutMode ? "btn_layout_coverflow" : "btn_layout_flow"), for: .normal)
-    
+
+        let heighMargin = coverFlowLayoutMode ? collectionViewHeightCoverFlowMargin : collectionViewHeightFlowMargin
+        collectionViewHeightConstraint.constant = safeAreaFrame.height - heighMargin
         collectionViewBottomConstraint.constant = coverFlowLayoutMode ? collectionViewBottomMarginCoverFlow : collectionViewBottomMarginFlow
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
@@ -434,7 +342,7 @@ extension MainView {
     
     
     // For single row coverFlowLayout - fit to height and left/right margin of 40
-    private var cellSizeCoverFlowLayout: CGSize {
+    var cellSizeCoverFlowLayout: CGSize {
         var width: CGFloat = frame.width - collectionViewHorizontalInsets * 2
         var height = width / posterRatio
         if height > collectionView.frame.height {
@@ -445,7 +353,7 @@ extension MainView {
     }
     
     // For 2 rows flowLayout
-    private var cellSizeFlowLayout: CGSize {
+    var cellSizeFlowLayout: CGSize {
         let footerHeight: CGFloat = 38
         let height = (collectionView.frame.height - flowLayout.minimumInteritemSpacing) / 2
         let posterHeight = height - footerHeight

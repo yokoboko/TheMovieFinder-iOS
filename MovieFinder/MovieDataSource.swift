@@ -31,10 +31,11 @@ class MovieDataSource: NSObject {
 
     private weak var dataTask: URLSessionDataTask?
 
+
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
         super.init()
-        loadWith(movieFilter: MovieFilter.popular) // loadWith(movieFilter: MovieFilter.search("Kill"))
+        loadWith(movieFilter: MovieFilter.upcoming) // loadWith(movieFilter: MovieFilter.search("Kill"))
     }
 
     func loadWith(movieFilter: MovieFilter) {

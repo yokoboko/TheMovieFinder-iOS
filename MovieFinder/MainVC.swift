@@ -12,6 +12,8 @@ class MainVC: UIViewController {
 
     let mainView = MainView()
 
+    private var section: MovieSection = .movies
+
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!
     
@@ -21,7 +23,12 @@ class MainVC: UIViewController {
         super.viewDidLoad()
         loadGenres()
     }
-    
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        mainView.constraintCollectionView()
+    }
+
     override func loadView() {
         view = mainView
     }
@@ -30,7 +37,7 @@ class MainVC: UIViewController {
         super.viewDidLayoutSubviews()
         mainView.updateItemSize()
     }
-    
+
     private func loadGenres() {
 
         GenresData.loadGenres { [weak self] (result) in
@@ -64,7 +71,8 @@ class MainVC: UIViewController {
         // Button actions
         mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
         mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
-        mainView.filtersBtn.addTarget(self, action: #selector(filtersAction), for: .touchUpInside)
+        mainView.filtersBtn.addTarget(self, action: #selector(showFilterAction), for: .touchUpInside)
+        mainView.filterView.hideFilterBtn.addTarget(self, action: #selector(hideFilterAction), for: .touchUpInside)
     }
 }
 
@@ -81,8 +89,12 @@ extension MainVC {
         mainView.collectionViewToggleLayout()
     }
     
-    @objc private func filtersAction(_ sender: Any) {
+    @objc private func showFilterAction(_ sender: Any) {
+        mainView.showFilter()
+    }
 
+    @objc private func hideFilterAction(_ sender: Any) {
+        mainView.hideFilter()
     }
 }
 
@@ -100,10 +112,12 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if mainView.collectionView.contentOffset.x >= mainView.collectionView.bounds.width {
-              mainView.scrollToTopBtn.alpha = 1
-        } else {
-              mainView.scrollToTopBtn.alpha = mainView.scrollToTopBtnAlpha
+        if mainView.isFilterHidden {
+            if mainView.collectionView.contentOffset.x >= mainView.collectionView.bounds.width {
+                  mainView.scrollToTopBtn.alpha = 1
+            } else {
+                  mainView.scrollToTopBtn.alpha = mainView.scrollToTopBtnAlpha
+            }
         }
     }
 

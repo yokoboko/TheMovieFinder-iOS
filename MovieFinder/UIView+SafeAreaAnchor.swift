@@ -37,4 +37,12 @@ extension UIView {
         }
         return self.bottomAnchor
     }
+
+    public var safeAreaFrame: CGRect {
+        if #available(iOS 11, *) {
+            return safeAreaLayoutGuide.layoutFrame
+        }
+        return bounds
+    }
 }
+

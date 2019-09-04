@@ -36,9 +36,12 @@
 		F10D95AF230D7EA000D48239 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D95AE230D7EA000D48239 /* GradientView.swift */; };
 		F10D95B2230D7EDC00D48239 /* UIImage+Saturation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */; };
 		F10D95B4230D819F00D48239 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F10D95B3230D819F00D48239 /* Application.xcassets */; };
+		F113BECA231D30DE00F88244 /* MovieSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BEC9231D30DD00F88244 /* MovieSection.swift */; };
+		F113BECC231D333100F88244 /* MainView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BECB231D333100F88244 /* MainView+Animations.swift */; };
 		F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */; };
 		F1142B2F23153E5D006D7A5F /* UIPaddedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1142B2E23153E5D006D7A5F /* UIPaddedLabel.swift */; };
 		F1669D9D2313D80F00ADC675 /* GenresData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1669D9C2313D80F00ADC675 /* GenresData.swift */; };
+		F18323F42317B45300B24A0E /* MainFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18323F32317B45300B24A0E /* MainFilterView.swift */; };
 		F1894E72231670A400A20902 /* MovieFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1894E71231670A400A20902 /* MovieFilter.swift */; };
 		F1907EFF231014780097E9DB /* UIDevice+Notch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1907EFE231014770097E9DB /* UIDevice+Notch.swift */; };
 		F1A14658230E88FF00A874DA /* MovieDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A14657230E88FF00A874DA /* MovieDataSource.swift */; };
@@ -99,9 +102,12 @@
 		F10D95AE230D7EA000D48239 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Saturation.swift"; sourceTree = "<group>"; };
 		F10D95B3230D819F00D48239 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
+		F113BEC9231D30DD00F88244 /* MovieSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSection.swift; sourceTree = "<group>"; };
+		F113BECB231D333100F88244 /* MainView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainView+Animations.swift"; sourceTree = "<group>"; };
 		F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterSmallCell.swift; sourceTree = "<group>"; };
 		F1142B2E23153E5D006D7A5F /* UIPaddedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPaddedLabel.swift; sourceTree = "<group>"; };
 		F1669D9C2313D80F00ADC675 /* GenresData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenresData.swift; sourceTree = "<group>"; };
+		F18323F32317B45300B24A0E /* MainFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterView.swift; sourceTree = "<group>"; };
 		F1894E71231670A400A20902 /* MovieFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieFilter.swift; sourceTree = "<group>"; };
 		F1907EFE231014770097E9DB /* UIDevice+Notch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Notch.swift"; sourceTree = "<group>"; };
 		F1A14657230E88FF00A874DA /* MovieDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDataSource.swift; sourceTree = "<group>"; };
@@ -237,7 +243,7 @@
 		F10D957C230D585900D48239 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F1A1465A230E8DD500A874DA /* Main VC */,
+				F1A1465A230E8DD500A874DA /* MainView */,
 				F1A1465B230E8DF100A874DA /* Cell */,
 				F10D95AE230D7EA000D48239 /* GradientView.swift */,
 				F1A1465E230E8E8800A874DA /* CoverFlowLayout.swift */,
@@ -334,21 +340,24 @@
 		F1A14659230E8DB600A874DA /* Data Source */ = {
 			isa = PBXGroup;
 			children = (
-				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
+				F113BEC9231D30DD00F88244 /* MovieSection.swift */,
 				F1894E71231670A400A20902 /* MovieFilter.swift */,
+				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
 				F1A14657230E88FF00A874DA /* MovieDataSource.swift */,
 				F1669D9C2313D80F00ADC675 /* GenresData.swift */,
 			);
 			name = "Data Source";
 			sourceTree = "<group>";
 		};
-		F1A1465A230E8DD500A874DA /* Main VC */ = {
+		F1A1465A230E8DD500A874DA /* MainView */ = {
 			isa = PBXGroup;
 			children = (
 				F10D95AA230D7B9A00D48239 /* MainView.swift */,
+				F113BECB231D333100F88244 /* MainView+Animations.swift */,
+				F18323F32317B45300B24A0E /* MainFilterView.swift */,
 				F10D95AC230D7E3400D48239 /* MainBackgroundView.swift */,
 			);
-			name = "Main VC";
+			name = MainView;
 			sourceTree = "<group>";
 		};
 		F1A1465B230E8DF100A874DA /* Cell */ = {
@@ -546,6 +555,7 @@
 				F1907EFF231014780097E9DB /* UIDevice+Notch.swift in Sources */,
 				F10D9559230D302B00D48239 /* MainVC.swift in Sources */,
 				F10D959F230D713B00D48239 /* TVShow.swift in Sources */,
+				F113BECA231D30DE00F88244 /* MovieSection.swift in Sources */,
 				F10D9595230D704B00D48239 /* Crew.swift in Sources */,
 				F1A14663230E90C700A874DA /* UIColor+Extension.swift in Sources */,
 				F1A14669230EC20100A874DA /* Localizable.swift in Sources */,
@@ -561,10 +571,12 @@
 				F10D958F230D6FE100D48239 /* MovieVideosResponse.swift in Sources */,
 				F10D9591230D701900D48239 /* MovieVideo.swift in Sources */,
 				F1894E72231670A400A20902 /* MovieFilter.swift in Sources */,
+				F113BECC231D333100F88244 /* MainView+Animations.swift in Sources */,
 				F10D959B230D70F700D48239 /* Genre.swift in Sources */,
 				F10D95AB230D7B9A00D48239 /* MainView.swift in Sources */,
 				F1A14667230EB78C00A874DA /* DataSourceDelegate.swift in Sources */,
 				F10D958B230D6FAC00D48239 /* MovieResponse.swift in Sources */,
+				F18323F42317B45300B24A0E /* MainFilterView.swift in Sources */,
 				F1A14665230E923900A874DA /* Cell+ReuseIdentifier.swift in Sources */,
 				F10D9599230D708700D48239 /* ImagesResponse.swift in Sources */,
 				F10D9593230D704100D48239 /* Cast.swift in Sources */,
