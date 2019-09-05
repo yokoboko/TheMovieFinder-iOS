@@ -35,7 +35,7 @@ class MovieDataSource: NSObject {
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
         super.init()
-        loadWith(movieFilter: MovieFilter.upcoming) // loadWith(movieFilter: MovieFilter.search("Kill"))
+        //loadWith(movieFilter: MovieFilter.upcoming) // loadWith(movieFilter: MovieFilter.search("Kill"))
     }
 
     func loadWith(movieFilter: MovieFilter) {
@@ -63,7 +63,7 @@ class MovieDataSource: NSObject {
 
         switch movieFilter {
 
-        case .popular: endpoint = .movieTopRated
+        case .popular: endpoint = .moviePopular
         case .trending: endpoint = .movieTrending
         case .topRated: endpoint = .movieTopRated
         case .upcoming: endpoint = .movieUpcoming

@@ -13,6 +13,7 @@ class MainVC: UIViewController {
     let mainView = MainView()
 
     private var section: MovieSection = .movies
+    private var movieFilter: MovieFilter = MovieFilter.all[0]
 
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!
@@ -55,12 +56,17 @@ class MainVC: UIViewController {
     private func setupVC() {
         
         // Header
-        mainView.sectionLabel.text = "movies".localized
-        mainView.filterLabel.text = "top_rated".localized
-        
+        mainView.sectionLabel.text = section.localizedName
+        mainView.filterLabel.text = movieFilter.localizedName
+
+        // Set filter
+        let filterNames: [String] = MovieFilter.all.map { $0.localizedName }
+        mainView.filterView.setFilters(names: filterNames, selectIndex: 0)
+
         // Default data source(Movies)
         movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
         movieDataSource.delegate = self
+        movieDataSource.loadWith(movieFilter: movieFilter)
 
         // CollectionView setup
         mainView.collectionView.delegate = self
@@ -73,6 +79,9 @@ class MainVC: UIViewController {
         mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
         mainView.filtersBtn.addTarget(self, action: #selector(showFilterAction), for: .touchUpInside)
         mainView.filterView.hideFilterBtn.addTarget(self, action: #selector(hideFilterAction), for: .touchUpInside)
+        for filterBtn in mainView.filterView.filterBtns {
+            filterBtn.addTarget(self, action: #selector(filterAction), for: .touchUpInside)
+        }
     }
 }
 
@@ -96,8 +105,41 @@ extension MainVC {
     @objc private func hideFilterAction(_ sender: Any) {
         mainView.hideFilter()
     }
+
+    @objc private func filterAction(_ sender: UIButton) {
+
+        switch section {
+        case .movies:
+                let filter = MovieFilter.all[sender.tag]
+
+                switch filter {
+                case .genres(_): break
+                case .search(_): break
+                default:
+                    movieFilter = filter
+                    mainView.filterLabel.text = movieFilter.localizedName
+                    mainView.filterView.selectFilter(selectIndex: sender.tag)
+                    movieDataSource.loadWith(movieFilter: movieFilter)
+
+                    // Disable collectionView
+                    mainView.collectionView.isUserInteractionEnabled = false
+                    mainView.collectionView.alpha = 0.5
+                }
+
+        case .tvShows:
+            print("TV Shows Filter: \(sender.tag)")
+
+        case .favourites:
+            print("Favourites Filter: \(sender.tag)")
+        }
+    }
 }
 
+// MARK: - Filters
+
+extension MainVC {
+
+}
 
 // MARK: - Collection View Delegate
 
@@ -150,6 +192,10 @@ extension MainVC: DataSourceDelegate {
         if let imageURL = imageURL {
             mainView.backgroundView.loadImage(url: imageURL)
         }
+
+        // Enable collectionView
+        mainView.collectionView.isUserInteractionEnabled = true
+        mainView.collectionView.alpha = 1
         
         // Set info
         mainView.setInfo(name: name, rating: voteAverage, genres: genres, date: year)

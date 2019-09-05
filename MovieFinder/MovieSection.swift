@@ -9,5 +9,15 @@
 import Foundation
 
 enum MovieSection {
-    case movies, tv, favourites
+    case movies, tvShows, favourites
+}
+
+extension MovieSection {
+    var localizedName: String {
+        switch self {
+        case .movies: return "movies".localized
+        case .tvShows: return "tvShows".localized
+        case .favourites: return "favourites".localized
+        }
+    }
 }

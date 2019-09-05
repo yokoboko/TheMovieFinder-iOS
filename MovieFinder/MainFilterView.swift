@@ -26,6 +26,8 @@ class MainFilterView: UIStackView {
     var searchView: UIView!
     var searchField: UITextField!
 
+    private var secondFilterRow: UIView!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -34,6 +36,36 @@ class MainFilterView: UIStackView {
     required init(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+    }
+
+    func setFilters(names: [String], selectIndex: Int) {
+        for (index, name) in names.enumerated() {
+            if index < filterBtns.count {
+                let filterBtn = filterBtns[index]
+                filterBtn.setTitle(name, for: .normal)
+            }
+        }
+        selectFilter(selectIndex: selectIndex)
+    }
+
+    func selectFilter(selectIndex: Int) {
+        if selectIndex < filterBtns.count {
+            for (index, filterBtn) in filterBtns.enumerated() {
+                filterBtn.setTitleColor(index == selectIndex  ? UIColor.movieFinder.primary : UIColor.movieFinder.tertiery,, for: .normal)
+            }
+            let filterBtn = filterBtns[selectIndex]
+            filterFocusXConstaint.isActive = false
+            filterFocusBottomConstraint.isActive = false
+            filterFocusWidthConstaint.isActive = false
+            filterFocusXConstaint = filterFocusView.centerXAnchor.constraint(equalTo: filterBtn.centerXAnchor)
+            filterFocusBottomConstraint = filterFocusView.bottomAnchor.constraint(equalTo: filterBtn.bottomAnchor, constant: -2)
+            filterFocusWidthConstaint = filterFocusView.widthAnchor.constraint(equalTo: filterBtn.widthAnchor)
+            NSLayoutConstraint.activate([
+                filterFocusXConstaint,
+                filterFocusBottomConstraint,
+                filterFocusWidthConstaint
+                ])
+        }
     }
 }
 
@@ -126,19 +158,15 @@ extension MainFilterView {
         addArrangedSubview(filterSV)
 
         filterSV.addArrangedSubview(createFilterRow())
-        filterSV.addArrangedSubview(createFilterRow())
-
-        let firstFilterBtn = filterBtns[0]
-        firstFilterBtn.setTitleColor(UIColor.movieFinder.primary, for: .normal)
-        for (index, filterType) in MovieFilter.all.enumerated() {
-            filterBtns[index].setTitle(filterType.localizedName, for: .normal)
-        }
+        secondFilterRow = createFilterRow()
+        filterSV.addArrangedSubview(secondFilterRow)
 
         filterFocusView = UIView()
         filterFocusView.backgroundColor = UIColor.movieFinder.primary
         filterFocusView.translatesAutoresizingMaskIntoConstraints = false
         filterSV.addSubview(filterFocusView)
 
+        let firstFilterBtn = filterBtns[0]
         filterFocusXConstaint = filterFocusView.centerXAnchor.constraint(equalTo: firstFilterBtn.centerXAnchor)
         filterFocusBottomConstraint = filterFocusView.bottomAnchor.constraint(equalTo: firstFilterBtn.bottomAnchor)
         filterFocusWidthConstaint = filterFocusView.widthAnchor.constraint(equalTo: firstFilterBtn.widthAnchor)

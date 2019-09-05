@@ -10,10 +10,10 @@ import Foundation
 
 enum MovieFilter {
 
-    case popular
     case trending
-    case topRated
     case upcoming
+    case popular
+    case topRated
     case genres([Genre])
     case search(String)
 }
@@ -21,7 +21,7 @@ enum MovieFilter {
 extension MovieFilter {
 
     static var all: [MovieFilter] {
-        return [popular, trending, topRated, upcoming, genres([]), search("")]
+        return [trending, upcoming, popular, topRated, genres([]), search("")]
     }
 
     var localizedName: String {

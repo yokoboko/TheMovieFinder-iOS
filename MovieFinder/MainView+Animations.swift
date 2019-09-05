@@ -300,7 +300,6 @@ extension MainView {
         }
     }
 
-
     private func stopDraging() {
         filterStartDrag = false
         if filterDragDirectionUp {
