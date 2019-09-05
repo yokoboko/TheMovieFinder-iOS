@@ -10,6 +10,8 @@ import UIKit
 
 class MainVC: UIViewController {
 
+    weak var delegate: MainCoordinatorDelegate?
+    
     let mainView = MainView()
 
     private var section: MovieSection = .movies
