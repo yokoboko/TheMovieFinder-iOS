@@ -51,7 +51,7 @@ class MainFilterView: UIStackView {
     func selectFilter(selectIndex: Int) {
         if selectIndex < filterBtns.count {
             for (index, filterBtn) in filterBtns.enumerated() {
-                filterBtn.setTitleColor(index == selectIndex  ? UIColor.movieFinder.primary : UIColor.movieFinder.tertiery,, for: .normal)
+                filterBtn.setTitleColor(index == selectIndex ? UIColor.movieFinder.primary : UIColor.movieFinder.tertiery, for: .normal)
             }
             let filterBtn = filterBtns[selectIndex]
             filterFocusXConstaint.isActive = false
