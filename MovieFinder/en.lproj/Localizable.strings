@@ -17,3 +17,6 @@
 "onTheAir" = "On The Air";
 "genres" = "Genres";
 "search" = "Search";
+
+"selectGenres" = "Select Genres";
+"done" = "Done";

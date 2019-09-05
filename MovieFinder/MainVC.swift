@@ -15,7 +15,6 @@ class MainVC: UIViewController {
     let mainView = MainView()
 
     private var section: MovieSection = .movies
-    private var movieFilter: MovieFilter = MovieFilter.all[0]
 
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!
@@ -56,7 +55,10 @@ class MainVC: UIViewController {
     }
 
     private func setupVC() {
-        
+
+        // Default filters
+        let movieFilter = MovieFilter.all[0]
+
         // Header
         mainView.sectionLabel.text = section.localizedName
         mainView.filterLabel.text = movieFilter.localizedName
@@ -68,7 +70,7 @@ class MainVC: UIViewController {
         // Default data source(Movies)
         movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
         movieDataSource.delegate = self
-        movieDataSource.loadWith(movieFilter: movieFilter)
+        movieDataSource.filter = movieFilter
 
         // CollectionView setup
         mainView.collectionView.delegate = self
@@ -83,6 +85,60 @@ class MainVC: UIViewController {
         mainView.filterView.hideFilterBtn.addTarget(self, action: #selector(hideFilterAction), for: .touchUpInside)
         for filterBtn in mainView.filterView.filterBtns {
             filterBtn.addTarget(self, action: #selector(filterAction), for: .touchUpInside)
+        }
+    }
+
+    private func selectMovieFilter(index: Int) {
+
+        let filter = MovieFilter.all[index]
+
+        switch filter {
+
+        case .genres(_):
+            var selectedGenres: [Genre] = []
+            switch movieDataSource.filter {
+            case .genres(let genres): selectedGenres = genres
+            default: break
+            }
+            delegate?.pickGenres(genreType: .movie, completion: { [weak self] (selectedGenres) in
+
+                guard let self = self else { return }
+
+                switch self.movieDataSource.filter {
+                case .genres(_):
+                    if selectedGenres.isEmpty {
+                        self.selectMovieFilter(index: 0)
+                        return
+                    }
+                default: break
+                }
+
+                if !selectedGenres.isEmpty {
+                    let genresFilter = MovieFilter.genres(selectedGenres)
+                    let genreNameString = selectedGenres.map { $0.name }.joined(separator: ", ")
+                    self.mainView.filterLabel.text = "\(genresFilter.localizedName): \(genreNameString)"
+                    self.mainView.filterView.selectFilter(selectIndex: genresFilter.index)
+                    self.movieDataSource.filter = genresFilter
+
+                    // Disable collectionView
+                    self.mainView.collectionView.isUserInteractionEnabled = false
+                    self.mainView.collectionView.alpha = 0.5
+                }
+            }, selected: selectedGenres)
+
+
+        case .search(_):
+            break
+
+        default:
+
+            mainView.filterLabel.text = filter.localizedName
+            mainView.filterView.selectFilter(selectIndex: index)
+            movieDataSource.filter = filter
+
+            // Disable collectionView
+            mainView.collectionView.isUserInteractionEnabled = false
+            mainView.collectionView.alpha = 0.5
         }
     }
 }
@@ -109,30 +165,10 @@ extension MainVC {
     }
 
     @objc private func filterAction(_ sender: UIButton) {
-
         switch section {
-        case .movies:
-                let filter = MovieFilter.all[sender.tag]
-
-                switch filter {
-                case .genres(_): break
-                case .search(_): break
-                default:
-                    movieFilter = filter
-                    mainView.filterLabel.text = movieFilter.localizedName
-                    mainView.filterView.selectFilter(selectIndex: sender.tag)
-                    movieDataSource.loadWith(movieFilter: movieFilter)
-
-                    // Disable collectionView
-                    mainView.collectionView.isUserInteractionEnabled = false
-                    mainView.collectionView.alpha = 0.5
-                }
-
-        case .tvShows:
-            print("TV Shows Filter: \(sender.tag)")
-
-        case .favourites:
-            print("Favourites Filter: \(sender.tag)")
+        case .movies: selectMovieFilter(index: sender.tag)
+        case .tvShows: print("TV Shows Filter: \(sender.tag)")
+        case .favourites: print("Favourites Filter: \(sender.tag)")
         }
     }
 }

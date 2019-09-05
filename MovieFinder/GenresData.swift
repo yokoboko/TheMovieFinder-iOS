@@ -71,7 +71,11 @@ class GenresData {
         }
         return genreNames
     }
-    
+
+    static func getMovieGenres() -> [Genre] {
+        return movieGenres
+    }
+
     static func tvShowGenreNames(ids: [Int]?) -> [String] {
         
         var genreNames = [String]()
@@ -83,5 +87,9 @@ class GenresData {
             }
         }
         return genreNames
+    }
+
+    static func getTVShowGenres() -> [Genre] {
+        return tvShowGenres
     }
 }

@@ -34,4 +34,13 @@ extension MovieFilter {
         case .search: return "search".localized
         }
     }
+
+    var index: Int {
+        for (i, filter) in MovieFilter.all.enumerated() {
+            if filter.localizedName == self.localizedName {
+                return i
+            }
+        }
+        return 0
+    }
 }

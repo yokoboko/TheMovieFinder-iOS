@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MainCoordinatorDelegate: class {
-
+    func pickGenres(genreType: GenreType, completion: @escaping ((_ selected: [Genre]) -> Void), selected: [Genre]?)
 }
 
 class MainCoordinator: BaseCoordinator {
@@ -29,5 +29,10 @@ class MainCoordinator: BaseCoordinator {
 }
 
 extension MainCoordinator: MainCoordinatorDelegate {
-
+    func pickGenres(genreType: GenreType, completion: @escaping ((_ selected: [Genre]) -> Void), selected: [Genre]?) {
+        let genrePickerVC = GenrePickerVC(genreType: genreType, completion: completion, selected: selected)
+        genrePickerVC.modalPresentationStyle = .overCurrentContext
+        genrePickerVC.modalTransitionStyle = .coverVertical
+        navigationController.present(genrePickerVC, animated: true, completion: nil)
+    }
 }

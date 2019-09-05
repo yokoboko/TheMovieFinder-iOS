@@ -147,16 +147,23 @@ extension MainView {
         sectionLabel.font = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.light)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(sectionLabel)
-        sectionLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        sectionLabel.topAnchor.constraint(equalTo: safeTopAnchor, constant: 20).isActive = true
+
         
         filterLabel = UILabel(frame: .zero)
         filterLabel.textColor = UIColor.movieFinder.tertiery
         filterLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.light)
         filterLabel.translatesAutoresizingMaskIntoConstraints = false
+        filterLabel.textAlignment = .center
         addSubview(filterLabel)
-        filterLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        filterLabel.topAnchor.constraint(equalTo: sectionLabel.bottomAnchor, constant: -2).isActive = true
+
+        NSLayoutConstraint.activate([
+            sectionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            sectionLabel.topAnchor.constraint(equalTo: safeTopAnchor, constant: 20),
+            filterLabel.topAnchor.constraint(equalTo: sectionLabel.bottomAnchor, constant: -2),
+            filterLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: 40),
+            filterLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -40),
+            ])
+
     }
     
     private func setupCollectionView() {

@@ -28,8 +28,18 @@ class MovieDataSource: NSObject {
     private let preheater = ImagePreheater()
 
     private var movieFilter: MovieFilter = .popular
+    var filter: MovieFilter {
+        get {
+            return movieFilter
+        }
+        set (newFilter) {
+            movieFilter = newFilter
+            fetchDataWithCurrentFilter()
+        }
+    }
 
     private weak var dataTask: URLSessionDataTask?
+
 
 
     init(collectionView: UICollectionView) {
@@ -38,9 +48,7 @@ class MovieDataSource: NSObject {
         //loadWith(movieFilter: MovieFilter.upcoming) // loadWith(movieFilter: MovieFilter.search("Kill"))
     }
 
-    func loadWith(movieFilter: MovieFilter) {
-
-        self.movieFilter = movieFilter
+    private func fetchDataWithCurrentFilter() {
         itemOnFocus = -1
         page = 0
         totalPages = 0
