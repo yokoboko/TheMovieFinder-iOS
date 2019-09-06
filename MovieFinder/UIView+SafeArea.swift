@@ -44,5 +44,12 @@ extension UIView {
         }
         return bounds
     }
+
+    public var safeInsets: UIEdgeInsets {
+        if #available(iOS 11, *) {
+            return safeAreaInsets
+        }
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
 }
 

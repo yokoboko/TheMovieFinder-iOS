@@ -23,7 +23,6 @@ class MovieDataSource: NSObject, DataSourceProtocol {
     private var totalPages = 0
     private var items = [Movie]()
 
-
     private var isFetching = false
     private var retryingToFetchData = false
 
@@ -46,12 +45,17 @@ class MovieDataSource: NSObject, DataSourceProtocol {
 
     private weak var dataTask: URLSessionDataTask?
 
-
-
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
         super.init()
         //loadWith(movieFilter: MovieFilter.upcoming) // loadWith(movieFilter: MovieFilter.search("Kill"))
+    }
+
+    func getItem(index: Int) -> Movie? {
+        if index >= 0, index < items.count {
+            return items[index]
+        }
+        return nil
     }
 
     private func fetchDataWithCurrentFilter() {

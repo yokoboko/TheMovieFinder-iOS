@@ -9,7 +9,7 @@
 import UIKit
 import Nuke
 
-class PosterSmallCell: UICollectionViewCell {
+class PosterSmallCell: UICollectionViewCell, PosterCell {
     
     var imageView: UIImageView = {
         let imageView = UIImageView()

@@ -277,6 +277,18 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
+
+        if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell, let image = cell.imageView.image {
+
+            switch section {
+            case .movies:
+                if let movie = movieDataSource.getItem(index: indexPath.item) {
+                    delegate?.detail(movie: movie, posterCell: cell)
+                }
+
+            default: break
+            }
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -19,7 +19,7 @@ class GenrePickerVC: UIViewController {
 
     private var didChangeSelection = false
 
-    init(genreType: GenreType, completion: @escaping ((_ selected: [Genre]) -> Void), selected: [Genre]?) {
+    init(genreType: GenreType, completion: @escaping (_ selected: [Genre]) -> Void, selected: [Genre]?) {
         self.genreType = genreType
         self.completion = completion
         if let selected = selected {
