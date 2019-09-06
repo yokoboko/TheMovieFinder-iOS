@@ -9,8 +9,8 @@
 import UIKit
 import Nuke
 
-class MovieDataSource: NSObject {
-    
+class MovieDataSource: NSObject, DataSourceProtocol {
+
     var delegate: DataSourceDelegate?
     
     private unowned var collectionView: UICollectionView
@@ -19,7 +19,9 @@ class MovieDataSource: NSObject {
     private var totalPages = 0
     private var items = [Movie]()
 
+    var isLoadingData: Bool { get { return isFetching }}
     private var isFetching = false
+    private var retryingToFetchData = false
 
     private var itemOnFocus = -1
     
@@ -67,7 +69,8 @@ class MovieDataSource: NSObject {
     private func fetchData() {
 
         var endpoint: MovieAPIEndpoint!
-        var params = ["page": "\(page + 1)"]
+        let pageToLoad = page + 1
+        var params = ["page": "\(pageToLoad)"]
 
         switch movieFilter {
 
@@ -86,13 +89,15 @@ class MovieDataSource: NSObject {
         }
 
         isFetching = true
+        retryingToFetchData = false
+        if pageToLoad == 1 { delegate?.dataIsLoading() }
         dataTask?.cancel()
         dataTask = MovieAPI.shared.GET(endpoint: endpoint,
                                  params: params,
                                  printDebug: true) { [weak self] (result: Result<MovieResponse, MovieAPIError>) in
     
                                     guard let self = self else { return }
-
+                                    self.isFetching = false
 
                                     switch result {
                                     case .success(let response):
@@ -100,17 +105,21 @@ class MovieDataSource: NSObject {
                                         self.page = response.page
                                         self.totalPages = response.totalPages
 
-                                        // First load
+                                        // Ignore results without posters - not cool
+                                        let results = response.results.filter { $0.posterPath != nil }
+
+                                        // First load with new filter
                                         if self.page == 1, !self.items.isEmpty {
                                             self.items.removeAll()
                                             self.collectionView.reloadData()
                                         }
 
                                         self.collectionView.performBatchUpdates({
-                                            self.items.append(contentsOf: response.results)
+
+                                            self.items.append(contentsOf: results)
                                             var insertedItemsIndex = [IndexPath]()
                                             let end = self.items.count
-                                            let start = end - response.results.count
+                                            let start = end - results.count
                                             for i in start..<end {
                                                 insertedItemsIndex.append(IndexPath(item: i, section: 0))
                                             }
@@ -121,12 +130,24 @@ class MovieDataSource: NSObject {
                                             self.itemOnFocus = 0
                                             self.callOnFocusDelegate()
                                         }
-                                    case .failure(let error):
-                                        print("Error: \(error)")
-                                    }
 
-                                    self.isFetching = false
+                                        if self.page == 1 {
+                                            self.delegate?.dataLoaded(isEmpty: self.items.isEmpty)
+                                        }
+
+                                    case .failure(_):
+                                        self.retryFetchData()
+                                    }
             }
+    }
+
+    private func retryFetchData() { // on unsuccessful request
+        if !retryingToFetchData {
+            retryingToFetchData = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+                if let self = self { self.fetchData() }
+            }
+        }
     }
 
     private func callOnFocusDelegate() {
@@ -137,7 +158,7 @@ class MovieDataSource: NSObject {
             posterURL = MovieImagePath.medium.path(poster: posterPath)
         }
         
-        delegate?.movieOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.releaseDate, imageURL: posterURL)
+        delegate?.itemOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.releaseDate, imageURL: posterURL)
     }
     
     private func imageURLForPosterPath(_ path: String) -> URL {
@@ -169,7 +190,7 @@ extension MovieDataSource: UICollectionViewDataSource {
         let item = items[indexPath.item]
         cell.title.text = item.title
         cell.genres.text = GenresData.movieGenreNames(ids: item.genreIds).joined(separator: ", ")
-        if let rating = item.voteAverage {
+        if let rating = item.voteAverage, rating != 0.0 {
             cell.rating.text = String(rating)
             cell.rating.isHidden = false
         } else {

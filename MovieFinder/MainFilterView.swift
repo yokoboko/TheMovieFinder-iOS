@@ -80,7 +80,6 @@ extension MainFilterView {
         setupHideBtn()
         setupSectionView()
         setupFilterView()
-        //setupSearchView()
     }
 
     private func setupHideBtn() {
@@ -219,47 +218,5 @@ extension MainFilterView {
         btn.tag = filterBtns.count
         filterBtns.append(btn)
         return btn
-    }
-
-    private func setupSearchView() {
-
-        searchView = UIView()
-        searchView.translatesAutoresizingMaskIntoConstraints = false
-        addArrangedSubview(searchView)
-
-        let line = UIView()
-        line.backgroundColor = UIColor.movieFinder.tertiery
-        line.translatesAutoresizingMaskIntoConstraints = false
-        searchView.addSubview(line)
-
-        searchField = UITextField()
-        searchField.translatesAutoresizingMaskIntoConstraints = false
-        searchField.leftViewMode = .always
-        let searchImageView = UIImageView(image: UIImage(named: "icon_search"))
-        searchImageView.contentMode = .left
-        if let size = searchImageView.image?.size {
-            searchImageView.frame = CGRect(x: 0.0, y: 0.0, width: size.width + 8.0, height: size.height)
-        }
-        searchField.leftView = searchImageView
-        searchField.textColor = UIColor.movieFinder.primary
-        searchField.attributedPlaceholder = NSAttributedString(string: "search".localized,
-                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.movieFinder.tertiery])
-        //searchField.clearButtonMode = .always
-        searchView.addSubview(searchField)
-
-        NSLayoutConstraint.activate([
-
-            line.heightAnchor.constraint(equalToConstant: 1),
-            line.bottomAnchor.constraint(equalTo: searchView.bottomAnchor),
-            line.leftAnchor.constraint(equalTo: searchView.leftAnchor, constant: 12),
-            line.rightAnchor.constraint(equalTo: searchView.rightAnchor, constant: 12),
-
-            searchField.topAnchor.constraint(equalTo: searchView.topAnchor),
-            searchField.bottomAnchor.constraint(equalTo: line.topAnchor, constant: -8),
-            searchField.leftAnchor.constraint(equalTo: searchView.leftAnchor, constant: 12),
-            searchField.rightAnchor.constraint(equalTo: searchView.rightAnchor, constant: 12)
-            ])
-
-        searchView.isHidden = true
     }
 }

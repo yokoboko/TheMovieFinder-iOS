@@ -9,5 +9,7 @@
 import Foundation
 
 protocol DataSourceDelegate: class {
-    func movieOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?)
+    func itemOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?)
+    func dataIsLoading()
+    func dataLoaded(isEmpty: Bool)
 }

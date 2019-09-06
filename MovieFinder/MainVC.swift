@@ -18,9 +18,15 @@ class MainVC: UIViewController {
 
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!
+    // private var tvDataSource: TVDataSource!
+    // private var favouritesDataSource: FavouritesDataSource!s
     
-    private var dataLoaded = false
-    
+    private var firstTimeDataLoaded = false
+
+    private var hideKeyboardOnTap: UITapGestureRecognizer?
+    private var movieSearchTerm = ""
+    private var tvShowsSearchTerm = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         loadGenres()
@@ -59,7 +65,7 @@ class MainVC: UIViewController {
         // Default filters
         let movieFilter = MovieFilter.all[0]
 
-        // Header
+        // Header (section & filter labels)
         mainView.sectionLabel.text = section.localizedName
         mainView.filterLabel.text = movieFilter.localizedName
 
@@ -86,6 +92,9 @@ class MainVC: UIViewController {
         for filterBtn in mainView.filterView.filterBtns {
             filterBtn.addTarget(self, action: #selector(filterAction), for: .touchUpInside)
         }
+
+        // Setup SearchField
+        setupSearchField()
     }
 
     private func selectMovieFilter(index: Int) {
@@ -96,9 +105,8 @@ class MainVC: UIViewController {
 
         case .genres(_):
             var selectedGenres: [Genre] = []
-            switch movieDataSource.filter {
-            case .genres(let genres): selectedGenres = genres
-            default: break
+            if case MovieFilter.genres(let genres) = movieDataSource.filter {
+                selectedGenres = genres
             }
             delegate?.pickGenres(genreType: .movie, completion: { [weak self] (selectedGenres) in
 
@@ -119,15 +127,16 @@ class MainVC: UIViewController {
                     self.mainView.filterLabel.text = "\(genresFilter.localizedName): \(genreNameString)"
                     self.mainView.filterView.selectFilter(selectIndex: genresFilter.index)
                     self.movieDataSource.filter = genresFilter
-
-                    // Disable collectionView
-                    self.mainView.collectionView.isUserInteractionEnabled = false
-                    self.mainView.collectionView.alpha = 0.5
                 }
             }, selected: selectedGenres)
 
 
         case .search(_):
+            if case MovieFilter.search(_) = movieDataSource.filter {} else {
+                movieSearchTerm = ""
+                mainView.searchView.searchField.text = ""
+            }
+            mainView.searchView.searchField.becomeFirstResponder()
             break
 
         default:
@@ -135,10 +144,6 @@ class MainVC: UIViewController {
             mainView.filterLabel.text = filter.localizedName
             mainView.filterView.selectFilter(selectIndex: index)
             movieDataSource.filter = filter
-
-            // Disable collectionView
-            mainView.collectionView.isUserInteractionEnabled = false
-            mainView.collectionView.alpha = 0.5
         }
     }
 }
@@ -173,10 +178,93 @@ extension MainVC {
     }
 }
 
-// MARK: - Filters
+// MARK: - Soft Keyboard
 
 extension MainVC {
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name:UIResponder.keyboardWillChangeFrameNotification, object: nil)
+
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        gesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(gesture)
+        hideKeyboardOnTap = gesture
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+        if let gesture = hideKeyboardOnTap {
+            view.removeGestureRecognizer(gesture)
+            hideKeyboardOnTap = nil
+        }
+    }
+
+    @objc private func keyboardNotification(notification: Notification) {
+
+        if notification.name == UIResponder.keyboardWillShowNotification { // Show search bar
+            mainView.collectionView.isUserInteractionEnabled = false
+            mainView.searchView.isHidden = false
+            mainView.searchView.alpha = 1
+        } else if notification.name == UIResponder.keyboardWillHideNotification { // Hide searchBar
+            mainView.searchView.isHidden = true
+            mainView.searchView.alpha = 0
+            mainView.collectionView.isUserInteractionEnabled = !(mainView.collectionView.dataSource as! DataSourceProtocol).isLoadingData
+        }
+        guard let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
+            mainView.searchView.transform = CGAffineTransform(translationX: 0, y: -keyboardRect.height)
+        } else {
+            mainView.searchView.transform = CGAffineTransform(translationX: 0, y: 0)
+        }
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+// MARK: - Search Field
+
+extension MainVC: UITextFieldDelegate {
+
+    private func setupSearchField() {
+        mainView.searchView.searchField.addTarget(self, action: #selector(searchFieldDidChange), for: .editingChanged)
+        mainView.searchView.searchField.delegate = self
+    }
+
+    @objc func searchFieldDidChange() {
+
+        let searchField = mainView.searchView.searchField
+        let searchTerm = searchField?.text ?? ""
+
+        switch section {
+        case .movies:
+            if searchTerm != movieSearchTerm {
+
+                movieSearchTerm = searchTerm
+                if movieSearchTerm.isEmpty {
+                    selectMovieFilter(index: 0)
+                } else {
+                    let searchFilter = MovieFilter.search(movieSearchTerm)
+                    self.mainView.filterLabel.text = "\(searchFilter.localizedName): \(movieSearchTerm)"
+                    self.mainView.filterView.selectFilter(selectIndex: searchFilter.index)
+                    self.movieDataSource.filter = searchFilter
+                }
+            }
+
+        default: break
+        }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        dismissKeyboard()
+        return true
+    }
 }
 
 // MARK: - Collection View Delegate
@@ -215,27 +303,34 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - DataSourceDelegate
 
 extension MainVC: DataSourceDelegate {
-    
-    func movieOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?) {
-        
+
+    func dataIsLoading() {
+        mainView.collectionView.isUserInteractionEnabled = false
+        mainView.collectionView.alpha = 0.5
+    }
+
+    func dataLoaded(isEmpty: Bool) {
         // On App Launch after load data
-        if !dataLoaded {
-            dataLoaded = true
+        if !firstTimeDataLoaded {
+            firstTimeDataLoaded = true
             mainView.showViewsAfterLoadingDataOnAppLaunch()
         }
-        
-        // Load background image
+        if !isEmpty {
+            mainView.collectionView.isUserInteractionEnabled = true
+            mainView.collectionView.alpha = 1
+        } else {
+            mainView.setInfo(name: "", rating: nil, genres: [], date: nil)
+        }
+    }
+
+    func itemOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?) {
+
         if let imageURL = imageURL {
             mainView.backgroundView.loadImage(url: imageURL)
         }
-
-        // Enable collectionView
-        mainView.collectionView.isUserInteractionEnabled = true
-        mainView.collectionView.alpha = 1
-        
-        // Set info
         mainView.setInfo(name: name, rating: voteAverage, genres: genres, date: year)
     }
 }

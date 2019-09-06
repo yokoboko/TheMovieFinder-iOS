@@ -33,6 +33,8 @@ class MainView: UIView {
     var filterDragShift: CGFloat = 0.0
     var filterDragDirectionUp = false
 
+    var searchView: MainSearchView!
+
     private let collectionViewHorizontalInsets: CGFloat = 40.0
     private let posterRatio: CGFloat = 24 / 36
     private let infoBottomMargin: CGFloat = 40.0
@@ -73,7 +75,7 @@ class MainView: UIView {
         
         infoNameLabel.text = name
         
-        if let rating = rating {
+        if let rating = rating, rating != 0.0 {
             let ratingString = String(rating)
             let ratingAttributes = [
                 NSAttributedString.Key.foregroundColor: UIColor.movieFinder.secondary,
@@ -126,6 +128,7 @@ extension MainView {
         setupInfoView()
         setupCollectionView()
         setupButtons()
+        setupSearchView()
         hideViewsAndShowLogoWhileLoadingOnAppLaunch()
     }
     
@@ -278,6 +281,21 @@ extension MainView {
                 filterViewTopConstraint,
                 filterView.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -collectionViewHorizontalInsets),
                 filterView.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: collectionViewHorizontalInsets)
+            ])
+    }
+
+    private func setupSearchView() {
+
+        searchView = MainSearchView()
+        searchView.translatesAutoresizingMaskIntoConstraints = false
+        searchView.isHidden = true
+        addSubview(searchView)
+
+        NSLayoutConstraint.activate([
+            searchView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 16),
+            searchView.leftAnchor.constraint(equalTo: leftAnchor),
+            searchView.rightAnchor.constraint(equalTo: rightAnchor),
+            searchView.heightAnchor.constraint(equalToConstant: 58)
             ])
     }
 }
