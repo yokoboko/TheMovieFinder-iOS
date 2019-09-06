@@ -12,14 +12,18 @@ import Nuke
 class MovieDataSource: NSObject, DataSourceProtocol {
 
     var delegate: DataSourceDelegate?
-    
+
+    // DataSourceProtocol
+    var isLoadingData: Bool { get { return isFetching }}
+    var isEmpty: Bool { get { return items.isEmpty }}
+
     private unowned var collectionView: UICollectionView
     
     private var page = 0
     private var totalPages = 0
     private var items = [Movie]()
 
-    var isLoadingData: Bool { get { return isFetching }}
+
     private var isFetching = false
     private var retryingToFetchData = false
 
@@ -132,7 +136,7 @@ class MovieDataSource: NSObject, DataSourceProtocol {
                                         }
 
                                         if self.page == 1 {
-                                            self.delegate?.dataLoaded(isEmpty: self.items.isEmpty)
+                                            self.delegate?.dataLoaded()
                                         }
 
                                     case .failure(_):
@@ -151,15 +155,17 @@ class MovieDataSource: NSObject, DataSourceProtocol {
     }
 
     private func callOnFocusDelegate() {
-        
-        let item = items[itemOnFocus]
-        var posterURL: URL? = nil
-        if  let posterPath = item.posterPath {
-            posterURL = MovieImagePath.medium.path(poster: posterPath)
+
+        if itemOnFocus < items.count {
+            let item = items[itemOnFocus]
+            var posterURL: URL? = nil
+            if  let posterPath = item.posterPath {
+                posterURL = MovieImagePath.medium.path(poster: posterPath)
+            }
+
+            delegate?.itemOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.releaseDate, imageURL: posterURL)
         }
-        
-        delegate?.itemOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.releaseDate, imageURL: posterURL)
-    }
+      }
     
     private func imageURLForPosterPath(_ path: String) -> URL {
         if let _ = collectionView.collectionViewLayout as? CoverFlowLayout {

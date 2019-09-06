@@ -34,6 +34,7 @@ class MainView: UIView {
     var filterDragDirectionUp = false
 
     var searchView: MainSearchView!
+    var noResultFoundView: MainNoResultFoundView!
 
     private let collectionViewHorizontalInsets: CGFloat = 40.0
     private let posterRatio: CGFloat = 24 / 36
@@ -129,6 +130,7 @@ extension MainView {
         setupCollectionView()
         setupButtons()
         setupSearchView()
+        setupNoResultFoundView()
         hideViewsAndShowLogoWhileLoadingOnAppLaunch()
     }
     
@@ -296,6 +298,22 @@ extension MainView {
             searchView.leftAnchor.constraint(equalTo: leftAnchor),
             searchView.rightAnchor.constraint(equalTo: rightAnchor),
             searchView.heightAnchor.constraint(equalToConstant: 58)
+            ])
+    }
+
+    private func setupNoResultFoundView() {
+
+        noResultFoundView = MainNoResultFoundView()
+        noResultFoundView.translatesAutoresizingMaskIntoConstraints = false
+        noResultFoundView.isUserInteractionEnabled = false
+        noResultFoundView.isHidden = true
+        addSubview(noResultFoundView)
+
+        NSLayoutConstraint.activate([
+            noResultFoundView.topAnchor.constraint(equalTo: collectionView.topAnchor),
+            noResultFoundView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            noResultFoundView.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: collectionViewHorizontalInsets),
+            noResultFoundView.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -collectionViewHorizontalInsets)
             ])
     }
 }

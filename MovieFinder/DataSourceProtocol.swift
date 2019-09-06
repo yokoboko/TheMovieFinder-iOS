@@ -10,4 +10,5 @@ import Foundation
 
 protocol DataSourceProtocol: class {
     var isLoadingData: Bool { get }
+    var isEmpty: Bool { get }
 }

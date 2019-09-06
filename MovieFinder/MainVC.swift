@@ -312,22 +312,24 @@ extension MainVC: DataSourceDelegate {
         mainView.collectionView.alpha = 0.5
     }
 
-    func dataLoaded(isEmpty: Bool) {
+    func dataLoaded() {
         // On App Launch after load data
         if !firstTimeDataLoaded {
             firstTimeDataLoaded = true
             mainView.showViewsAfterLoadingDataOnAppLaunch()
         }
-        if !isEmpty {
+        let dataSource = mainView.collectionView.dataSource as! DataSourceProtocol
+        if dataSource.isEmpty {
+            mainView.noResultFoundView.isHidden = false
+            mainView.setInfo(name: "", rating: nil, genres: [], date: nil)
+        } else {
             mainView.collectionView.isUserInteractionEnabled = true
             mainView.collectionView.alpha = 1
-        } else {
-            mainView.setInfo(name: "", rating: nil, genres: [], date: nil)
+            mainView.noResultFoundView.isHidden = true
         }
     }
 
     func itemOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?) {
-
         if let imageURL = imageURL {
             mainView.backgroundView.loadImage(url: imageURL)
         }

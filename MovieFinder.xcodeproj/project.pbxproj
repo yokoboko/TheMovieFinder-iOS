@@ -63,6 +63,7 @@
 		F1A1466D230EC2C600A874DA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1A1466F230EC2C600A874DA /* Localizable.strings */; };
 		F1FBCA4F23223093002157F6 /* MainSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FBCA4E23223092002157F6 /* MainSearchView.swift */; };
 		F1FBCA5123224150002157F6 /* DataSourceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */; };
+		F1FBCA5323225649002157F6 /* MainNoResultFoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FBCA5223225649002157F6 /* MainNoResultFoundView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,7 @@
 		F1A1466E230EC2C600A874DA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F1FBCA4E23223092002157F6 /* MainSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchView.swift; sourceTree = "<group>"; };
 		F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceProtocol.swift; sourceTree = "<group>"; };
+		F1FBCA5223225649002157F6 /* MainNoResultFoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNoResultFoundView.swift; sourceTree = "<group>"; };
 		F2F284B46A4E345834F76D4D /* Pods-MovieFinderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieFinderTests.debug.xcconfig"; path = "Target Support Files/Pods-MovieFinderTests/Pods-MovieFinderTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -408,6 +410,7 @@
 				F113BECB231D333100F88244 /* MainView+Animations.swift */,
 				F18323F32317B45300B24A0E /* MainFilterView.swift */,
 				F1FBCA4E23223092002157F6 /* MainSearchView.swift */,
+				F1FBCA5223225649002157F6 /* MainNoResultFoundView.swift */,
 				F10D95AC230D7E3400D48239 /* MainBackgroundView.swift */,
 			);
 			name = "Main View";
@@ -619,6 +622,7 @@
 				F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */,
 				F10D9582230D6EED00D48239 /* MovieAPIError.swift in Sources */,
 				F101E13323210941007E3F7E /* AppCoordinator.swift in Sources */,
+				F1FBCA5323225649002157F6 /* MainNoResultFoundView.swift in Sources */,
 				F101E13723210FCF007E3F7E /* BaseCoordinator.swift in Sources */,
 				F10D9557230D302B00D48239 /* AppDelegate.swift in Sources */,
 				F10D95A1230D715700D48239 /* TVShowResponse.swift in Sources */,

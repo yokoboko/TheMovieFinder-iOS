@@ -11,5 +11,5 @@ import Foundation
 protocol DataSourceDelegate: class {
     func itemOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?)
     func dataIsLoading()
-    func dataLoaded(isEmpty: Bool)
+    func dataLoaded()
 }
