@@ -97,7 +97,7 @@ class MainVC: UIViewController {
         setupSearchField()
     }
 
-    private func selectMovieFilter(index: Int) {
+    private func selectMovieFilter(index: Int, skipHideFilter: Bool = false) {
 
         let filter = MovieFilter.all[index]
 
@@ -124,9 +124,12 @@ class MainVC: UIViewController {
                 if !selectedGenres.isEmpty {
                     let genresFilter = MovieFilter.genres(selectedGenres)
                     let genreNameString = selectedGenres.map { $0.name }.joined(separator: ", ")
+                    self.movieDataSource.filter = genresFilter
                     self.mainView.filterLabel.text = "\(genresFilter.localizedName): \(genreNameString)"
                     self.mainView.filterView.selectFilter(selectIndex: genresFilter.index)
-                    self.movieDataSource.filter = genresFilter
+                    if !skipHideFilter {
+                        self.mainView.hideFilter()
+                    }
                 }
             }, selected: selectedGenres)
 
@@ -141,9 +144,12 @@ class MainVC: UIViewController {
 
         default:
 
+            movieDataSource.filter = filter
             mainView.filterLabel.text = filter.localizedName
             mainView.filterView.selectFilter(selectIndex: index)
-            movieDataSource.filter = filter
+            if !skipHideFilter {
+                mainView.hideFilter()
+            }
         }
     }
 }
@@ -214,6 +220,7 @@ extension MainVC {
             mainView.searchView.isHidden = true
             mainView.searchView.alpha = 0
             mainView.collectionView.isUserInteractionEnabled = !(mainView.collectionView.dataSource as! DataSourceProtocol).isLoadingData
+            mainView.hideFilter()
         }
         guard let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
@@ -248,7 +255,7 @@ extension MainVC: UITextFieldDelegate {
 
                 movieSearchTerm = searchTerm
                 if movieSearchTerm.isEmpty {
-                    selectMovieFilter(index: 0)
+                    selectMovieFilter(index: 0, skipHideFilter: true)
                 } else {
                     let searchFilter = MovieFilter.search(movieSearchTerm)
                     self.mainView.filterLabel.text = "\(searchFilter.localizedName): \(movieSearchTerm)"
@@ -278,7 +285,8 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
 
-        if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell, let _ = cell.imageView.image {
+        if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell,
+            let _ = cell.imageView.image {
 
             switch section {
             case .movies:
@@ -332,7 +340,7 @@ extension MainVC: DataSourceDelegate {
             mainView.noResultFoundView.isHidden = false
             mainView.setInfo(name: "", rating: nil, genres: [], date: nil)
         } else if !firstTimeDataLoading {
-            mainView.collectionView.isUserInteractionEnabled = true
+            mainView.collectionView.isUserInteractionEnabled = mainView.searchView.alpha == 0
             mainView.collectionView.alpha = 1
             mainView.noResultFoundView.isHidden = true
         }
