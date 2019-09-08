@@ -21,7 +21,7 @@ class MainVC: UIViewController {
     // private var tvDataSource: TVDataSource!
     // private var favouritesDataSource: FavouritesDataSource!s
     
-    private var firstTimeDataLoaded = false
+    private var firstTimeDataLoading = true
 
     private var hideKeyboardOnTap: UITapGestureRecognizer?
     private var movieSearchTerm = ""
@@ -320,24 +320,27 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
 extension MainVC: DataSourceDelegate {
 
     func dataIsLoading() {
-        mainView.collectionView.isUserInteractionEnabled = false
-        mainView.collectionView.alpha = 0.5
+        if !firstTimeDataLoading {
+            mainView.collectionView.isUserInteractionEnabled = false
+            mainView.collectionView.alpha = 0.5
+        }
     }
 
     func dataLoaded() {
-        // On App Launch after load data
-        if !firstTimeDataLoaded {
-            firstTimeDataLoaded = true
-            mainView.showViewsAfterLoadingDataOnAppLaunch()
-        }
         let dataSource = mainView.collectionView.dataSource as! DataSourceProtocol
         if dataSource.isEmpty {
             mainView.noResultFoundView.isHidden = false
             mainView.setInfo(name: "", rating: nil, genres: [], date: nil)
-        } else {
+        } else if !firstTimeDataLoading {
             mainView.collectionView.isUserInteractionEnabled = true
             mainView.collectionView.alpha = 1
             mainView.noResultFoundView.isHidden = true
+        }
+
+        // On App Launch after load data
+        if firstTimeDataLoading {
+            firstTimeDataLoading = false
+            mainView.showViewsAfterLoadingDataOnAppLaunch()
         }
     }
 
