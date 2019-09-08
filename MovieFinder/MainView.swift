@@ -129,8 +129,8 @@ extension MainView {
         setupInfoView()
         setupCollectionView()
         setupButtons()
-        setupSearchView()
         setupNoResultFoundView()
+        setupSearchView()
         hideViewsAndShowLogoWhileLoadingOnAppLaunch()
     }
     
@@ -286,21 +286,6 @@ extension MainView {
             ])
     }
 
-    private func setupSearchView() {
-
-        searchView = MainSearchView()
-        searchView.translatesAutoresizingMaskIntoConstraints = false
-        searchView.isHidden = true
-        addSubview(searchView)
-
-        NSLayoutConstraint.activate([
-            searchView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 16),
-            searchView.leftAnchor.constraint(equalTo: leftAnchor),
-            searchView.rightAnchor.constraint(equalTo: rightAnchor),
-            searchView.heightAnchor.constraint(equalToConstant: 58)
-            ])
-    }
-
     private func setupNoResultFoundView() {
 
         noResultFoundView = MainNoResultFoundView()
@@ -314,6 +299,21 @@ extension MainView {
             noResultFoundView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor),
             noResultFoundView.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: collectionViewHorizontalInsets),
             noResultFoundView.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -collectionViewHorizontalInsets)
+            ])
+    }
+
+    private func setupSearchView() {
+
+        searchView = MainSearchView()
+        searchView.translatesAutoresizingMaskIntoConstraints = false
+        searchView.isHidden = true
+        addSubview(searchView)
+
+        NSLayoutConstraint.activate([
+            searchView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 16),
+            searchView.leftAnchor.constraint(equalTo: leftAnchor),
+            searchView.rightAnchor.constraint(equalTo: rightAnchor),
+            searchView.heightAnchor.constraint(equalToConstant: 58)
             ])
     }
 }

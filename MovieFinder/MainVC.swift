@@ -278,7 +278,7 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
 
-        if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell, let image = cell.imageView.image {
+        if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell, let _ = cell.imageView.image {
 
             switch section {
             case .movies:
