@@ -217,8 +217,10 @@ extension MovieDataSource: UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         var urls = [URL]()
+        let itemsCount = items.count
         for indexPath in indexPaths {
-            if let posterPath = items[indexPath.item].posterPath {
+            if indexPath.item < itemsCount,
+                let posterPath = items[indexPath.item].posterPath {
                 urls.append(imageURLForPosterPath(posterPath))
             }
         }
@@ -227,8 +229,10 @@ extension MovieDataSource: UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         var urls = [URL]()
+        let itemsCount = items.count
         for indexPath in indexPaths {
-            if let posterPath = items[indexPath.item].posterPath {
+            if indexPath.item < itemsCount,
+                let posterPath = items[indexPath.item].posterPath {
                 urls.append(imageURLForPosterPath(posterPath))
             }
         }
