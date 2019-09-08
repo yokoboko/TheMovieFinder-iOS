@@ -50,25 +50,9 @@ class PosterBigCell: UICollectionViewCell, PosterCell {
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])
     }
-    
-//    override var isHighlighted: Bool {
-//        didSet {
-//            shrink(down: isHighlighted)
-//        }
-//    }
-//    
-//    private func shrink(down: Bool) {
-//        
-//        UIView.animate(withDuration: 0.15, delay: 0.0, options: [.allowUserInteraction, .curveEaseOut], animations: {
-//            if down {
-//                self.transform = CGAffineTransform(scaleX: 0.96, y: 0.96)
-//            } else {
-//                self.transform = .identity
-//            }
-//        }, completion: nil)
-//    }
-    
+
     override func prepareForReuse() {
+        isHidden = false
         imageView.image = nil
     }
     

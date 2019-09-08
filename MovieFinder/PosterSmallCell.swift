@@ -98,6 +98,7 @@ class PosterSmallCell: UICollectionViewCell, PosterCell {
     }
     
     override func prepareForReuse() {
+        isHidden = false
         imageView.image = nil
     }
     
