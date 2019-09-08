@@ -45,6 +45,16 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
             }) { _ in
                 if !transitionContext.transitionWasCancelled {
                     movieDetailVC.posterCell.isHidden = false
+                    if let posterSmallCell = movieDetailVC.posterCell as? PosterSmallCell {
+                        posterSmallCell.rating.alpha = 0
+                        posterSmallCell.genres.alpha = 0
+                        posterSmallCell.title.alpha = 0
+                        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+                            posterSmallCell.rating.alpha = 1
+                            posterSmallCell.genres.alpha = 1
+                            posterSmallCell.title.alpha = 1
+                        }, completion: nil)
+                    }
                 }
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             }
