@@ -10,23 +10,21 @@ import UIKit
 
 class MovieDetailVC: UIViewController {
 
+    weak var delegate: MovieDetailCoordinatorDelegate?
+
     private var movie: Movie?
     // TODO private var tvShow: TVShow?
     // TODO private var favourite: Favourite?
-    unowned var posterCell: PosterCell
 
     let detailView = MovieDetailView()
     
-    private let interactor = Interactor()
+    private var interactor: Interactor
 
-    init(movie: Movie, posterCell: PosterCell) {
+    init(movie: Movie, image: UIImage?, interactor: Interactor) {
         self.movie = movie
-        self.posterCell = posterCell
+        self.interactor = interactor
         super.init(nibName: nil, bundle: nil)
-
-        modalPresentationStyle = .custom
-        transitioningDelegate = self
-        detailView.posterImageView.image = posterCell.imageView.image
+        detailView.posterImageView.image = image
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -47,7 +45,7 @@ class MovieDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let testGesture = UITapGestureRecognizer(target: self, action: #selector(bla))
+        let testGesture = UITapGestureRecognizer(target: self, action: #selector(closeMovieDetail))
         view.addGestureRecognizer(testGesture)
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
@@ -55,15 +53,12 @@ class MovieDetailVC: UIViewController {
         view.addGestureRecognizer(panGestureRecognizer)
     }
 
-    @objc func bla() {
-        dismiss(animated: true, completion: nil)
+    @objc func closeMovieDetail() {
+        delegate?.dismissMovieDetail()
     }
-
-
-
 }
 
-// MARK: - Pan gesture
+// MARK: - Pan Gesture dismiss transition
 
 extension MovieDetailVC: UIGestureRecognizerDelegate {
 
@@ -72,59 +67,8 @@ extension MovieDetailVC: UIGestureRecognizerDelegate {
     }
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-
-        let percentThreshold:CGFloat = 0.2
-
         guard detailView.scrollView.contentOffset.y <= 0  else { return }
-
-        switch gesture.state {
-        case .began:
-            if gesture.velocity(in: view).y >= 0 {
-                interactor.hasStarted = true
-                dismiss(animated: true)
-            }
-        case .changed:
-            if interactor.hasStarted {
-                // convert y-position to downward pull progress (percentage)
-                let translationY = gesture.translation(in: view).y * 2
-                let verticalMovement = translationY / view.bounds.height
-                let downwardMovement = fmaxf(Float(verticalMovement), 0.0)
-                let downwardMovementPercent = fminf(downwardMovement, 1.0)
-                let progress = CGFloat(downwardMovementPercent)
-                interactor.shouldFinish = progress > percentThreshold
-                interactor.update(progress)
-            }
-        case .cancelled:
-            if interactor.hasStarted {
-                interactor.hasStarted = false
-                interactor.cancel()
-            }
-        case .ended:
-            if interactor.hasStarted {
-                interactor.hasStarted = false
-                interactor.shouldFinish
-                    ? interactor.finish()
-                    : interactor.cancel()
-            }
-        default:
-            break
-        }
+        delegate?.handleGestureDismissTransition(gesture: gesture)
     }
 }
 
-// MARK: - Custom transition Transition (MainVC -> MovieDetailVC)
-
-extension MovieDetailVC: UIViewControllerTransitioningDelegate {
-
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return MovieDetailPresentTransition()
-    }
-
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return MovieDetailDismissTransition()
-    }
-
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return interactor.hasStarted ? interactor : nil
-    }
-}

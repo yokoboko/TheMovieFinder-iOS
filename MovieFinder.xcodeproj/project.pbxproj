@@ -61,6 +61,7 @@
 		F1A14667230EB78C00A874DA /* DataSourceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */; };
 		F1A14669230EC20100A874DA /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A14668230EC20000A874DA /* Localizable.swift */; };
 		F1A1466D230EC2C600A874DA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1A1466F230EC2C600A874DA /* Localizable.strings */; };
+		F1E6DC192324F2F70060F1CE /* MovieDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E6DC182324F2F70060F1CE /* MovieDetailCoordinator.swift */; };
 		F1FBCA4F23223093002157F6 /* MainSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FBCA4E23223092002157F6 /* MainSearchView.swift */; };
 		F1FBCA5123224150002157F6 /* DataSourceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */; };
 		F1FBCA5323225649002157F6 /* MainNoResultFoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FBCA5223225649002157F6 /* MainNoResultFoundView.swift */; };
@@ -144,6 +145,7 @@
 		F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceDelegate.swift; sourceTree = "<group>"; };
 		F1A14668230EC20000A874DA /* Localizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
 		F1A1466E230EC2C600A874DA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F1E6DC182324F2F70060F1CE /* MovieDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailCoordinator.swift; sourceTree = "<group>"; };
 		F1FBCA4E23223092002157F6 /* MainSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchView.swift; sourceTree = "<group>"; };
 		F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceProtocol.swift; sourceTree = "<group>"; };
 		F1FBCA5223225649002157F6 /* MainNoResultFoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNoResultFoundView.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				F1FBCA5B23226814002157F6 /* Transitions */,
 				F101E13223210941007E3F7E /* AppCoordinator.swift */,
 				F101E134232109AA007E3F7E /* MainCoordinator.swift */,
+				F1E6DC182324F2F70060F1CE /* MovieDetailCoordinator.swift */,
 			);
 			name = Coordinator;
 			sourceTree = "<group>";
@@ -656,6 +659,7 @@
 				F10D9595230D704B00D48239 /* Crew.swift in Sources */,
 				F1A14663230E90C700A874DA /* UIColor+Extension.swift in Sources */,
 				F1A14669230EC20100A874DA /* Localizable.swift in Sources */,
+				F1E6DC192324F2F70060F1CE /* MovieDetailCoordinator.swift in Sources */,
 				F1A14661230E90BD00A874DA /* UIView+SafeArea.swift in Sources */,
 				F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */,
 				F10D9582230D6EED00D48239 /* MovieAPIError.swift in Sources */,

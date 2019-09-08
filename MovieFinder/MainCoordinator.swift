@@ -32,8 +32,15 @@ class MainCoordinator: BaseCoordinator {
 extension MainCoordinator: MainCoordinatorDelegate {
 
     func detail(movie: Movie, posterCell: PosterCell) {
-        let detailVC = MovieDetailVC(movie: movie, posterCell: posterCell)
-        navigationController.present(detailVC, animated: true)
+
+        let movieDetailCoordinator = MovieDetailCoordinator(navigationController: navigationController,
+                                                             movie: movie,
+                                                             posterCell: posterCell)
+        movieDetailCoordinator.isCompleted = { [weak self] in
+            self?.free(coordinator: movieDetailCoordinator)
+        }
+        self.store(coordinator: movieDetailCoordinator)
+        movieDetailCoordinator.start()
     }
 
     func pickGenres(genreType: GenreType, completion: @escaping (_ selected: [Genre]) -> Void, selected: [Genre]?) {

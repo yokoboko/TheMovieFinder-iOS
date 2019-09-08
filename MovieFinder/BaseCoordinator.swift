@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BaseCoordinator: Coordinator {
+class BaseCoordinator: NSObject, Coordinator {
 
     var childCoordinators: [Coordinator] = []
     var isCompleted: (() -> Void)?

@@ -10,6 +10,13 @@ import UIKit
 
 class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
 
+    private var posterCell: PosterCell
+
+    init(posterCell: PosterCell) {
+        self.posterCell = posterCell
+        super.init()
+    }
+
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.45
     }
@@ -31,7 +38,7 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
 
             let detailView = movieDetailVC.detailView
 
-            let fromFrame = movieDetailVC.posterCell.imageView.convert(movieDetailVC.posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
+            let fromFrame = posterCell.imageView.convert(posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
             let toFrame = movieDetailVC.detailView.posterViewOriginalFrame
 
             detailView.posterTopConstraint.constant = fromFrame.minY
@@ -39,7 +46,7 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
             detailView.posterWidthConstraint.constant = fromFrame.width
             detailView.posterHeightConstraint.constant = fromFrame.height
             movieDetailVC.view.layoutIfNeeded()
-            movieDetailVC.posterCell.isHidden = true
+            posterCell.isHidden = true
             UIView.animate(withDuration: duration, animations: {
                 detailView.posterTopConstraint.constant = toFrame.minY
                 detailView.posterLeftConstraint.constant = toFrame.minX

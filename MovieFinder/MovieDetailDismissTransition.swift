@@ -10,6 +10,13 @@ import UIKit
 
 class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransitioning {
 
+    private var posterCell: PosterCell
+
+    init(posterCell: PosterCell) {
+        self.posterCell = posterCell
+        super.init()
+    }
+
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.45
     }
@@ -27,7 +34,7 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
             let movieDetailVC = fromViewController as? MovieDetailVC {
 
             let detailView = movieDetailVC.detailView
-            let toFrame = movieDetailVC.posterCell.imageView.convert(movieDetailVC.posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
+            let toFrame = posterCell.imageView.convert(posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
 
             let originalFrame = detailView.posterViewOriginalFrame
             detailView.posterTopConstraint.constant = originalFrame.minY
@@ -44,8 +51,8 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
                 movieDetailVC.view.layoutIfNeeded()
             }) { _ in
                 if !transitionContext.transitionWasCancelled {
-                    movieDetailVC.posterCell.isHidden = false
-                    if let posterSmallCell = movieDetailVC.posterCell as? PosterSmallCell {
+                    self.posterCell.isHidden = false
+                    if let posterSmallCell = self.posterCell as? PosterSmallCell {
                         posterSmallCell.rating.alpha = 0
                         posterSmallCell.genres.alpha = 0
                         posterSmallCell.title.alpha = 0
