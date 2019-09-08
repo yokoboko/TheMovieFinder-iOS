@@ -78,7 +78,7 @@ class MovieDataSource: NSObject, DataSourceProtocol {
 
         var endpoint: MovieAPIEndpoint!
         let pageToLoad = page + 1
-        var params = ["page": "\(pageToLoad)"]
+        var params = ["page": "\(pageToLoad)", "region": "US"]
 
         switch movieFilter {
 
@@ -102,7 +102,7 @@ class MovieDataSource: NSObject, DataSourceProtocol {
         dataTask?.cancel()
         dataTask = MovieAPI.shared.GET(endpoint: endpoint,
                                  params: params,
-                                 printDebug: true) { [weak self] (result: Result<MovieResponse, MovieAPIError>) in
+                                 printDebug: false) { [weak self] (result: Result<MovieResponse, MovieAPIError>) in
     
                                     guard let self = self else { return }
                                     self.isFetching = false

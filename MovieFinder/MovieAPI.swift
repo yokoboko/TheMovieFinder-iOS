@@ -44,7 +44,9 @@ struct MovieAPI {
                 }
                 return
             }
-            
+
+            if printDebug { print(queryURL.absoluteString); print("------------------"); print(String(data: data, encoding: .utf8)!); }
+
             guard error == nil else {
                 DispatchQueue.main.async {
                     completionHandler(.failure(.networkError(error: error!)))
