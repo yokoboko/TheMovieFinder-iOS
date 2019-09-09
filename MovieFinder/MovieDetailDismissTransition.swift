@@ -18,7 +18,7 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.45
+        return 0.3
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -42,12 +42,25 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
             detailView.posterWidthConstraint.constant = originalFrame.width
             detailView.posterHeightConstraint.constant = originalFrame.height
             movieDetailVC.view.layoutIfNeeded()
-            UIView.animate(withDuration: duration, animations: {
+
+            UIView.animate(withDuration: duration / 2, delay: 0, options: [.curveEaseInOut], animations: {
+                detailView.dismissBtn.alpha = 0
+                detailView.posterInfoSV.alpha = 0
+                detailView.favouriteBtn.alpha = 0
+                detailView.infoSV.alpha = 0
+            }, completion: nil)
+
+            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
                 detailView.posterTopConstraint.constant = toFrame.minY
                 detailView.posterLeftConstraint.constant = toFrame.minX
                 detailView.posterWidthConstraint.constant = toFrame.width
                 detailView.posterHeightConstraint.constant = toFrame.height
+                detailView.posterView.transform = .identity
                 detailView.visualEffectView.effect = nil
+                detailView.dismissBtn.transform = CGAffineTransform(translationX: 0, y: toFrame.minY - originalFrame.minY)
+                detailView.posterInfoSV.transform = CGAffineTransform(translationX: 0, y: toFrame.minY - originalFrame.minY)
+                detailView.favouriteBtn.transform = CGAffineTransform(translationX: 0, y: toFrame.minY - originalFrame.minY)
+                detailView.infoSV.transform = CGAffineTransform(translationX: 0, y: toFrame.maxY - originalFrame.maxY)
                 movieDetailVC.view.layoutIfNeeded()
             }) { _ in
                 if !transitionContext.transitionWasCancelled {

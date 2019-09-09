@@ -22,13 +22,12 @@ class AppCoordinator: BaseCoordinator {
         navigationController.isNavigationBarHidden = true
 
         let mainCoordinator = MainCoordinator(navigationController: navigationController)
-        mainCoordinator.isCompleted = { [weak self] in
-            self?.free(coordinator: mainCoordinator)
-        }
+        mainCoordinator.delegate = self
         self.store(coordinator: mainCoordinator)
         mainCoordinator.start()
 
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
+
 }

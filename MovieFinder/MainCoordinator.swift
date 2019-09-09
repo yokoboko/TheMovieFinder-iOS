@@ -9,6 +9,7 @@
 import UIKit
 
 protocol MainCoordinatorDelegate: class {
+
     func pickGenres(genreType: GenreType, completion: @escaping (_ selected: [Genre]) -> Void, selected: [Genre]?)
     func detail(movie: Movie, posterCell: PosterCell)
 }
@@ -23,6 +24,7 @@ class MainCoordinator: BaseCoordinator {
     }
 
     override func start() {
+
         mainVC = MainVC()
         mainVC.delegate = self
         navigationController.pushViewController(mainVC, animated: true)
@@ -36,14 +38,13 @@ extension MainCoordinator: MainCoordinatorDelegate {
         let movieDetailCoordinator = MovieDetailCoordinator(navigationController: navigationController,
                                                              movie: movie,
                                                              posterCell: posterCell)
-        movieDetailCoordinator.isCompleted = { [weak self] in
-            self?.free(coordinator: movieDetailCoordinator)
-        }
         self.store(coordinator: movieDetailCoordinator)
+        movieDetailCoordinator.delegate = self
         movieDetailCoordinator.start()
     }
 
     func pickGenres(genreType: GenreType, completion: @escaping (_ selected: [Genre]) -> Void, selected: [Genre]?) {
+
         let genrePickerVC = GenrePickerVC(genreType: genreType, completion: completion, selected: selected)
         genrePickerVC.modalPresentationStyle = .overCurrentContext
         genrePickerVC.modalTransitionStyle = .coverVertical

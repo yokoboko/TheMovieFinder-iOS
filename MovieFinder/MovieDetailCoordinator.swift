@@ -16,11 +16,11 @@ protocol MovieDetailCoordinatorDelegate: class {
 class MovieDetailCoordinator: BaseCoordinator {
 
     private let navigationController: UINavigationController
-    private var detailVC: MovieDetailVC!
-    private var posterCell: PosterCell
+    private unowned var detailVC: MovieDetailVC!
+    private unowned var posterCell: PosterCell
     private var movie: Movie?
 
-    private let interactor = Interactor()
+    private var interactor = Interactor()
 
     init(navigationController: UINavigationController, movie: Movie, posterCell: PosterCell) {
         self.navigationController = navigationController
@@ -30,16 +30,18 @@ class MovieDetailCoordinator: BaseCoordinator {
 
     override func start() {
 
+        var detailVC: MovieDetailVC?
         if let movie = movie {
-            detailVC = MovieDetailVC(movie: movie, image: posterCell.imageView.image, interactor: interactor)
+            detailVC = MovieDetailVC(movie: movie, image: posterCell.imageView.image)
         }
         if let detailVC = detailVC {
+            self.detailVC = detailVC
             detailVC.modalPresentationStyle = .custom
             detailVC.transitioningDelegate = self
             detailVC.delegate = self
             navigationController.present(detailVC, animated: true)
         } else {
-            fatalError("MovieDetailCoordinator: MovieDetailVC not initialized")
+            fatalError("MovieDetailCoordinator: MovieDetailVC no valid data")
         }
     }
 }
@@ -67,7 +69,7 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
 
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer) {
 
-        let percentThreshold:CGFloat = 0.2
+        let percentThreshold:CGFloat = 0.05
         switch gesture.state {
         case .began:
             if gesture.velocity(in: detailVC.view).y >= 0 {
@@ -75,7 +77,7 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
                 detailVC.dismiss(animated: true) { [weak self] in
                     guard let self = self else { return }
                     if self.interactor.shouldFinish {
-                        self.isCompleted?()
+                        self.delegate?.subCoordinatorIsCompleted(coordinator: self)
                     }
                 }
             }
@@ -110,7 +112,7 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
     func dismissMovieDetail() {
         detailVC.dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-            self.isCompleted?()
+            self.delegate?.subCoordinatorIsCompleted(coordinator: self)
         }
     }
 }

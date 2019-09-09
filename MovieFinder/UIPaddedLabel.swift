@@ -10,10 +10,10 @@ import UIKit
 
 public class UIPaddedLabel: UILabel {
     
-    @IBInspectable var topInset: CGFloat = 5.0
-    @IBInspectable var bottomInset: CGFloat = 5.0
-    @IBInspectable var leftInset: CGFloat = 7.0
-    @IBInspectable var rightInset: CGFloat = 7.0
+    @IBInspectable var topInset: CGFloat = 0
+    @IBInspectable var bottomInset: CGFloat = 0
+    @IBInspectable var leftInset: CGFloat = 0
+    @IBInspectable var rightInset: CGFloat = 0
     
     public override func drawText(in rect: CGRect) {
         let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)

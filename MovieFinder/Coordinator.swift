@@ -24,3 +24,7 @@ extension Coordinator {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
     }
 }
+
+protocol CoordinatorDelegate: class {
+    func subCoordinatorIsCompleted(coordinator: Coordinator)
+}

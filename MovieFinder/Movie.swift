@@ -19,11 +19,12 @@ struct Movie: Codable {
     let voteAverage: Double?
     
     // Details
-    let homepage: String?
+    let homepage: URL?
     let videos: MovieVideosResponse?
     let images: ImagesResponse?
     let credits: CreditsResponse?
     let similar: MovieResponse?
+    let runtime: Int?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -39,5 +40,6 @@ struct Movie: Codable {
         case images
         case credits
         case similar
+        case runtime
     }
 }

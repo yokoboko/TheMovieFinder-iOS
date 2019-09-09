@@ -8,12 +8,18 @@
 
 import Foundation
 
-class BaseCoordinator: NSObject, Coordinator {
+
+
+class BaseCoordinator: NSObject, Coordinator, CoordinatorDelegate {
 
     var childCoordinators: [Coordinator] = []
-    var isCompleted: (() -> Void)?
-
+    weak var delegate: CoordinatorDelegate?
+    
     func start() {
         fatalError("Children should implement 'start'.")
+    }
+
+    func subCoordinatorIsCompleted(coordinator: Coordinator) {
+        self.free(coordinator: coordinator)
     }
 }
