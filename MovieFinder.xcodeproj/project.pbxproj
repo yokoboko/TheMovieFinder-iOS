@@ -44,6 +44,14 @@
 		F10D95AF230D7EA000D48239 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D95AE230D7EA000D48239 /* GradientView.swift */; };
 		F10D95B2230D7EDC00D48239 /* UIImage+Saturation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */; };
 		F10D95B4230D819F00D48239 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F10D95B3230D819F00D48239 /* Application.xcassets */; };
+		F10F42C22327893300C31869 /* Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42BE2327893100C31869 /* Init.swift */; };
+		F10F42C32327893300C31869 /* Easing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42BF2327893300C31869 /* Easing.swift */; };
+		F10F42C42327893300C31869 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42C02327893300C31869 /* Geometry.swift */; };
+		F10F42C52327893300C31869 /* Constraints+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42C12327893300C31869 /* Constraints+.swift */; };
+		F10F42C82327893D00C31869 /* FaveIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42C62327893C00C31869 /* FaveIcon.swift */; };
+		F10F42C92327893D00C31869 /* FaveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42C72327893D00C31869 /* FaveButton.swift */; };
+		F10F42CC2327894700C31869 /* Spark.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42CA2327894600C31869 /* Spark.swift */; };
+		F10F42CD2327894700C31869 /* Ring.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42CB2327894700C31869 /* Ring.swift */; };
 		F113BECA231D30DE00F88244 /* MovieSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BEC9231D30DD00F88244 /* MovieSection.swift */; };
 		F113BECC231D333100F88244 /* MainView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BECB231D333100F88244 /* MainView+Animations.swift */; };
 		F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */; };
@@ -128,6 +136,14 @@
 		F10D95AE230D7EA000D48239 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		F10D95B1230D7EDC00D48239 /* UIImage+Saturation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Saturation.swift"; sourceTree = "<group>"; };
 		F10D95B3230D819F00D48239 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
+		F10F42BE2327893100C31869 /* Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Init.swift; sourceTree = "<group>"; };
+		F10F42BF2327893300C31869 /* Easing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Easing.swift; sourceTree = "<group>"; };
+		F10F42C02327893300C31869 /* Geometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		F10F42C12327893300C31869 /* Constraints+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constraints+.swift"; sourceTree = "<group>"; };
+		F10F42C62327893C00C31869 /* FaveIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaveIcon.swift; sourceTree = "<group>"; };
+		F10F42C72327893D00C31869 /* FaveButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaveButton.swift; sourceTree = "<group>"; };
+		F10F42CA2327894600C31869 /* Spark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spark.swift; sourceTree = "<group>"; };
+		F10F42CB2327894700C31869 /* Ring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ring.swift; sourceTree = "<group>"; };
 		F113BEC9231D30DD00F88244 /* MovieSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSection.swift; sourceTree = "<group>"; };
 		F113BECB231D333100F88244 /* MainView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainView+Animations.swift"; sourceTree = "<group>"; };
 		F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterSmallCell.swift; sourceTree = "<group>"; };
@@ -313,6 +329,7 @@
 				F101E13D23211E09007E3F7E /* Genre Picker View */,
 				F1FBCA5423225E0C002157F6 /* Movie Detail View */,
 				F1A1465B230E8DF100A874DA /* Cell */,
+				F10F42BC2327891900C31869 /* Fave Button */,
 				F10D95AE230D7EA000D48239 /* GradientView.swift */,
 				F1A1465E230E8E8800A874DA /* CoverFlowLayout.swift */,
 				F1142B2E23153E5D006D7A5F /* UIPaddedLabel.swift */,
@@ -407,6 +424,29 @@
 				F1907EFE231014770097E9DB /* UIDevice+Notch.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		F10F42BC2327891900C31869 /* Fave Button */ = {
+			isa = PBXGroup;
+			children = (
+				F10F42BD2327892200C31869 /* Helpers */,
+				F10F42C72327893D00C31869 /* FaveButton.swift */,
+				F10F42C62327893C00C31869 /* FaveIcon.swift */,
+				F10F42CB2327894700C31869 /* Ring.swift */,
+				F10F42CA2327894600C31869 /* Spark.swift */,
+			);
+			name = "Fave Button";
+			sourceTree = "<group>";
+		};
+		F10F42BD2327892200C31869 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F10F42C12327893300C31869 /* Constraints+.swift */,
+				F10F42BF2327893300C31869 /* Easing.swift */,
+				F10F42C02327893300C31869 /* Geometry.swift */,
+				F10F42BE2327893100C31869 /* Init.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 		F1A14659230E8DB600A874DA /* Data Source */ = {
@@ -648,24 +688,29 @@
 				F10D9589230D6F8900D48239 /* Movie.swift in Sources */,
 				F1FBCA5F23226B47002157F6 /* MovieDetailDismissTransition.swift in Sources */,
 				F10D95AF230D7EA000D48239 /* GradientView.swift in Sources */,
+				F10F42CD2327894700C31869 /* Ring.swift in Sources */,
 				F10D95A6230D72A900D48239 /* MovieImagePath.swift in Sources */,
 				F1142B2F23153E5D006D7A5F /* UIPaddedLabel.swift in Sources */,
 				F1907EFF231014780097E9DB /* UIDevice+Notch.swift in Sources */,
 				F10D9559230D302B00D48239 /* MainVC.swift in Sources */,
 				F1FBCA5A23226471002157F6 /* PosterCellProtocol.swift in Sources */,
 				F10D959F230D713B00D48239 /* TVShow.swift in Sources */,
+				F10F42C32327893300C31869 /* Easing.swift in Sources */,
 				F113BECA231D30DE00F88244 /* MovieSection.swift in Sources */,
 				F1FBCA5D23226823002157F6 /* Interactor.swift in Sources */,
 				F10D9595230D704B00D48239 /* Crew.swift in Sources */,
 				F1A14663230E90C700A874DA /* UIColor+Extension.swift in Sources */,
+				F10F42C22327893300C31869 /* Init.swift in Sources */,
 				F1A14669230EC20100A874DA /* Localizable.swift in Sources */,
 				F1E6DC192324F2F70060F1CE /* MovieDetailCoordinator.swift in Sources */,
 				F1A14661230E90BD00A874DA /* UIView+SafeArea.swift in Sources */,
+				F10F42C82327893D00C31869 /* FaveIcon.swift in Sources */,
 				F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */,
 				F10D9582230D6EED00D48239 /* MovieAPIError.swift in Sources */,
 				F101E13323210941007E3F7E /* AppCoordinator.swift in Sources */,
 				F1FBCA5323225649002157F6 /* MainNoResultFoundView.swift in Sources */,
 				F101E13723210FCF007E3F7E /* BaseCoordinator.swift in Sources */,
+				F10F42C92327893D00C31869 /* FaveButton.swift in Sources */,
 				F10D9557230D302B00D48239 /* AppDelegate.swift in Sources */,
 				F10D95A1230D715700D48239 /* TVShowResponse.swift in Sources */,
 				F10D955F230D302B00D48239 /* MovieFinder.xcdatamodeld in Sources */,
@@ -676,6 +721,7 @@
 				F10D958F230D6FE100D48239 /* MovieVideosResponse.swift in Sources */,
 				F1FBCA5623225E40002157F6 /* MovieDetailVC.swift in Sources */,
 				F10D9591230D701900D48239 /* MovieVideo.swift in Sources */,
+				F10F42CC2327894700C31869 /* Spark.swift in Sources */,
 				F1894E72231670A400A20902 /* MovieFilter.swift in Sources */,
 				F1FBCA4F23223093002157F6 /* MainSearchView.swift in Sources */,
 				F101E13F23211E2A007E3F7E /* GenrePickerView.swift in Sources */,
@@ -687,7 +733,9 @@
 				F10D958B230D6FAC00D48239 /* MovieResponse.swift in Sources */,
 				F18323F42317B45300B24A0E /* MainFilterView.swift in Sources */,
 				F1A14665230E923900A874DA /* Cell+ReuseIdentifier.swift in Sources */,
+				F10F42C52327893300C31869 /* Constraints+.swift in Sources */,
 				F10D9599230D708700D48239 /* ImagesResponse.swift in Sources */,
+				F10F42C42327893300C31869 /* Geometry.swift in Sources */,
 				F101E131232107DC007E3F7E /* Coordinator.swift in Sources */,
 				F10D9593230D704100D48239 /* Cast.swift in Sources */,
 				F1A14658230E88FF00A874DA /* MovieDataSource.swift in Sources */,

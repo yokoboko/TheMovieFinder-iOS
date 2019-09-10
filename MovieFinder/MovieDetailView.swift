@@ -28,7 +28,7 @@ class MovieDetailView: UIView {
 
     var posterInfoSV: UIStackView!
     var ratingLabel: UIPaddedLabel!
-    var favouriteBtn: UIButton!
+    var favouriteBtn: FaveButton!
     var genreLabel: UIPaddedLabel!
     var dateLabel: UIPaddedLabel!
     var durationLabel: UIPaddedLabel!
@@ -200,9 +200,10 @@ extension MovieDetailView {
         posterInfoSV.spacing = 0
         containerView.addSubview(posterInfoSV)
 
-        favouriteBtn = UIButton()
+        favouriteBtn = FaveButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44),
+                                  faveIconNormal: UIImage(named: "btn_favourite_inactive"),
+                                  faveIconSelected: UIImage(named: "btn_favourite_active"))
         favouriteBtn.translatesAutoresizingMaskIntoConstraints = false
-        favouriteBtn.setImage(UIImage(named: "btn_favourite_inactive"), for: .normal)
         containerView.addSubview(favouriteBtn)
 
         ratingLabel = UIPaddedLabel()

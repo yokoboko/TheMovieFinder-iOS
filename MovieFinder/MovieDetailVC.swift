@@ -62,6 +62,7 @@ extension MovieDetailVC {
         detailView.dismissBtn.addTarget(self, action: #selector(dismissAction(_:)), for: .touchUpInside)
         detailView.posterDismissBtn.addTarget(self, action: #selector(dismissAction(_:)), for: .touchUpInside)
         detailView.homepageBtn.addTarget(self, action: #selector(homepageAction(_:)), for: .touchUpInside)
+        detailView.favouriteBtn.addTarget(self, action: #selector(favouriteAction(_:)), for: .touchUpInside)
     }
 
     @objc func dismissAction(_ sender: Any) {
@@ -72,6 +73,10 @@ extension MovieDetailVC {
         if let movie = movie, let homepage = movie.homepage {
             UIApplication.shared.open(homepage)
         }
+    }
+
+    @objc func favouriteAction(_ sender: Any) {
+        //print(detailView.favouriteBtn.isSelected)
     }
 }
 
