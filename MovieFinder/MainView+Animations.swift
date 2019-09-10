@@ -154,7 +154,7 @@ extension MainView {
             toggleLayoutBtn.isUserInteractionEnabled = false
             filtersBtn.isUserInteractionEnabled = false
 
-            UIView.animate(withDuration: duration / 2, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: duration / 2, delay: 0, options: [.curveEaseOut, .allowUserInteraction], animations: {
                 self.infoNameLabel.alpha = 0
                 self.infoGenresLabel.alpha = 0
                 self.infoRatingLabel.alpha = 0
@@ -165,7 +165,8 @@ extension MainView {
                            delay: 0,
                            usingSpringWithDamping: 0.75,
                            initialSpringVelocity: 0,
-                           options: [.curveEaseOut], animations: {
+                           options: [.curveEaseOut, .allowUserInteraction],
+                           animations: {
                 self.sectionLabel.alpha = 0
                 self.sectionLabel.transform = CGAffineTransform(translationX: 0, y: -32)
                 self.filterLabel.alpha = 0
@@ -198,7 +199,7 @@ extension MainView {
             filtersBtn.isUserInteractionEnabled = true
 
             if self.isCoverFlowLayout {
-                UIView.animate(withDuration: duration / 2, delay: duration / 2, options: [.curveEaseOut], animations: {
+                UIView.animate(withDuration: duration / 2, delay: duration / 2, options: [.curveEaseOut, .allowUserInteraction], animations: {
                     self.infoNameLabel.alpha = 1
                     self.infoGenresLabel.alpha = 1
                     self.infoRatingLabel.alpha = 1
@@ -209,7 +210,8 @@ extension MainView {
                            delay: 0,
                            usingSpringWithDamping: 0.75,
                            initialSpringVelocity: 0,
-                           options: [.curveEaseOut], animations: {
+                           options: [.curveEaseOut, .allowUserInteraction],
+                           animations: {
                 self.sectionLabel.alpha = 1
                 self.sectionLabel.transform = .identity
                 self.filterLabel.alpha = 1
