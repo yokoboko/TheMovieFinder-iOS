@@ -9,7 +9,8 @@
 import Foundation
 
 struct ImagesResponse: Codable {
-    
-    let backdrops: [String]
-    let posters: [String]
+
+    let id: Int?
+    let backdrops: [MovieImage]
+    let posters: [MovieImage]
 }

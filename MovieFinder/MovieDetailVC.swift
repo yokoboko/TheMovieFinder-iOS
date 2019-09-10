@@ -137,6 +137,10 @@ extension MovieDetailVC {
         }
 
         // Photos
+        if let images = movie.images, !images.backdrops.isEmpty {
+            let filteredImages = images.backdrops.filter { $0.aspect != nil && $0.filePath != nil }
+            print(filteredImages.count)
+        }
 
         // Cast
 
@@ -165,7 +169,7 @@ extension MovieDetailVC {
 
     private func loadMovieDetail(id: Int) {
         MovieAPI.shared.GET(endpoint: .movieDetail(movie: id),
-                             params: ["append_to_response": "credits,images,videos,similar"],
+                            params: ["append_to_response": "credits,images,videos,similar", "include_image_language": "en,null"],
                              printDebug: false) { [weak self] (result: Result<Movie,MovieAPIError>) in
                                 guard let self = self else { return }
                                 switch result {
