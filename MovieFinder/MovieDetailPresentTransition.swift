@@ -18,7 +18,7 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
+        return transitionContext?.isInteractive ?? true ? 0.3 : 0.6
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -27,7 +27,7 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
             let toViewController = transitionContext.viewController(forKey: .to),
             let fromViewController = transitionContext.viewController(forKey: .from)
             else { return }
-
+        
         transitionContext.containerView.addSubview(toViewController.view)
         let duration = self.transitionDuration(using: transitionContext)
 
@@ -52,19 +52,20 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
             detailView.posterInfoSV.alpha = 0
             detailView.favouriteBtn.alpha = 0
             detailView.infoSV.alpha = 0
-            UIView.animate(withDuration: duration / 2, delay: duration / 2, options: [.curveEaseInOut], animations: {
-                detailView.dismissBtn.alpha = 1
-                detailView.posterInfoSV.alpha = 1
-                detailView.favouriteBtn.alpha = 1
-                detailView.infoSV.alpha = 1
-            }, completion: nil)
 
             detailView.dismissBtn.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.posterInfoSV.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.favouriteBtn.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.infoSV.transform = CGAffineTransform(translationX: 0, y: fromFrame.maxY - toFrame.maxY)
             detailView.visualEffectView.effect = nil
-            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
+            let damping: CGFloat = transitionContext.isInteractive ? 1.0 : 0.72
+            UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 0, options: [.curveEaseOut], animations: {
+
+                detailView.dismissBtn.alpha = 1
+                detailView.posterInfoSV.alpha = 1
+                detailView.favouriteBtn.alpha = 1
+                detailView.infoSV.alpha = 1
+
                 detailView.posterTopConstraint.constant = toFrame.minY
                 detailView.posterLeftConstraint.constant = toFrame.minX
                 detailView.posterWidthConstraint.constant = toFrame.width

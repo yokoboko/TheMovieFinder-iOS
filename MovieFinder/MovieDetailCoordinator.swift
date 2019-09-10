@@ -69,7 +69,7 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
 
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer) {
 
-        let percentThreshold:CGFloat = 0.2
+        let percentThreshold:CGFloat = 0.01
         switch gesture.state {
         case .began:
             if gesture.velocity(in: detailVC.view).y >= 0 {

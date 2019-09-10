@@ -18,7 +18,7 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
+        return transitionContext?.isInteractive ?? true ? 0.3 : 0.6
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -42,16 +42,17 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
             detailView.posterWidthConstraint.constant = originalFrame.width
             detailView.posterHeightConstraint.constant = originalFrame.height
             movieDetailVC.view.layoutIfNeeded()
+            
+            detailView.visualEffectView.effect = detailView.blurEffect
 
-            UIView.animate(withDuration: duration / 2, delay: 0, options: [.curveEaseInOut], animations: {
+            let damping: CGFloat = transitionContext.isInteractive ? 1.0 : 0.72
+            UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 0, options: [.curveEaseOut], animations: {
+
                 detailView.dismissBtn.alpha = 0
                 detailView.posterInfoSV.alpha = 0
                 detailView.favouriteBtn.alpha = 0
                 detailView.infoSV.alpha = 0
-            }, completion: nil)
 
-            detailView.visualEffectView.effect = detailView.blurEffect
-            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
                 detailView.posterTopConstraint.constant = toFrame.minY
                 detailView.posterLeftConstraint.constant = toFrame.minX
                 detailView.posterWidthConstraint.constant = toFrame.width
