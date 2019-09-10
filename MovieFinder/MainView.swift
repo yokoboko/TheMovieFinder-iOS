@@ -45,11 +45,11 @@ class MainView: UIView {
     let collectionViewHeightCoverFlowMargin: CGFloat = 220
     let collectionViewHeightFlowMargin: CGFloat = 160
     let collectionViewHeightFlowFiltersMargin: CGFloat = 220
-    let collectionViewBottomMarginFilters: CGFloat = -16
+    let collectionViewBottomMarginFilters: CGFloat = -24
     let collectionViewBottomMarginCoverFlow: CGFloat = -128
     let collectionViewBottomMarginFlow: CGFloat = -64
 
-    let filterViewMargin: CGFloat = 24
+    let filterViewMargin: CGFloat = 6
     
     private var coverFlowLayoutMode = true
     var isCoverFlowLayout: Bool {
@@ -263,10 +263,10 @@ extension MainView {
         NSLayoutConstraint.activate([
             scrollToTopBtn.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin - 13),
             scrollToTopBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
-            toggleLayoutBtn.centerXAnchor.constraint(equalTo: centerXAnchor),
-            toggleLayoutBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
-            filtersBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin + 16),
+            filtersBtn.centerXAnchor.constraint(equalTo: centerXAnchor),
             filtersBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
+            toggleLayoutBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin + 16),
+            toggleLayoutBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
             ])
     }
     

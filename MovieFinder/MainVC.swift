@@ -33,21 +33,21 @@ class MainVC: UIViewController {
         super.viewDidLoad()
         loadGenres()
 
-        // Test code - go to movie details
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            guard let self = self else { return }
-            let indexPath = IndexPath(item: 0, section: 0)
-            if let cell = self.mainView.collectionView.cellForItem(at: indexPath) as? PosterCell,
-                let _ = cell.imageView.image {
-                switch self.section {
-                case .movies:
-                    if let movie = self.movieDataSource.getItem(index: indexPath.item) {
-                        self.delegate?.detail(movie: movie, posterCell: cell)
-                    }
-                default: break
-                }
-            }
-        }
+//        // Test code - go to movie details
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+//            guard let self = self else { return }
+//            let indexPath = IndexPath(item: 0, section: 0)
+//            if let cell = self.mainView.collectionView.cellForItem(at: indexPath) as? PosterCell,
+//                let _ = cell.imageView.image {
+//                switch self.section {
+//                case .movies:
+//                    if let movie = self.movieDataSource.getItem(index: indexPath.item) {
+//                        self.delegate?.detail(movie: movie, posterCell: cell)
+//                    }
+//                default: break
+//                }
+//            }
+//        }
     }
 
     override func viewWillLayoutSubviews() {

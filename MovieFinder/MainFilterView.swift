@@ -57,7 +57,7 @@ class MainFilterView: UIStackView {
             filterFocusBottomConstraint.isActive = false
             filterFocusWidthConstaint.isActive = false
             filterFocusXConstaint = filterFocusView.centerXAnchor.constraint(equalTo: filterBtn.centerXAnchor)
-            filterFocusBottomConstraint = filterFocusView.bottomAnchor.constraint(equalTo: filterBtn.bottomAnchor, constant: -2)
+            filterFocusBottomConstraint = filterFocusView.bottomAnchor.constraint(equalTo: filterBtn.centerYAnchor, constant: 12)
             filterFocusWidthConstaint = filterFocusView.widthAnchor.constraint(equalTo: filterBtn.widthAnchor)
             NSLayoutConstraint.activate([
                 filterFocusXConstaint,
@@ -74,21 +74,11 @@ extension MainFilterView {
 
         axis = .vertical
         distribution = .equalSpacing
-        spacing = 16
+        spacing = 0
 
-        setupHideBtn()
         setupSectionView()
         setupFilterView()
-    }
-
-    private func setupHideBtn() {
-
-        hideFilterBtn = UIButton()
-        hideFilterBtn.setImage(UIImage(named: "icon_swipe_down"), for: .normal)
-        hideFilterBtn.contentVerticalAlignment = .bottom
-        hideFilterBtn.translatesAutoresizingMaskIntoConstraints = false
-        hideFilterBtn.heightAnchor.constraint(equalToConstant: 34)
-        addArrangedSubview(hideFilterBtn)
+        setupHideBtn()
     }
 
     private func setupSectionView() {
@@ -150,7 +140,7 @@ extension MainFilterView {
         filterSV.axis = .vertical
         filterSV.distribution = .equalSpacing
         filterSV.spacing = 8
-        filterSV.layoutMargins = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        filterSV.layoutMargins = UIEdgeInsets(top: 12, left: 12, bottom: 0, right: 12)
         filterSV.isLayoutMarginsRelativeArrangement = true
         filterSV.translatesAutoresizingMaskIntoConstraints = false
         addArrangedSubview(filterSV)
@@ -170,7 +160,7 @@ extension MainFilterView {
         filterFocusWidthConstaint = filterFocusView.widthAnchor.constraint(equalTo: firstFilterBtn.widthAnchor)
 
         NSLayoutConstraint.activate([
-            filterSV.heightAnchor.constraint(equalToConstant: 66),
+            filterSV.heightAnchor.constraint(equalToConstant: 82),
             filterFocusView.heightAnchor.constraint(equalToConstant: 2),
             filterFocusXConstaint,
             filterFocusBottomConstraint,
@@ -217,5 +207,21 @@ extension MainFilterView {
         btn.tag = filterBtns.count
         filterBtns.append(btn)
         return btn
+    }
+
+    private func setupHideBtn() {
+
+        let containerSV = UIStackView()
+        containerSV.translatesAutoresizingMaskIntoConstraints = false
+        containerSV.layoutMargins = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
+        containerSV.isLayoutMarginsRelativeArrangement = true
+        addArrangedSubview(containerSV)
+
+        hideFilterBtn = UIButton()
+        hideFilterBtn.setImage(UIImage(named: "btn_filters"), for: .normal)
+        hideFilterBtn.contentVerticalAlignment = .top
+        hideFilterBtn.translatesAutoresizingMaskIntoConstraints = false
+        hideFilterBtn.heightAnchor.constraint(equalToConstant: 34)
+        containerSV.addArrangedSubview(hideFilterBtn)
     }
 }
