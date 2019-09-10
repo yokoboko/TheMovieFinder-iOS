@@ -63,6 +63,7 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
             detailView.posterInfoSV.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.favouriteBtn.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.infoSV.transform = CGAffineTransform(translationX: 0, y: fromFrame.maxY - toFrame.maxY)
+            detailView.visualEffectView.effect = nil
             UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
                 detailView.posterTopConstraint.constant = toFrame.minY
                 detailView.posterLeftConstraint.constant = toFrame.minX
