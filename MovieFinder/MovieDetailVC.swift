@@ -110,6 +110,7 @@ extension MovieDetailVC {
             let runtimeString = h > 0 ? "\(h)h \(m)min" : "\(m)min"
             detailView.durationLabel.text = runtimeString
             detailView.durationLabel.isHidden = false
+            detailView.durationLabel.alpha = 0
         }
 
         // Homepage link
@@ -119,12 +120,14 @@ extension MovieDetailVC {
             let homepageString = NSMutableAttributedString(string: host, attributes: homepageAttributes)
             detailView.homepageBtn.setAttributedTitle(homepageString, for: .normal)
             detailView.homepageBtn.isHidden = false
+            detailView.homepageBtn.alpha = 0
         }
 
         // Trailers
         if let videosResponse = movie.videos, !videosResponse.results.isEmpty {
             trailerDataSource = TrailerDataSource(trailers: videosResponse.results)
             detailView.trailersSV.isHidden = false
+            detailView.trailersSV.alpha = 0
             detailView.trailersCV.delegate = self
             detailView.trailersCV.dataSource = trailerDataSource
         }
@@ -135,8 +138,12 @@ extension MovieDetailVC {
 
         // Similar
 
-
-        detailView.animateLayout()
+        // FadeIn Animation
+        UIView.animate(withDuration: 0.3) {
+            if !self.detailView.durationLabel.isHidden { self.detailView.durationLabel.alpha = 1 }
+            if !self.detailView.homepageBtn.isHidden { self.detailView.homepageBtn.alpha = 1 }
+            if !self.detailView.trailersSV.isHidden { self.detailView.trailersSV.alpha = 1 }
+        }
     }
 
 }
