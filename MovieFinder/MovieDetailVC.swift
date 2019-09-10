@@ -43,7 +43,6 @@ class MovieDetailVC: UIViewController {
             ])
     }
 
-    var interactionController: UIPercentDrivenInteractiveTransition?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,6 +51,10 @@ class MovieDetailVC: UIViewController {
         setupGestures()
         setBasicInfo()
         loadDetailData()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
 }
 
@@ -68,6 +71,7 @@ extension MovieDetailVC {
     }
 
     @objc func dismissAction(_ sender: Any) {
+        detailView.scrollView.delegate = nil
         delegate?.dismissMovieDetail()
     }
 
