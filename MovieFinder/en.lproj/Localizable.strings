@@ -21,3 +21,8 @@
 "selectGenres" = "Select Genres";
 "done" = "Done";
 "noResultFound" = "No Result Found";
+
+"trailers" = "Trailers";
+"photos" = "Photos";
+"cast" = "Cast";
+"similar" = "Similar";

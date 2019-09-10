@@ -15,4 +15,13 @@ struct MovieVideo: Codable {
     let site: String?
     let name: String?
     let type: String?
+
+    var thumbURL: URL? {
+        get {
+            if site == "YouTube", let url = URL(string: "https://img.youtube.com/vi/\(key)/hqdefault.jpg") {
+                return url
+            }
+            return nil
+        }
+    }
 }

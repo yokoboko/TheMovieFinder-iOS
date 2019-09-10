@@ -52,6 +52,8 @@
 		F10F42C92327893D00C31869 /* FaveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42C72327893D00C31869 /* FaveButton.swift */; };
 		F10F42CC2327894700C31869 /* Spark.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42CA2327894600C31869 /* Spark.swift */; };
 		F10F42CD2327894700C31869 /* Ring.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42CB2327894700C31869 /* Ring.swift */; };
+		F10F42CF23279DA300C31869 /* TrailerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42CE23279DA300C31869 /* TrailerDataSource.swift */; };
+		F10F42D123279F2800C31869 /* TrailerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42D023279F2800C31869 /* TrailerCell.swift */; };
 		F113BECA231D30DE00F88244 /* MovieSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BEC9231D30DD00F88244 /* MovieSection.swift */; };
 		F113BECC231D333100F88244 /* MainView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BECB231D333100F88244 /* MainView+Animations.swift */; };
 		F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */; };
@@ -144,6 +146,8 @@
 		F10F42C72327893D00C31869 /* FaveButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaveButton.swift; sourceTree = "<group>"; };
 		F10F42CA2327894600C31869 /* Spark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spark.swift; sourceTree = "<group>"; };
 		F10F42CB2327894700C31869 /* Ring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ring.swift; sourceTree = "<group>"; };
+		F10F42CE23279DA300C31869 /* TrailerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailerDataSource.swift; sourceTree = "<group>"; };
+		F10F42D023279F2800C31869 /* TrailerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailerCell.swift; sourceTree = "<group>"; };
 		F113BEC9231D30DD00F88244 /* MovieSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSection.swift; sourceTree = "<group>"; };
 		F113BECB231D333100F88244 /* MainView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainView+Animations.swift"; sourceTree = "<group>"; };
 		F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterSmallCell.swift; sourceTree = "<group>"; };
@@ -455,6 +459,7 @@
 				F113BEC9231D30DD00F88244 /* MovieSection.swift */,
 				F1894E71231670A400A20902 /* MovieFilter.swift */,
 				F1A14657230E88FF00A874DA /* MovieDataSource.swift */,
+				F10F42CE23279DA300C31869 /* TrailerDataSource.swift */,
 				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
 				F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */,
 			);
@@ -480,6 +485,7 @@
 				F1FBCA5923226471002157F6 /* PosterCellProtocol.swift */,
 				F1A1465C230E8E1000A874DA /* PosterBigCell.swift */,
 				F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */,
+				F10F42D023279F2800C31869 /* TrailerCell.swift */,
 				F101E140232127F0007E3F7E /* GenreCell.swift */,
 			);
 			name = Cell;
@@ -737,10 +743,12 @@
 				F10D9599230D708700D48239 /* ImagesResponse.swift in Sources */,
 				F10F42C42327893300C31869 /* Geometry.swift in Sources */,
 				F101E131232107DC007E3F7E /* Coordinator.swift in Sources */,
+				F10F42CF23279DA300C31869 /* TrailerDataSource.swift in Sources */,
 				F10D9593230D704100D48239 /* Cast.swift in Sources */,
 				F1A14658230E88FF00A874DA /* MovieDataSource.swift in Sources */,
 				F1A1465D230E8E1000A874DA /* PosterBigCell.swift in Sources */,
 				F1FBCA58232260C4002157F6 /* MovieDetailView.swift in Sources */,
+				F10F42D123279F2800C31869 /* TrailerCell.swift in Sources */,
 				F10D9584230D6EFD00D48239 /* MovieAPIEndpoint.swift in Sources */,
 				F10D959D230D710B00D48239 /* GenreResponse.swift in Sources */,
 				F10D9580230D6E6700D48239 /* MovieAPI.swift in Sources */,

@@ -50,6 +50,7 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
                 detailView.infoSV.alpha = 0
             }, completion: nil)
 
+            detailView.visualEffectView.effect = detailView.blurEffect
             UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
                 detailView.posterTopConstraint.constant = toFrame.minY
                 detailView.posterLeftConstraint.constant = toFrame.minX

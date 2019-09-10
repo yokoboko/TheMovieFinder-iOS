@@ -69,7 +69,7 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
 
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer) {
 
-        let percentThreshold:CGFloat = 0.05
+        let percentThreshold:CGFloat = 0.2
         switch gesture.state {
         case .began:
             if gesture.velocity(in: detailVC.view).y >= 0 {
@@ -96,13 +96,18 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
             if interactor.hasStarted {
                 interactor.hasStarted = false
                 interactor.cancel()
+
             }
         case .ended:
             if interactor.hasStarted {
+
                 interactor.hasStarted = false
-                interactor.shouldFinish
-                    ? interactor.finish()
-                    : interactor.cancel()
+                if interactor.shouldFinish {
+                    interactor.finish()
+                } else {
+                    interactor.cancel()
+                    self.detailVC.detailView.visualEffectView.effect = self.detailVC.detailView.blurEffect // bug fix - blur flickers on short gestures
+                }
             }
         default:
             break

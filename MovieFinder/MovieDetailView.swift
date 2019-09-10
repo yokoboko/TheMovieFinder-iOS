@@ -38,6 +38,10 @@ class MovieDetailView: UIView {
     var titleLabel: UILabel!
     var descriptionLabel: UILabel!
 
+    var trailersSV: UIStackView!
+    var trailersLabel: UIPaddedLabel!
+    var trailersCV: UICollectionView!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -65,13 +69,14 @@ extension MovieDetailView {
         setupDismissButton()
         setupPosterInfoView()
         setupInfoView()
+        setupTrailersView()
     }
 
     private func setupBackgroundView() {
 
         backgroundColor = .clear
 
-        visualEffectView = UIVisualEffectView(effect: nil)
+        visualEffectView = UIVisualEffectView(effect: blurEffect)
         visualEffectView.frame = frame
         visualEffectView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(visualEffectView)
@@ -243,7 +248,7 @@ extension MovieDetailView {
         homepageBtn.translatesAutoresizingMaskIntoConstraints = false
         homepageBtn.contentHorizontalAlignment = .left
         homepageBtn.setTitleColor(UIColor.movieFinder.tertiery, for: .normal)
-        homepageBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
+        homepageBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
         posterInfoSV.addArrangedSubview(homepageBtn)
 
         NSLayoutConstraint.activate([
@@ -265,29 +270,72 @@ extension MovieDetailView {
         infoSV.translatesAutoresizingMaskIntoConstraints = false
         infoSV.distribution = .equalSpacing
         infoSV.axis = .vertical
-        infoSV.spacing = 16
+        infoSV.spacing = 24
         containerView.addSubview(infoSV)
+
+        let infoTextSV = UIStackView()
+        infoTextSV.translatesAutoresizingMaskIntoConstraints = false
+        infoTextSV.distribution = .equalSpacing
+        infoTextSV.axis = .vertical
+        infoTextSV.spacing = 16
+        infoTextSV.layoutMargins = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+        infoTextSV.isLayoutMarginsRelativeArrangement = true
+        infoSV.addArrangedSubview(infoTextSV)
 
         titleLabel = UILabel()
         titleLabel.textColor = UIColor.movieFinder.secondary
         titleLabel.font = UIFont.systemFont(ofSize: 24, weight: UIFont.Weight.black)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 3
-        infoSV.addArrangedSubview(titleLabel)
+        infoTextSV.addArrangedSubview(titleLabel)
 
         descriptionLabel = UILabel()
         descriptionLabel.textColor = UIColor.movieFinder.tertiery
         descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
         descriptionLabel.numberOfLines  = 20
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        infoSV.addArrangedSubview(descriptionLabel)
+        infoTextSV.addArrangedSubview(descriptionLabel)
 
         NSLayoutConstraint.activate([
-            infoSV.leftAnchor.constraint(equalTo: containerView.safeLeftAnchor, constant: margin),
-            infoSV.rightAnchor.constraint(equalTo: containerView.safeRightAnchor, constant: -margin),
+            infoSV.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            infoSV.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             infoSV.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 48 + 195 + 24),
-            infoSV.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -32)
+            infoSV.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -40)
             ])
+    }
+
+    private func setupTrailersView() {
+
+        trailersSV = UIStackView()
+        trailersSV.translatesAutoresizingMaskIntoConstraints = false
+        trailersSV.distribution = .equalSpacing
+        trailersSV.axis = .vertical
+        trailersSV.spacing = 12
+        trailersSV.isHidden = true
+        infoSV.addArrangedSubview(trailersSV)
+
+        trailersLabel = UIPaddedLabel()
+        trailersLabel.leftInset = margin
+        trailersLabel.rightInset = margin
+        trailersLabel.textColor = UIColor.movieFinder.secondary
+        trailersLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.semibold)
+        trailersLabel.text = "trailers".localized
+        trailersLabel.translatesAutoresizingMaskIntoConstraints = false
+        trailersSV.addArrangedSubview(trailersLabel)
+
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.itemSize = CGSize(width: 228, height: 128 + 28)
+        flowLayout.minimumLineSpacing = 24
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+        trailersCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        trailersCV.translatesAutoresizingMaskIntoConstraints = false
+        trailersCV.heightAnchor.constraint(equalToConstant: flowLayout.itemSize.height).isActive = true
+        trailersCV.showsHorizontalScrollIndicator = false
+        trailersCV.backgroundColor = .clear
+        trailersCV.clipsToBounds = false
+        trailersCV.register(TrailerCell.self, forCellWithReuseIdentifier: TrailerCell.reuseIdentifier)
+        trailersSV.addArrangedSubview(trailersCV)
     }
 }
 

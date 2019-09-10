@@ -18,8 +18,10 @@ class MovieDetailVC: UIViewController {
 
     let detailView = MovieDetailView()
 
+    private var trailerDataSource: TrailerDataSource?
 
     private var disablePosterDragging = false
+    private var collectionViewDragging = false
 
     init(movie: Movie, image: UIImage?) {
         self.movie = movie
@@ -101,6 +103,7 @@ extension MovieDetailVC {
 
         self.movie = movie
 
+        // Runtime
         if let minutes = movie.runtime {
             let h: Int = Int(minutes) / 60
             let m: Int = Int(minutes) % 60
@@ -109,6 +112,7 @@ extension MovieDetailVC {
             detailView.durationLabel.isHidden = false
         }
 
+        // Homepage link
         if let homepage = movie.homepage, let host = homepage.host {
             let homepageAttributes: [NSAttributedString.Key: Any] = [ NSAttributedString.Key.foregroundColor: UIColor.movieFinder.tertiery,
                                                                       .underlineStyle: NSUnderlineStyle.single.rawValue] //.double.rawValue, .thick.rawValue
@@ -116,6 +120,21 @@ extension MovieDetailVC {
             detailView.homepageBtn.setAttributedTitle(homepageString, for: .normal)
             detailView.homepageBtn.isHidden = false
         }
+
+        // Trailers
+        if let videosResponse = movie.videos, !videosResponse.results.isEmpty {
+            trailerDataSource = TrailerDataSource(trailers: videosResponse.results)
+            detailView.trailersSV.isHidden = false
+            detailView.trailersCV.delegate = self
+            detailView.trailersCV.dataSource = trailerDataSource
+        }
+
+        // Photos
+
+        // Cast
+
+        // Similar
+
 
         detailView.animateLayout()
     }
@@ -156,19 +175,32 @@ extension MovieDetailVC: UIScrollViewDelegate {
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        disablePosterDragging = scrollView.contentOffset.y == 0 && detailView.scrollView.panGestureRecognizer.velocity(in: detailView.scrollView).y > 0
+        if scrollView == detailView.scrollView {
+            disablePosterDragging = scrollView.contentOffset.y == 0 && detailView.scrollView.panGestureRecognizer.velocity(in: detailView.scrollView).y > 0
+        } else {
+            collectionViewDragging = true
+        }
     }
 
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if scrollView != detailView.scrollView {
+            collectionViewDragging = false
+        }
+    }
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        disablePosterDragging = false
+        if scrollView == detailView.scrollView {
+            disablePosterDragging = false
+        }
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !disablePosterDragging {
-            let translationY = -scrollView.contentOffset.y //scrollIsDragging ? min(0, -scrollView.contentOffset.y) : -scrollView.contentOffset.y
-            detailView.posterView.transform = CGAffineTransform(translationX: 0, y: translationY)
-        } else {
-            scrollView.contentOffset = CGPoint(x: 0, y: 0)
+        if scrollView == detailView.scrollView {
+            if !disablePosterDragging {
+                let translationY = -scrollView.contentOffset.y //scrollIsDragging ? min(0, -scrollView.contentOffset.y) : -scrollView.contentOffset.y
+                detailView.posterView.transform = CGAffineTransform(translationX: 0, y: translationY)
+            } else {
+                scrollView.contentOffset = CGPoint(x: 0, y: 0)
+            }
         }
     }
 }
@@ -187,8 +219,25 @@ extension MovieDetailVC: UIGestureRecognizerDelegate {
     }
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        guard detailView.scrollView.contentOffset.y <= 0  else { return }
+        guard detailView.scrollView.contentOffset.y <= 0 else { return }
+        if collectionViewDragging {
+            gesture.isEnabled = false
+            gesture.isEnabled = true
+            detailView.visualEffectView.effect = detailView.blurEffect // bugfix - blur flickers on cancel
+        }
         delegate?.handleGestureDismissTransition(gesture: gesture)
     }
 }
 
+// MARK: - CollectionViewDelegate
+
+extension MovieDetailVC: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: false)
+        switch collectionView {
+        case detailView.trailersCV: print("TODO: Trailer tap \(indexPath.item)")
+        default: break
+        }
+    }
+}
