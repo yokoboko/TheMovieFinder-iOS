@@ -23,7 +23,6 @@ class MainFilterView: UIStackView {
     private var filterFocusBottomConstraint: NSLayoutConstraint!
     private var filterFocusWidthConstaint: NSLayoutConstraint!
 
-    var searchView: UIView!
     var searchField: UITextField!
 
     private var secondFilterRow: UIView!

@@ -307,6 +307,7 @@ extension MainView {
         searchView = MainSearchView()
         searchView.translatesAutoresizingMaskIntoConstraints = false
         searchView.isHidden = true
+        searchView.alpha = 0
         addSubview(searchView)
 
         NSLayoutConstraint.activate([
