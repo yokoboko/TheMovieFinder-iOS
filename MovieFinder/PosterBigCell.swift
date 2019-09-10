@@ -11,19 +11,7 @@ import Nuke
 
 class PosterBigCell: UICollectionViewCell, PosterCell {
     
-    var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.black
-        imageView.contentMode = .scaleAspectFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.setContentHuggingPriority(.init(1), for: .horizontal)
-        imageView.setContentHuggingPriority(.init(1), for: .vertical)
-        imageView.setContentCompressionResistancePriority(.init(1), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(.init(1), for: .vertical)
-        imageView.layer.cornerRadius = 5
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    var imageView: UIImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,6 +29,17 @@ class PosterBigCell: UICollectionViewCell, PosterCell {
         contentView.layer.shadowOffset = CGSize(width: 0, height: 15)
         contentView.layer.shadowRadius = 15
         contentView.layer.shadowOpacity = 0.64
+
+        imageView = UIImageView()
+        imageView.backgroundColor = UIColor.black
+        imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.setContentHuggingPriority(.init(1), for: .horizontal)
+        imageView.setContentHuggingPriority(.init(1), for: .vertical)
+        imageView.setContentCompressionResistancePriority(.init(1), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.init(1), for: .vertical)
+        imageView.layer.cornerRadius = 5
+        imageView.clipsToBounds = true
         contentView.addSubview(imageView)
         
         NSLayoutConstraint.activate([

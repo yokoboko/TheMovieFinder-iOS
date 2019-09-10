@@ -186,29 +186,25 @@ extension MovieDataSource: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+
+        let item = items[indexPath.item]
+        var itemPosterURL: URL?
+        if let posterPath = item.posterPath {
+            itemPosterURL = imageURLForPosterPath(posterPath)
+        }
+
+        // Big Poster Cell
         if let _ = collectionView.collectionViewLayout as? CoverFlowLayout {
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterBigCell.reuseIdentifier, for: indexPath) as! PosterBigCell
-            if let posterPath = items[indexPath.item].posterPath {
-                cell.loadImage(imageURL: imageURLForPosterPath(posterPath))
+            if let itemPosterURL = itemPosterURL {
+                cell.loadImage(imageURL: itemPosterURL)
             }
             return cell
         }
-        
+
+        // Small poster cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterSmallCell.reuseIdentifier, for: indexPath) as! PosterSmallCell
-        let item = items[indexPath.item]
-        cell.title.text = item.title
-        cell.genres.text = GenresData.movieGenreNames(ids: item.genreIds).joined(separator: ", ")
-        if let rating = item.voteAverage, rating != 0.0 {
-            cell.rating.text = String(rating)
-            cell.rating.isHidden = false
-        } else {
-            cell.rating.isHidden = true
-        }
-        if let posterPath = item.posterPath {
-            cell.loadImage(imageURL: imageURLForPosterPath(posterPath))
-        }
+        cell.setData(title: item.title, genreNames: GenresData.movieGenreNames(ids: item.genreIds), rating: item.voteAverage, posterURL: itemPosterURL)
         return cell
     }
 }
