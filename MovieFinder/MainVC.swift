@@ -27,6 +27,8 @@ class MainVC: UIViewController {
     private var movieSearchTerm = ""
     private var tvShowsSearchTerm = ""
 
+    private let hideFilterMenuOnChange = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         loadGenres()
@@ -143,7 +145,7 @@ class MainVC: UIViewController {
                     self.movieDataSource.filter = genresFilter
                     self.mainView.filterLabel.text = "\(genresFilter.localizedName): \(genreNameString)"
                     self.mainView.filterView.selectFilter(selectIndex: genresFilter.index)
-                    if !skipHideFilter {
+                    if self.hideFilterMenuOnChange, !skipHideFilter {
                         self.mainView.hideFilter()
                     }
                 }
@@ -163,7 +165,7 @@ class MainVC: UIViewController {
             movieDataSource.filter = filter
             mainView.filterLabel.text = filter.localizedName
             mainView.filterView.selectFilter(selectIndex: index)
-            if !skipHideFilter {
+            if hideFilterMenuOnChange, !skipHideFilter {
                 mainView.hideFilter()
             }
         }
@@ -236,7 +238,9 @@ extension MainVC {
             mainView.searchView.isHidden = true
             mainView.searchView.alpha = 0
             mainView.collectionView.isUserInteractionEnabled = !(mainView.collectionView.dataSource as! DataSourceProtocol).isLoadingData
-            mainView.hideFilter()
+            if hideFilterMenuOnChange {
+                mainView.hideFilter()
+            }
         }
         guard let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
