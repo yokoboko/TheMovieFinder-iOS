@@ -21,6 +21,7 @@ class MovieDetailVC: UIViewController {
     private var trailerDataSource: TrailerDataSource?
     private var imageDataSource: ImageDataSource?
     private var castDataSource: CastDataSource?
+    private var similarMovieDataSource: SimilarMovieDataSource?
 
     private var disablePosterDragging = false
     private var collectionViewDragging = false
@@ -163,6 +164,13 @@ extension MovieDetailVC {
         }
 
         // Similar
+        if let similarResponse = movie.similar, !similarResponse.results.isEmpty {
+            similarMovieDataSource = SimilarMovieDataSource(movies: similarResponse.results)
+            detailView.similarSV.isHidden = false
+            detailView.similarSV.alpha = 0
+            detailView.similarCV.delegate = self
+            detailView.similarCV.dataSource = similarMovieDataSource
+        }
 
         // FadeIn Animation
         UIView.animate(withDuration: 0.3) {
@@ -171,6 +179,7 @@ extension MovieDetailVC {
             if !self.detailView.trailersSV.isHidden { self.detailView.trailersSV.alpha = 1 }
             if !self.detailView.imagesSV.isHidden { self.detailView.imagesSV.alpha = 1 }
             if !self.detailView.castSV.isHidden { self.detailView.castSV.alpha = 1 }
+            if !self.detailView.similarSV.isHidden { self.detailView.similarSV.alpha = 1 }
         }
     }
 
@@ -274,6 +283,7 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
         case detailView.trailersCV: print("TODO: Trailer tap \(indexPath.item)")
         case detailView.imagesCV: print("TODO: Images tap \(indexPath.item)")
         case detailView.castCV: print("TODO: Cast tap \(indexPath.item)")
+        case detailView.similarCV: print("TODO: Similar tap \(indexPath.item)")
         default: break
         }
     }
@@ -294,6 +304,9 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
 
         case detailView.castCV:
             return (detailView.castCV.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
+
+        case detailView.similarCV:
+            return (detailView.similarCV.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
 
         default: return .zero
         }

@@ -13,6 +13,7 @@
 		F101AEB02328D62B002B49A9 /* ImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEAF2328D62B002B49A9 /* ImageDataSource.swift */; };
 		F101AEB22328EB19002B49A9 /* CastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB12328EB19002B49A9 /* CastCell.swift */; };
 		F101AEB42328EDF1002B49A9 /* CastDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB32328EDF1002B49A9 /* CastDataSource.swift */; };
+		F101AEB62328FE15002B49A9 /* SimilarMovieDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB52328FE15002B49A9 /* SimilarMovieDataSource.swift */; };
 		F101E131232107DC007E3F7E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E130232107DC007E3F7E /* Coordinator.swift */; };
 		F101E13323210941007E3F7E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E13223210941007E3F7E /* AppCoordinator.swift */; };
 		F101E135232109AA007E3F7E /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E134232109AA007E3F7E /* MainCoordinator.swift */; };
@@ -108,6 +109,7 @@
 		F101AEAF2328D62B002B49A9 /* ImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataSource.swift; sourceTree = "<group>"; };
 		F101AEB12328EB19002B49A9 /* CastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastCell.swift; sourceTree = "<group>"; };
 		F101AEB32328EDF1002B49A9 /* CastDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastDataSource.swift; sourceTree = "<group>"; };
+		F101AEB52328FE15002B49A9 /* SimilarMovieDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMovieDataSource.swift; sourceTree = "<group>"; };
 		F101E130232107DC007E3F7E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		F101E13223210941007E3F7E /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		F101E134232109AA007E3F7E /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				F10F42CE23279DA300C31869 /* TrailerDataSource.swift */,
 				F101AEAF2328D62B002B49A9 /* ImageDataSource.swift */,
 				F101AEB32328EDF1002B49A9 /* CastDataSource.swift */,
+				F101AEB52328FE15002B49A9 /* SimilarMovieDataSource.swift */,
 				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
 				F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */,
 			);
@@ -736,6 +739,7 @@
 				F10F42C92327893D00C31869 /* FaveButton.swift in Sources */,
 				F10D9557230D302B00D48239 /* AppDelegate.swift in Sources */,
 				F10D95A1230D715700D48239 /* TVShowResponse.swift in Sources */,
+				F101AEB62328FE15002B49A9 /* SimilarMovieDataSource.swift in Sources */,
 				F10D955F230D302B00D48239 /* MovieFinder.xcdatamodeld in Sources */,
 				F1A1465F230E8E8800A874DA /* CoverFlowLayout.swift in Sources */,
 				F1FBCA5123224150002157F6 /* DataSourceProtocol.swift in Sources */,

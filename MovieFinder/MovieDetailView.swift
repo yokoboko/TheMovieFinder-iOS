@@ -50,6 +50,10 @@ class MovieDetailView: UIView {
     var castLabel: UIPaddedLabel!
     var castCV: UICollectionView!
 
+    var similarSV: UIStackView!
+    var similarLabel: UIPaddedLabel!
+    var similarCV: UICollectionView!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -80,6 +84,7 @@ extension MovieDetailView {
         setupTrailersView()
         setupImagesView()
         setupCastView()
+        setupSimilarView()
     }
 
     private func setupBackgroundView() {
@@ -403,7 +408,7 @@ extension MovieDetailView {
         castSV.addArrangedSubview(castLabel)
 
         let castImageRatio: CGFloat = 2 / 3
-        let imageHeight: CGFloat = 128
+        let imageHeight: CGFloat = 180
         let imageWidth: CGFloat = imageHeight * castImageRatio
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -419,6 +424,44 @@ extension MovieDetailView {
         castCV.clipsToBounds = false
         castCV.register(CastCell.self, forCellWithReuseIdentifier: CastCell.reuseIdentifier)
         castSV.addArrangedSubview(castCV)
+    }
+
+    private func setupSimilarView() {
+
+        similarSV = UIStackView()
+        similarSV.translatesAutoresizingMaskIntoConstraints = false
+        similarSV.distribution = .equalSpacing
+        similarSV.axis = .vertical
+        similarSV.spacing = 12
+        similarSV.isHidden = true
+        infoSV.addArrangedSubview(similarSV)
+
+        similarLabel = UIPaddedLabel()
+        similarLabel.leftInset = margin
+        similarLabel.rightInset = margin
+        similarLabel.textColor = UIColor.movieFinder.secondary
+        similarLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.semibold)
+        similarLabel.text = "similar".localized
+        similarLabel.translatesAutoresizingMaskIntoConstraints = false
+        similarSV.addArrangedSubview(similarLabel)
+
+        let similarImageRatio: CGFloat = 24 / 36
+        let imageHeight: CGFloat = 180
+        let imageWidth: CGFloat = imageHeight * similarImageRatio
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.itemSize = CGSize(width: imageWidth, height: imageHeight + 38)
+        flowLayout.minimumLineSpacing = 24
+        flowLayout.minimumInteritemSpacing = 24
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+        similarCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        similarCV.translatesAutoresizingMaskIntoConstraints = false
+        similarCV.heightAnchor.constraint(equalToConstant: flowLayout.itemSize.height).isActive = true
+        similarCV.showsHorizontalScrollIndicator = false
+        similarCV.backgroundColor = .clear
+        similarCV.clipsToBounds = false
+        similarCV.register(PosterSmallCell.self, forCellWithReuseIdentifier: PosterSmallCell.reuseIdentifier)
+        similarSV.addArrangedSubview(similarCV)
     }
 }
 
