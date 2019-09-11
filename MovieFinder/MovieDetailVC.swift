@@ -25,9 +25,10 @@ class MovieDetailVC: UIViewController {
 
     private var disablePosterDragging = false
     private var collectionViewDragging = false
-
-    init(movie: Movie, image: UIImage?) {
+    private var showSimilar = true
+    init(movie: Movie, image: UIImage?, showSimilar: Bool = true) {
         self.movie = movie
+        self.showSimilar = showSimilar
         super.init(nibName: nil, bundle: nil)
         detailView.posterImageView.image = image
     }
@@ -164,7 +165,7 @@ extension MovieDetailVC {
         }
 
         // Similar
-        if let similarResponse = movie.similar, !similarResponse.results.isEmpty {
+        if showSimilar, let similarResponse = movie.similar, !similarResponse.results.isEmpty {
             similarMovieDataSource = SimilarMovieDataSource(movies: similarResponse.results)
             detailView.similarSV.isHidden = false
             detailView.similarSV.alpha = 0
@@ -295,10 +296,19 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
         switch collectionView {
+
         case detailView.trailersCV: print("TODO: Trailer tap \(indexPath.item)")
         case detailView.imagesCV: print("TODO: Images tap \(indexPath.item)")
         case detailView.castCV: print("TODO: Cast tap \(indexPath.item)")
-        case detailView.similarCV: print("TODO: Similar tap \(indexPath.item)")
+
+        case detailView.similarCV:
+            if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell,
+                let _ = cell.imageView.image,
+                let similarMovieDataSource = similarMovieDataSource,
+                let movie = similarMovieDataSource.item(at: indexPath.item) {
+                    delegate?.detail(movie: movie, posterCell: cell)
+                }
+
         default: break
         }
     }

@@ -42,7 +42,7 @@ extension MainView {
 
         guard let logoImageView = logoImageView  else { return }
 
-        UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: {
+        UIView.animate(withDuration: 0.6, delay: 0.3, options: [.curveEaseOut], animations: {
             logoImageView.alpha = 0
             logoImageView.transform = CGAffineTransform(translationX: 0, y: -64)
         }) { (success) in
@@ -59,7 +59,7 @@ extension MainView {
         toggleLayoutBtn.transform = CGAffineTransform(translationX: 0, y: 80)
         filtersBtn.transform = CGAffineTransform(translationX: 0, y: 80)
 
-        UIView.animate(withDuration: 0.8, delay: 0.6, options: [.curveEaseOut], animations: {
+        UIView.animate(withDuration: 0.8, delay: 0.6 + 0.3, options: [.curveEaseOut], animations: {
             self.sectionLabel.alpha = 1
             self.sectionLabel.transform = .identity
             self.filterLabel.alpha = 1

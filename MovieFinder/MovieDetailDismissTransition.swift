@@ -23,15 +23,11 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
 
-        guard
-            let toViewController = transitionContext.viewController(forKey: .to),
-            let fromViewController = transitionContext.viewController(forKey: .from)
-            else { return }
+        guard let fromViewController = transitionContext.viewController(forKey: .from) else { return }
 
         let duration = self.transitionDuration(using: transitionContext)
-        if  let toNavVC = toViewController as? UINavigationController,
-            let _ = toNavVC.viewControllers.first as? MainVC,
-            let movieDetailVC = fromViewController as? MovieDetailVC {
+        
+        if  let movieDetailVC = fromViewController as? MovieDetailVC {
 
             let detailView = movieDetailVC.detailView
             let toFrame = posterCell.imageView.convert(posterCell.imageView.frame, to: UIApplication.shared.keyWindow)

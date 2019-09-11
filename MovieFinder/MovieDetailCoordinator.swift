@@ -11,35 +11,38 @@ import UIKit
 protocol MovieDetailCoordinatorDelegate: class {
     func dismissMovieDetail()
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer)
+    func detail(movie: Movie, posterCell: PosterCell)
 }
 
 class MovieDetailCoordinator: BaseCoordinator {
 
-    private let navigationController: UINavigationController
+    private unowned let rootViewController: UIViewController
     private unowned var detailVC: MovieDetailVC!
     private unowned var posterCell: PosterCell
     private var movie: Movie?
+    private var showSimilar: Bool
 
     private var interactor = Interactor()
 
-    init(navigationController: UINavigationController, movie: Movie, posterCell: PosterCell) {
-        self.navigationController = navigationController
+    init(rootViewController: UIViewController, movie: Movie, posterCell: PosterCell, showSimilar: Bool = true) {
+        self.rootViewController = rootViewController
         self.movie = movie
         self.posterCell = posterCell
+        self.showSimilar = showSimilar
     }
 
     override func start() {
 
         var detailVC: MovieDetailVC?
         if let movie = movie {
-            detailVC = MovieDetailVC(movie: movie, image: posterCell.imageView.image)
+            detailVC = MovieDetailVC(movie: movie, image: posterCell.imageView.image, showSimilar: showSimilar)
         }
         if let detailVC = detailVC {
             self.detailVC = detailVC
             detailVC.modalPresentationStyle = .custom
             detailVC.transitioningDelegate = self
             detailVC.delegate = self
-            navigationController.present(detailVC, animated: true)
+            rootViewController.present(detailVC, animated: true)
         } else {
             fatalError("MovieDetailCoordinator: MovieDetailVC no valid data")
         }
@@ -66,6 +69,17 @@ extension MovieDetailCoordinator: UIViewControllerTransitioningDelegate {
 // MARK: - Gesture Dismiss
 
 extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
+
+    func detail(movie: Movie, posterCell: PosterCell) {
+
+        let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: detailVC,
+                                                            movie: movie,
+                                                            posterCell: posterCell,
+                                                            showSimilar: false)
+        self.store(coordinator: movieDetailCoordinator)
+        movieDetailCoordinator.delegate = self
+        movieDetailCoordinator.start()
+    }
 
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer) {
 

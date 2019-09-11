@@ -23,18 +23,14 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
 
-        guard
-            let toViewController = transitionContext.viewController(forKey: .to),
-            let fromViewController = transitionContext.viewController(forKey: .from)
-            else { return }
+        guard let toViewController = transitionContext.viewController(forKey: .to) else { return }
         
         transitionContext.containerView.addSubview(toViewController.view)
+        
         let duration = self.transitionDuration(using: transitionContext)
 
         
-        if  let fromNavVC = fromViewController as? UINavigationController,
-            let _ = fromNavVC.viewControllers.first as? MainVC,
-            let movieDetailVC = toViewController as? MovieDetailVC {
+        if let movieDetailVC = toViewController as? MovieDetailVC {
 
             let detailView = movieDetailVC.detailView
 

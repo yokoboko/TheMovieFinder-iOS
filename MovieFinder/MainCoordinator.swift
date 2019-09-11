@@ -35,7 +35,7 @@ extension MainCoordinator: MainCoordinatorDelegate {
 
     func detail(movie: Movie, posterCell: PosterCell) {
 
-        let movieDetailCoordinator = MovieDetailCoordinator(navigationController: navigationController,
+        let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: mainVC,
                                                              movie: movie,
                                                              posterCell: posterCell)
         self.store(coordinator: movieDetailCoordinator)
