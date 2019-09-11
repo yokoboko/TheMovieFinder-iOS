@@ -19,6 +19,7 @@ class MovieDetailVC: UIViewController {
     let detailView = MovieDetailView()
 
     private var trailerDataSource: TrailerDataSource?
+    private var imageDataSource: ImageDataSource?
 
     private var disablePosterDragging = false
     private var collectionViewDragging = false
@@ -129,17 +130,26 @@ extension MovieDetailVC {
 
         // Trailers
         if let videosResponse = movie.videos, !videosResponse.results.isEmpty {
-            trailerDataSource = TrailerDataSource(trailers: videosResponse.results)
-            detailView.trailersSV.isHidden = false
-            detailView.trailersSV.alpha = 0
-            detailView.trailersCV.delegate = self
-            detailView.trailersCV.dataSource = trailerDataSource
+            let filteredTrailers = videosResponse.results.filter { $0.site == "YouTube" }
+            if !filteredTrailers.isEmpty {
+                trailerDataSource = TrailerDataSource(trailers: filteredTrailers)
+                detailView.trailersSV.isHidden = false
+                detailView.trailersSV.alpha = 0
+                detailView.trailersCV.delegate = self
+                detailView.trailersCV.dataSource = trailerDataSource
+            }
         }
 
         // Photos
         if let images = movie.images, !images.backdrops.isEmpty {
-            let filteredImages = images.backdrops.filter { $0.aspect != nil && $0.filePath != nil }
-            print(filteredImages.count)
+            let filteredBackgropImages = images.backdrops.filter { $0.aspect != nil && $0.filePath != nil }
+             if !filteredBackgropImages.isEmpty {
+                imageDataSource = ImageDataSource(images: filteredBackgropImages)
+                detailView.imagesSV.isHidden = false
+                detailView.imagesSV.alpha = 0
+                detailView.imagesCV.delegate = self
+                detailView.imagesCV.dataSource = imageDataSource
+            }
         }
 
         // Cast
@@ -151,6 +161,7 @@ extension MovieDetailVC {
             if !self.detailView.durationLabel.isHidden { self.detailView.durationLabel.alpha = 1 }
             if !self.detailView.homepageBtn.isHidden { self.detailView.homepageBtn.alpha = 1 }
             if !self.detailView.trailersSV.isHidden { self.detailView.trailersSV.alpha = 1 }
+            if !self.detailView.trailersSV.isHidden { self.detailView.imagesSV.alpha = 1 }
         }
     }
 
@@ -234,7 +245,7 @@ extension MovieDetailVC: UIGestureRecognizerDelegate {
     }
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        guard detailView.scrollView.contentOffset.y <= 0 else { return }
+        guard detailView.scrollView.contentOffset.y == 0 else { return }
         if collectionViewDragging {
             gesture.isEnabled = false
             gesture.isEnabled = true
@@ -246,13 +257,32 @@ extension MovieDetailVC: UIGestureRecognizerDelegate {
 
 // MARK: - CollectionViewDelegate
 
-extension MovieDetailVC: UICollectionViewDelegate {
+extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
         switch collectionView {
         case detailView.trailersCV: print("TODO: Trailer tap \(indexPath.item)")
+        case detailView.imagesCV: print("TODO: Images tap \(indexPath.item)")
         default: break
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        switch collectionView {
+
+        case detailView.trailersCV:
+            return (detailView.trailersCV.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
+
+        case detailView.imagesCV:
+            let height =  detailView.imagesCV.frame.height
+            if let item = imageDataSource!.item(at: indexPath.item) {
+                let width = height * CGFloat(item.aspect!)
+                return CGSize(width: width, height: height)
+            }
+            return  CGSize(width: height, height: height)
+
+        default: return .zero
         }
     }
 }

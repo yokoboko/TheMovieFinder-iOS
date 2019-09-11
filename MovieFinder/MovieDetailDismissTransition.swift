@@ -45,8 +45,9 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
             
             detailView.visualEffectView.effect = detailView.blurEffect
 
-            let damping: CGFloat = transitionContext.isInteractive ? 1.0 : 0.72
-            UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 0, options: [.curveEaseOut], animations: {
+            let damping: CGFloat = transitionContext.isInteractive ? 1.0 : 0.74
+            let animationCurve: UIView.AnimationOptions = transitionContext.isInteractive ? .curveLinear : .curveEaseOut
+            UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 0, options: [animationCurve], animations: {
 
                 detailView.dismissBtn.alpha = 0
                 detailView.posterInfoSV.alpha = 0

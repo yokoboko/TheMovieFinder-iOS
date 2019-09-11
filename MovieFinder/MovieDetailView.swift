@@ -42,6 +42,10 @@ class MovieDetailView: UIView {
     var trailersLabel: UIPaddedLabel!
     var trailersCV: UICollectionView!
 
+    var imagesSV: UIStackView!
+    var imagesLabel: UIPaddedLabel!
+    var imagesCV: UICollectionView!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -70,6 +74,7 @@ extension MovieDetailView {
         setupPosterInfoView()
         setupInfoView()
         setupTrailersView()
+        setupImagesView()
     }
 
     private func setupBackgroundView() {
@@ -327,6 +332,7 @@ extension MovieDetailView {
         flowLayout.scrollDirection = .horizontal
         flowLayout.itemSize = CGSize(width: 228, height: 128 + 28)
         flowLayout.minimumLineSpacing = 24
+        flowLayout.minimumInteritemSpacing = 24
         flowLayout.sectionInset = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
         trailersCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         trailersCV.translatesAutoresizingMaskIntoConstraints = false
@@ -336,6 +342,40 @@ extension MovieDetailView {
         trailersCV.clipsToBounds = false
         trailersCV.register(TrailerCell.self, forCellWithReuseIdentifier: TrailerCell.reuseIdentifier)
         trailersSV.addArrangedSubview(trailersCV)
+    }
+
+    private func setupImagesView() {
+
+        imagesSV = UIStackView()
+        imagesSV.translatesAutoresizingMaskIntoConstraints = false
+        imagesSV.distribution = .equalSpacing
+        imagesSV.axis = .vertical
+        imagesSV.spacing = 12
+        imagesSV.isHidden = true
+        infoSV.addArrangedSubview(imagesSV)
+
+        imagesLabel = UIPaddedLabel()
+        imagesLabel.leftInset = margin
+        imagesLabel.rightInset = margin
+        imagesLabel.textColor = UIColor.movieFinder.secondary
+        imagesLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.semibold)
+        imagesLabel.text = "images".localized
+        imagesLabel.translatesAutoresizingMaskIntoConstraints = false
+        imagesSV.addArrangedSubview(imagesLabel)
+
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 24
+        flowLayout.minimumInteritemSpacing = 24
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+        imagesCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        imagesCV.translatesAutoresizingMaskIntoConstraints = false
+        imagesCV.heightAnchor.constraint(equalToConstant: 128).isActive = true
+        imagesCV.showsHorizontalScrollIndicator = false
+        imagesCV.backgroundColor = .clear
+        imagesCV.clipsToBounds = false
+        imagesCV.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.reuseIdentifier)
+        imagesSV.addArrangedSubview(imagesCV)
     }
 }
 

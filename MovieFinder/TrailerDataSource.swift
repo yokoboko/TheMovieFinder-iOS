@@ -16,6 +16,11 @@ class TrailerDataSource: NSObject {
         self.items = trailers
         super.init()
     }
+
+    func item(at: Int) -> MovieVideo? {
+        guard at >= 0, at < items.count else { return nil }
+        return items[at]
+    }
 }
 
 extension TrailerDataSource: UICollectionViewDataSource {
