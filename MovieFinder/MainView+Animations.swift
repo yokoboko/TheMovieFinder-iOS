@@ -33,7 +33,7 @@ extension MainView {
         infoNameLabel.alpha = 0
         infoRatingLabel.alpha = 0
         infoGenresLabel.alpha = 0
-        scrollToTopBtn.alpha = 0
+        scrollToTopContainer.alpha = 0
         toggleLayoutBtn.alpha = 0
         filtersBtn.alpha = 0
     }
@@ -55,7 +55,7 @@ extension MainView {
         infoNameLabel.transform = CGAffineTransform(translationX: 0, y: 66)
         infoRatingLabel.transform = CGAffineTransform(translationX: 0, y: 66)
         infoGenresLabel.transform = CGAffineTransform(translationX: 0, y: 74)
-        scrollToTopBtn.transform = CGAffineTransform(translationX: 0, y: 80)
+        scrollToTopContainer.transform = CGAffineTransform(translationX: 0, y: 80)
         toggleLayoutBtn.transform = CGAffineTransform(translationX: 0, y: 80)
         filtersBtn.transform = CGAffineTransform(translationX: 0, y: 80)
 
@@ -72,8 +72,8 @@ extension MainView {
             self.infoRatingLabel.transform = .identity
             self.infoGenresLabel.alpha = 1
             self.infoGenresLabel.transform = .identity
-            self.scrollToTopBtn.alpha = self.scrollToTopBtnAlpha
-            self.scrollToTopBtn.transform = .identity
+            self.scrollToTopContainer.alpha = 1
+            self.scrollToTopContainer.transform = .identity
             self.toggleLayoutBtn.alpha = 1
             self.toggleLayoutBtn.transform = .identity
             self.filtersBtn.alpha = 1
@@ -150,7 +150,7 @@ extension MainView {
                 collectionView.collectionViewLayout.invalidateLayout()
             }
 
-            scrollToTopBtn.isUserInteractionEnabled = false
+            scrollToTopContainer.isUserInteractionEnabled = false
             toggleLayoutBtn.isUserInteractionEnabled = false
             filtersBtn.isUserInteractionEnabled = false
 
@@ -171,7 +171,7 @@ extension MainView {
                 self.sectionLabel.transform = CGAffineTransform(translationX: 0, y: -32)
                 self.filterLabel.alpha = 0
                 self.filterLabel.transform = CGAffineTransform(translationX: 0, y: -32)
-                self.scrollToTopBtn.alpha = 0
+                self.scrollToTopContainer.alpha = 0
                 self.toggleLayoutBtn.alpha = 0
                 self.filtersBtn.alpha = 0
                 self.filterView.alpha = 1
@@ -194,7 +194,7 @@ extension MainView {
                 collectionView.collectionViewLayout.invalidateLayout()
             }
 
-            scrollToTopBtn.isUserInteractionEnabled = true
+            scrollToTopContainer.isUserInteractionEnabled = true
             toggleLayoutBtn.isUserInteractionEnabled = true
             filtersBtn.isUserInteractionEnabled = true
 
@@ -216,7 +216,7 @@ extension MainView {
                 self.sectionLabel.transform = .identity
                 self.filterLabel.alpha = 1
                 self.filterLabel.transform = .identity
-                self.scrollToTopBtn.alpha = 1
+                self.scrollToTopContainer.alpha = 1
                 self.toggleLayoutBtn.alpha = 1
                 self.filtersBtn.alpha = 1
                 self.filterView.alpha = 0
@@ -282,7 +282,7 @@ extension MainView {
         }
         sectionLabel.alpha = 1 - progress
         filterLabel.alpha = 1 - progress
-        scrollToTopBtn.alpha = 1 - progress
+        scrollToTopContainer.alpha = 1 - progress
         toggleLayoutBtn.alpha = 1 - progress
         filtersBtn.alpha = 1 - progress
         filterView.alpha = progress

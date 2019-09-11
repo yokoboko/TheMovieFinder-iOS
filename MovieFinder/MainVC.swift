@@ -321,7 +321,7 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if mainView.isFilterHidden {
-            if mainView.collectionView.contentOffset.x >= mainView.collectionView.bounds.width {
+            if mainView.collectionView.contentOffset.x > 0 {
                   mainView.scrollToTopBtn.alpha = 1
             } else {
                   mainView.scrollToTopBtn.alpha = mainView.scrollToTopBtnAlpha
@@ -370,6 +370,8 @@ extension MainVC: DataSourceDelegate {
             firstTimeDataLoading = false
             mainView.showViewsAfterLoadingDataOnAppLaunch()
         }
+
+        mainView.scrollToTopBtn.alpha = mainView.scrollToTopBtnAlpha
     }
 
     func itemOnFocus(name: String, voteAverage: Double?, genres: [String], year: String?, imageURL: URL?) {

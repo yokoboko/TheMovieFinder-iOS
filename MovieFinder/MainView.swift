@@ -21,7 +21,8 @@ class MainView: UIView {
     var infoNameLabel: UILabel!
     var infoRatingLabel: UILabel!
     var infoGenresLabel: UILabel!
-    
+
+    var scrollToTopContainer: UIView!
     var scrollToTopBtn: UIButton!
     var toggleLayoutBtn: UIButton!
     var filtersBtn: UIButton!
@@ -244,11 +245,16 @@ extension MainView {
     }
     
     private func setupButtons() {
-        
-        scrollToTopBtn = UIButton(type: .custom)
+
+        scrollToTopContainer = UIView()
+        scrollToTopContainer.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(scrollToTopContainer)
+
+        scrollToTopBtn = UIButton()
         scrollToTopBtn.translatesAutoresizingMaskIntoConstraints = false
         scrollToTopBtn.setImage(UIImage(named: "btn_scroll_to_top"), for: .normal)
-        addSubview(scrollToTopBtn)
+        scrollToTopBtn.alpha = scrollToTopBtnAlpha
+        scrollToTopContainer.addSubview(scrollToTopBtn)
         
         toggleLayoutBtn = UIButton(type: .custom)
         toggleLayoutBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -261,8 +267,12 @@ extension MainView {
         addSubview(filtersBtn)
 
         NSLayoutConstraint.activate([
-            scrollToTopBtn.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin - 13),
-            scrollToTopBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
+            scrollToTopContainer.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: infoBottomMargin - 13),
+            scrollToTopContainer.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
+            scrollToTopContainer.widthAnchor.constraint(equalTo: scrollToTopBtn.widthAnchor),
+            scrollToTopContainer.heightAnchor.constraint(equalTo: scrollToTopBtn.heightAnchor),
+            scrollToTopBtn.leftAnchor.constraint(equalTo: scrollToTopContainer.leftAnchor),
+            scrollToTopBtn.topAnchor.constraint(equalTo: scrollToTopContainer.topAnchor),
             filtersBtn.centerXAnchor.constraint(equalTo: centerXAnchor),
             filtersBtn.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -6),
             toggleLayoutBtn.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -infoBottomMargin + 16),
