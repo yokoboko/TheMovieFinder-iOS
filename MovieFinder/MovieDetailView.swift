@@ -110,7 +110,7 @@ extension MovieDetailView {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = false
         addSubview(scrollView)
-
+        
         containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(containerView)

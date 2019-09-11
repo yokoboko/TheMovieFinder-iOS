@@ -230,7 +230,11 @@ extension MovieDetailVC: UIScrollViewDelegate {
         if scrollView != detailView.scrollView {
             collectionViewDragging = false
         }
+        if !decelerate {
+            scrollViewDidEndDecelerating(scrollView)
+        }
     }
+
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView == detailView.scrollView {
             disablePosterDragging = false
@@ -263,13 +267,24 @@ extension MovieDetailVC: UIGestureRecognizerDelegate {
     }
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        guard detailView.scrollView.contentOffset.y == 0 else { return }
+        guard detailView.scrollView.contentOffset.y <= 0 else { return }
         if collectionViewDragging {
             gesture.isEnabled = false
             gesture.isEnabled = true
             detailView.visualEffectView.effect = detailView.blurEffect // bugfix - blur flickers on cancel
         }
         delegate?.handleGestureDismissTransition(gesture: gesture)
+    }
+
+    // Bugfix for interactor
+    func disableScroll() {
+        detailView.scrollView.panGestureRecognizer.isEnabled = false
+    }
+
+    func enableScroll() {
+        detailView.scrollView.panGestureRecognizer.isEnabled = true
+        detailView.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        detailView.visualEffectView.effect = detailView.blurEffect // bug fix - blur flickers on short gestures
     }
 }
 

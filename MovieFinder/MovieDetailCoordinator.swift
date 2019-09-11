@@ -71,9 +71,11 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
 
         let percentThreshold:CGFloat = 0.01
         switch gesture.state {
+
         case .began:
             if gesture.velocity(in: detailVC.view).y >= 0 {
                 interactor.hasStarted = true
+                detailVC.disableScroll()
                 detailVC.dismiss(animated: true) { [weak self] in
                     guard let self = self else { return }
                     if self.interactor.shouldFinish {
@@ -81,6 +83,7 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
                     }
                 }
             }
+
         case .changed:
             if interactor.hasStarted {
                 // convert y-position to downward pull progress (percentage)
@@ -92,12 +95,14 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
                 interactor.shouldFinish = progress > percentThreshold
                 interactor.update(progress)
             }
+
         case .cancelled:
             if interactor.hasStarted {
                 interactor.hasStarted = false
                 interactor.cancel()
-
+                detailVC.enableScroll()
             }
+
         case .ended:
             if interactor.hasStarted {
 
@@ -106,11 +111,11 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
                     interactor.finish()
                 } else {
                     interactor.cancel()
-                    self.detailVC.detailView.visualEffectView.effect = self.detailVC.detailView.blurEffect // bug fix - blur flickers on short gestures
+                    detailVC.enableScroll()
                 }
             }
-        default:
-            break
+
+        default: break
         }
     }
 
