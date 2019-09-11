@@ -10,8 +10,10 @@ import Foundation
 
 enum MovieImagePath: String {
     case small = "https://image.tmdb.org/t/p/w154/"
-    case medium = "https://image.tmdb.org/t/p/w500/"
-    case cast = "https://image.tmdb.org/t/p/w185/"
+    case medium = "https://image.tmdb.org/t/p/w342/"
+    case large = "https://image.tmdb.org/t/p/w500/"
+    case castSmall = "https://image.tmdb.org/t/p/w185/"
+    case castMedium = "https://image.tmdb.org/t/p/h632/"
     case original = "https://image.tmdb.org/t/p/original/"
     case backgropSmall = "https://image.tmdb.org/t/p/w300/"
     case backgropMedium = "https://image.tmdb.org/t/p/w780/"

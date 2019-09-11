@@ -164,7 +164,7 @@ class MovieDataSource: NSObject, DataSourceProtocol {
             let item = items[itemOnFocus]
             var posterURL: URL? = nil
             if  let posterPath = item.posterPath {
-                posterURL = MovieImagePath.medium.path(poster: posterPath)
+                posterURL = MovieImagePath.large.path(poster: posterPath)
             }
 
             delegate?.itemOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.releaseDate, imageURL: posterURL)
@@ -173,7 +173,7 @@ class MovieDataSource: NSObject, DataSourceProtocol {
     
     private func imageURLForPosterPath(_ path: String) -> URL {
         if let _ = collectionView.collectionViewLayout as? CoverFlowLayout {
-            return MovieImagePath.medium.path(poster: path)
+            return MovieImagePath.large.path(poster: path)
         }
         return MovieImagePath.small.path(poster: path)
     }

@@ -275,7 +275,7 @@ extension MovieDetailView {
             favouriteBtn.widthAnchor.constraint(equalToConstant: 44),
             favouriteBtn.heightAnchor.constraint(equalToConstant: 44),
             favouriteBtn.rightAnchor.constraint(equalTo: posterInfoSV.rightAnchor, constant: 12),
-            favouriteBtn.centerYAnchor.constraint(equalTo: ratingLabel.centerYAnchor)
+            favouriteBtn.centerYAnchor.constraint(equalTo: ratingLabel.centerYAnchor, constant: -4)
             ])
     }
 

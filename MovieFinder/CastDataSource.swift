@@ -31,7 +31,7 @@ extension CastDataSource: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCell.reuseIdentifier, for: indexPath) as! CastCell
         var imageURL: URL?
         if let path = item.profilePath {
-            imageURL = MovieImagePath.cast.path(poster: path)
+            imageURL = MovieImagePath.castMedium.path(poster: path)
         }
         cell.setData(actorName: item.name, imageURL: imageURL)
         return cell

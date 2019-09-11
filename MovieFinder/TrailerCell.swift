@@ -55,6 +55,11 @@ class TrailerCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
 
+        let playImage = UIImageView(image: UIImage(named: "icon_play_video"))
+        playImage.translatesAutoresizingMaskIntoConstraints = false
+        playImage.alpha = 1
+        contentView.addSubview(playImage)
+
         NSLayoutConstraint.activate([
 
             imageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -66,6 +71,9 @@ class TrailerCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor),
             imageView.leftAnchor.constraint(equalTo: imageContainerView.leftAnchor),
             imageView.rightAnchor.constraint(equalTo: imageContainerView.rightAnchor),
+
+            playImage.rightAnchor.constraint(equalTo: imageContainerView.rightAnchor, constant: -2),
+            playImage.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: -2),
 
             titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor),
