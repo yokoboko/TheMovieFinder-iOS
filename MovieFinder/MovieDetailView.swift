@@ -46,6 +46,10 @@ class MovieDetailView: UIView {
     var imagesLabel: UIPaddedLabel!
     var imagesCV: UICollectionView!
 
+    var castSV: UIStackView!
+    var castLabel: UIPaddedLabel!
+    var castCV: UICollectionView!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -75,6 +79,7 @@ extension MovieDetailView {
         setupInfoView()
         setupTrailersView()
         setupImagesView()
+        setupCastView()
     }
 
     private func setupBackgroundView() {
@@ -376,6 +381,44 @@ extension MovieDetailView {
         imagesCV.clipsToBounds = false
         imagesCV.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.reuseIdentifier)
         imagesSV.addArrangedSubview(imagesCV)
+    }
+
+    private func setupCastView() {
+
+        castSV = UIStackView()
+        castSV.translatesAutoresizingMaskIntoConstraints = false
+        castSV.distribution = .equalSpacing
+        castSV.axis = .vertical
+        castSV.spacing = 12
+        castSV.isHidden = true
+        infoSV.addArrangedSubview(castSV)
+
+        castLabel = UIPaddedLabel()
+        castLabel.leftInset = margin
+        castLabel.rightInset = margin
+        castLabel.textColor = UIColor.movieFinder.secondary
+        castLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.semibold)
+        castLabel.text = "cast".localized
+        castLabel.translatesAutoresizingMaskIntoConstraints = false
+        castSV.addArrangedSubview(castLabel)
+
+        let castImageRatio: CGFloat = 2 / 3
+        let imageHeight: CGFloat = 128
+        let imageWidth: CGFloat = imageHeight * castImageRatio
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.itemSize = CGSize(width: imageWidth, height: imageHeight + 38)
+        flowLayout.minimumLineSpacing = 24
+        flowLayout.minimumInteritemSpacing = 24
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+        castCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        castCV.translatesAutoresizingMaskIntoConstraints = false
+        castCV.heightAnchor.constraint(equalToConstant: flowLayout.itemSize.height).isActive = true
+        castCV.showsHorizontalScrollIndicator = false
+        castCV.backgroundColor = .clear
+        castCV.clipsToBounds = false
+        castCV.register(CastCell.self, forCellWithReuseIdentifier: CastCell.reuseIdentifier)
+        castSV.addArrangedSubview(castCV)
     }
 }
 

@@ -20,6 +20,7 @@ class MovieDetailVC: UIViewController {
 
     private var trailerDataSource: TrailerDataSource?
     private var imageDataSource: ImageDataSource?
+    private var castDataSource: CastDataSource?
 
     private var disablePosterDragging = false
     private var collectionViewDragging = false
@@ -153,6 +154,13 @@ extension MovieDetailVC {
         }
 
         // Cast
+        if let credits = movie.credits, !credits.cast.isEmpty {
+            castDataSource = CastDataSource(cast: credits.cast)
+            detailView.castSV.isHidden = false
+            detailView.castSV.alpha = 0
+            detailView.castCV.delegate = self
+            detailView.castCV.dataSource = castDataSource
+        }
 
         // Similar
 
@@ -161,7 +169,8 @@ extension MovieDetailVC {
             if !self.detailView.durationLabel.isHidden { self.detailView.durationLabel.alpha = 1 }
             if !self.detailView.homepageBtn.isHidden { self.detailView.homepageBtn.alpha = 1 }
             if !self.detailView.trailersSV.isHidden { self.detailView.trailersSV.alpha = 1 }
-            if !self.detailView.trailersSV.isHidden { self.detailView.imagesSV.alpha = 1 }
+            if !self.detailView.imagesSV.isHidden { self.detailView.imagesSV.alpha = 1 }
+            if !self.detailView.castSV.isHidden { self.detailView.castSV.alpha = 1 }
         }
     }
 
@@ -264,6 +273,7 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
         switch collectionView {
         case detailView.trailersCV: print("TODO: Trailer tap \(indexPath.item)")
         case detailView.imagesCV: print("TODO: Images tap \(indexPath.item)")
+        case detailView.castCV: print("TODO: Cast tap \(indexPath.item)")
         default: break
         }
     }
@@ -281,6 +291,9 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
                 return CGSize(width: width, height: height)
             }
             return  CGSize(width: height, height: height)
+
+        case detailView.castCV:
+            return (detailView.castCV.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
 
         default: return .zero
         }

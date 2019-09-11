@@ -11,6 +11,8 @@
 		A0212D0F790D5A336945EA7F /* Pods_MovieFinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24CD769AD8FE678310325191 /* Pods_MovieFinder.framework */; };
 		F101AEAE2328D346002B49A9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEAD2328D346002B49A9 /* ImageCell.swift */; };
 		F101AEB02328D62B002B49A9 /* ImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEAF2328D62B002B49A9 /* ImageDataSource.swift */; };
+		F101AEB22328EB19002B49A9 /* CastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB12328EB19002B49A9 /* CastCell.swift */; };
+		F101AEB42328EDF1002B49A9 /* CastDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB32328EDF1002B49A9 /* CastDataSource.swift */; };
 		F101E131232107DC007E3F7E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E130232107DC007E3F7E /* Coordinator.swift */; };
 		F101E13323210941007E3F7E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E13223210941007E3F7E /* AppCoordinator.swift */; };
 		F101E135232109AA007E3F7E /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E134232109AA007E3F7E /* MainCoordinator.swift */; };
@@ -104,6 +106,8 @@
 		DA7B79630A1EEDB393A3AF07 /* Pods-MovieFinderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieFinderTests.release.xcconfig"; path = "Target Support Files/Pods-MovieFinderTests/Pods-MovieFinderTests.release.xcconfig"; sourceTree = "<group>"; };
 		F101AEAD2328D346002B49A9 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		F101AEAF2328D62B002B49A9 /* ImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataSource.swift; sourceTree = "<group>"; };
+		F101AEB12328EB19002B49A9 /* CastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastCell.swift; sourceTree = "<group>"; };
+		F101AEB32328EDF1002B49A9 /* CastDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastDataSource.swift; sourceTree = "<group>"; };
 		F101E130232107DC007E3F7E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		F101E13223210941007E3F7E /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		F101E134232109AA007E3F7E /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
@@ -468,6 +472,7 @@
 				F1A14657230E88FF00A874DA /* MovieDataSource.swift */,
 				F10F42CE23279DA300C31869 /* TrailerDataSource.swift */,
 				F101AEAF2328D62B002B49A9 /* ImageDataSource.swift */,
+				F101AEB32328EDF1002B49A9 /* CastDataSource.swift */,
 				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
 				F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */,
 			);
@@ -495,6 +500,7 @@
 				F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */,
 				F10F42D023279F2800C31869 /* TrailerCell.swift */,
 				F101AEAD2328D346002B49A9 /* ImageCell.swift */,
+				F101AEB12328EB19002B49A9 /* CastCell.swift */,
 				F101E140232127F0007E3F7E /* GenreCell.swift */,
 			);
 			name = Cell;
@@ -717,6 +723,7 @@
 				F10D9595230D704B00D48239 /* Crew.swift in Sources */,
 				F1A14663230E90C700A874DA /* UIColor+Extension.swift in Sources */,
 				F10F42C22327893300C31869 /* Init.swift in Sources */,
+				F101AEB42328EDF1002B49A9 /* CastDataSource.swift in Sources */,
 				F1A14669230EC20100A874DA /* Localizable.swift in Sources */,
 				F1E6DC192324F2F70060F1CE /* MovieDetailCoordinator.swift in Sources */,
 				F1A14661230E90BD00A874DA /* UIView+SafeArea.swift in Sources */,
@@ -738,6 +745,7 @@
 				F1B695FA2327F5C10070E071 /* MovieImage.swift in Sources */,
 				F1FBCA5623225E40002157F6 /* MovieDetailVC.swift in Sources */,
 				F10D9591230D701900D48239 /* MovieVideo.swift in Sources */,
+				F101AEB22328EB19002B49A9 /* CastCell.swift in Sources */,
 				F10F42CC2327894700C31869 /* Spark.swift in Sources */,
 				F1894E72231670A400A20902 /* MovieFilter.swift in Sources */,
 				F1FBCA4F23223093002157F6 /* MainSearchView.swift in Sources */,
