@@ -21,6 +21,17 @@ class ImageDataSource: NSObject {
         guard at >= 0, at < items.count else { return nil }
         return items[at]
     }
+
+    var imageURLs: [URL] {
+        get {
+            return items.compactMap {
+                if let filePath = $0.filePath {
+                    return MovieImagePath.original.path(poster: filePath)
+                }
+                return nil
+            }
+        }
+    }
 }
 
 extension ImageDataSource: UICollectionViewDataSource {
@@ -30,7 +41,7 @@ extension ImageDataSource: UICollectionViewDataSource {
         let item = items[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.reuseIdentifier, for: indexPath) as! ImageCell
         if let imagePath = item.filePath {
-            cell.loadImage(imageURL: MovieImagePath.backgropMedium.path(poster: imagePath) )
+            cell.loadImage(imageURL: MovieImagePath.backdropMedium.path(poster: imagePath) )
         }
         return cell
     }

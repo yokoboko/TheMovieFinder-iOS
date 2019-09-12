@@ -290,6 +290,7 @@ extension MovieDetailVC: UIGestureRecognizerDelegate {
     }
 }
 
+
 // MARK: - CollectionViewDelegate
 
 extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -304,10 +305,14 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
             }
 
         case detailView.imagesCV:
-            print("TODO: Images tap \(indexPath.item)")
+            if let imageDataSource = imageDataSource {
+                delegate?.imagesViewer(imageURLs: imageDataSource.imageURLs, firstIndex: indexPath.item)
+            }
 
         case detailView.castCV:
-            print("TODO: Cast tap \(indexPath.item)")
+            if let castDataSource = castDataSource {
+                delegate?.imagesViewer(imageURLs: castDataSource.imageURLs, firstIndex: indexPath.item)
+            }
 
         case detailView.similarCV:
             if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell,

@@ -15,9 +15,9 @@ enum MovieImagePath: String {
     case castSmall = "https://image.tmdb.org/t/p/w185/"
     case castMedium = "https://image.tmdb.org/t/p/h632/"
     case original = "https://image.tmdb.org/t/p/original/"
-    case backgropSmall = "https://image.tmdb.org/t/p/w300/"
-    case backgropMedium = "https://image.tmdb.org/t/p/w780/"
-    case backgropLarge = "https://image.tmdb.org/t/p/w1280/"
+    case backdropSmall = "https://image.tmdb.org/t/p/w300/"
+    case backdropMedium = "https://image.tmdb.org/t/p/w780/"
+    case backdropLarge = "https://image.tmdb.org/t/p/w1280/"
     func path(poster: String) -> URL {
         return URL(string: rawValue)!.appendingPathComponent(poster)
     }

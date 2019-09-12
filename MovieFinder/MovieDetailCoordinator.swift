@@ -12,6 +12,7 @@ protocol MovieDetailCoordinatorDelegate: class {
     func dismissMovieDetail()
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer)
     func detail(movie: Movie, posterCell: PosterCell)
+    func imagesViewer(imageURLs: [URL], firstIndex: Int)
     func playYoutubeVideo(videoID: String)
 }
 
@@ -83,6 +84,13 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
         movieDetailCoordinator.delegate = self
         movieDetailCoordinator.start()
     }
+
+    func imagesViewer(imageURLs: [URL], firstIndex: Int) {
+
+        let imagesViewerVC = ImagesViewerVC(photosURLs: imageURLs, firstIndex: firstIndex)
+        detailVC.present(imagesViewerVC, animated: true)
+    }
+
 
     func playYoutubeVideo(videoID: String) {
 

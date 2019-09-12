@@ -21,6 +21,17 @@ class CastDataSource: NSObject {
         guard at >= 0, at < items.count else { return nil }
         return items[at]
     }
+
+    var imageURLs: [URL] {
+        get {
+            return items.compactMap {
+                if let filePath = $0.profilePath {
+                    return MovieImagePath.original.path(poster: filePath)
+                }
+                return nil
+            }
+        }
+    }
 }
 
 extension CastDataSource: UICollectionViewDataSource {
