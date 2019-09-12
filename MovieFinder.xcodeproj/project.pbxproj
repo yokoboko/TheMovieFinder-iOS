@@ -14,6 +14,7 @@
 		F101AEB22328EB19002B49A9 /* CastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB12328EB19002B49A9 /* CastCell.swift */; };
 		F101AEB42328EDF1002B49A9 /* CastDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB32328EDF1002B49A9 /* CastDataSource.swift */; };
 		F101AEB62328FE15002B49A9 /* SimilarMovieDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB52328FE15002B49A9 /* SimilarMovieDataSource.swift */; };
+		F101AEB823291E78002B49A9 /* YoutubePlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101AEB723291E78002B49A9 /* YoutubePlayerVC.swift */; };
 		F101E131232107DC007E3F7E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E130232107DC007E3F7E /* Coordinator.swift */; };
 		F101E13323210941007E3F7E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E13223210941007E3F7E /* AppCoordinator.swift */; };
 		F101E135232109AA007E3F7E /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E134232109AA007E3F7E /* MainCoordinator.swift */; };
@@ -110,6 +111,7 @@
 		F101AEB12328EB19002B49A9 /* CastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastCell.swift; sourceTree = "<group>"; };
 		F101AEB32328EDF1002B49A9 /* CastDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastDataSource.swift; sourceTree = "<group>"; };
 		F101AEB52328FE15002B49A9 /* SimilarMovieDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMovieDataSource.swift; sourceTree = "<group>"; };
+		F101AEB723291E78002B49A9 /* YoutubePlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubePlayerVC.swift; sourceTree = "<group>"; };
 		F101E130232107DC007E3F7E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		F101E13223210941007E3F7E /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		F101E134232109AA007E3F7E /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 				F10D9558230D302B00D48239 /* MainVC.swift */,
 				F101E1392321174A007E3F7E /* GenrePickerVC.swift */,
 				F1FBCA5523225E40002157F6 /* MovieDetailVC.swift */,
+				F101AEB723291E78002B49A9 /* YoutubePlayerVC.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -764,6 +767,7 @@
 				F1A14665230E923900A874DA /* Cell+ReuseIdentifier.swift in Sources */,
 				F10F42C52327893300C31869 /* Constraints+.swift in Sources */,
 				F10D9599230D708700D48239 /* ImagesResponse.swift in Sources */,
+				F101AEB823291E78002B49A9 /* YoutubePlayerVC.swift in Sources */,
 				F10F42C42327893300C31869 /* Geometry.swift in Sources */,
 				F101E131232107DC007E3F7E /* Coordinator.swift in Sources */,
 				F10F42CF23279DA300C31869 /* TrailerDataSource.swift in Sources */,

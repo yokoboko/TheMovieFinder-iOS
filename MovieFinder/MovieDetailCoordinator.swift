@@ -12,6 +12,7 @@ protocol MovieDetailCoordinatorDelegate: class {
     func dismissMovieDetail()
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer)
     func detail(movie: Movie, posterCell: PosterCell)
+    func playYoutubeVideo(videoID: String)
 }
 
 class MovieDetailCoordinator: BaseCoordinator {
@@ -54,10 +55,12 @@ class MovieDetailCoordinator: BaseCoordinator {
 extension MovieDetailCoordinator: UIViewControllerTransitioningDelegate {
 
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        guard let _ = presented as? MovieDetailVC else { return nil }
         return MovieDetailPresentTransition(posterCell: posterCell)
     }
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        guard let _ = dismissed as? MovieDetailVC else { return nil }
         return MovieDetailDismissTransition(posterCell: posterCell)
     }
 
@@ -66,7 +69,7 @@ extension MovieDetailCoordinator: UIViewControllerTransitioningDelegate {
     }
 }
 
-// MARK: - Gesture Dismiss
+// MARK: - Coordinator Delegate
 
 extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
 
@@ -79,6 +82,14 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
         self.store(coordinator: movieDetailCoordinator)
         movieDetailCoordinator.delegate = self
         movieDetailCoordinator.start()
+    }
+
+    func playYoutubeVideo(videoID: String) {
+
+        let youtubePlayerVC = YoutubePlayerVC(videoID: videoID)
+        youtubePlayerVC.modalPresentationStyle = .overCurrentContext
+        youtubePlayerVC.modalTransitionStyle = .coverVertical
+        detailVC.present(youtubePlayerVC, animated: true)
     }
 
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer) {

@@ -26,6 +26,7 @@ class MovieDetailVC: UIViewController {
     private var disablePosterDragging = false
     private var collectionViewDragging = false
     private var showSimilar = true
+
     init(movie: Movie, image: UIImage?, showSimilar: Bool = true) {
         self.movie = movie
         self.showSimilar = showSimilar
@@ -297,9 +298,16 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
         collectionView.deselectItem(at: indexPath, animated: false)
         switch collectionView {
 
-        case detailView.trailersCV: print("TODO: Trailer tap \(indexPath.item)")
-        case detailView.imagesCV: print("TODO: Images tap \(indexPath.item)")
-        case detailView.castCV: print("TODO: Cast tap \(indexPath.item)")
+        case detailView.trailersCV:
+            if let trailerDataSource = trailerDataSource, let item = trailerDataSource.item(at: indexPath.item) {
+                delegate?.playYoutubeVideo(videoID: item.key)
+            }
+
+        case detailView.imagesCV:
+            print("TODO: Images tap \(indexPath.item)")
+
+        case detailView.castCV:
+            print("TODO: Cast tap \(indexPath.item)")
 
         case detailView.similarCV:
             if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell,
