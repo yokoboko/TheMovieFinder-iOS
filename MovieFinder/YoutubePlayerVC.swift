@@ -26,7 +26,7 @@ class YoutubePlayerVC: UIViewController, WKScriptMessageHandler {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
 
         let userContentController = WKUserContentController()
         userContentController.add(self, name: YouTubePlayerEvent.onReady.rawValue)
@@ -64,7 +64,8 @@ class YoutubePlayerVC: UIViewController, WKScriptMessageHandler {
             player.leftAnchor.constraint(equalTo: view.safeLeftAnchor, constant: 30),
             player.rightAnchor.constraint(equalTo: view.safeRightAnchor, constant: -30),
             player.topAnchor.constraint(equalTo: view.safeTopAnchor, constant: 50),
-            player.heightAnchor.constraint(equalTo: player.widthAnchor, multiplier: 3 / 4),
+            //player.heightAnchor.constraint(equalTo: player.widthAnchor, multiplier: 3 / 4),
+            player.bottomAnchor.constraint(equalTo: doneBtn.topAnchor, constant: -24),
 
             doneBtn.leftAnchor.constraint(equalTo: view.safeLeftAnchor, constant: 30),
             doneBtn.rightAnchor.constraint(equalTo: view.safeRightAnchor, constant: -30),
