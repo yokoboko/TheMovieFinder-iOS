@@ -495,7 +495,11 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let fetchMoreItemsTreshold = mainView.isCoverFlowLayout ? 5 :  10
-        movieDataSource.tryToFetchMore(indexPath: indexPath, itemsTreshold: fetchMoreItemsTreshold)
+        switch section {
+        case .movies: movieDataSource.tryToFetchMore(indexPath: indexPath, itemsTreshold: fetchMoreItemsTreshold)
+        case .tvShows: tvDataSource.tryToFetchMore(indexPath: indexPath, itemsTreshold: fetchMoreItemsTreshold)
+        default: break
+        }
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
