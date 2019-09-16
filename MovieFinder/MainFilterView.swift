@@ -66,6 +66,44 @@ class MainFilterView: UIStackView {
                 ])
         }
     }
+
+    func selectSection(section: MovieSection) {
+
+        switch section {
+        case .movies:
+            moviesBtn.setTitleColor(UIColor.movieFinder.primary, for: .normal)
+            moviesBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+            moviesBtn.backgroundColor = UIColor.movieFinder.tertiery
+            tvShowsBtn.setTitleColor(UIColor.movieFinder.tertiery, for: .normal)
+            tvShowsBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .light)
+            tvShowsBtn.backgroundColor = .clear
+            favouritesBtn.setTitleColor(UIColor.movieFinder.tertiery, for: .normal)
+            favouritesBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .light)
+            favouritesBtn.backgroundColor = .clear
+
+        case .tvShows:
+            moviesBtn.setTitleColor(UIColor.movieFinder.tertiery, for: .normal)
+            moviesBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .light)
+            moviesBtn.backgroundColor = .clear
+            tvShowsBtn.setTitleColor(UIColor.movieFinder.primary, for: .normal)
+            tvShowsBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+            tvShowsBtn.backgroundColor = UIColor.movieFinder.tertiery
+            favouritesBtn.setTitleColor(UIColor.movieFinder.tertiery, for: .normal)
+            favouritesBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .light)
+            favouritesBtn.backgroundColor = .clear
+
+        case .favourites:
+            moviesBtn.setTitleColor(UIColor.movieFinder.tertiery, for: .normal)
+            moviesBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .light)
+            moviesBtn.backgroundColor = .clear
+            tvShowsBtn.setTitleColor(UIColor.movieFinder.tertiery, for: .normal)
+            tvShowsBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .light)
+            tvShowsBtn.backgroundColor = .clear
+            favouritesBtn.setTitleColor(UIColor.movieFinder.primary, for: .normal)
+            favouritesBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+            favouritesBtn.backgroundColor = UIColor.movieFinder.tertiery
+        }
+    }
 }
 
 extension MainFilterView {
@@ -91,15 +129,18 @@ extension MainFilterView {
         addArrangedSubview(background)
 
         moviesBtn = createSectionBtn(title: "movies".localized)
+        moviesBtn.tag = 0
         moviesBtn.backgroundColor = UIColor.movieFinder.tertiery
         moviesBtn.setTitleColor(UIColor.movieFinder.primary, for: .normal)
         moviesBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         background.addSubview(moviesBtn)
 
         tvShowsBtn = createSectionBtn(title: "tvShows".localized)
+        tvShowsBtn.tag = 1
         background.addSubview(tvShowsBtn)
 
         favouritesBtn = createSectionBtn(title: "favourites".localized)
+        favouritesBtn.tag = 2
         background.addSubview(favouritesBtn)
 
         NSLayoutConstraint.activate([

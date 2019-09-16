@@ -220,6 +220,7 @@ extension MainView {
         infoRatingLabel.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
         infoRatingLabel.translatesAutoresizingMaskIntoConstraints = false
         infoRatingLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        infoRatingLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         addSubview(infoRatingLabel)
         
         infoNameLabel = UILabel(frame: .zero)
@@ -228,6 +229,8 @@ extension MainView {
         infoNameLabel.translatesAutoresizingMaskIntoConstraints = false
         infoNameLabel.adjustsFontSizeToFitWidth = true
         infoNameLabel.minimumScaleFactor = 0.7
+        infoNameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        infoNameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         addSubview(infoNameLabel)
 
         NSLayoutConstraint.activate([

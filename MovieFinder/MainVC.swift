@@ -18,7 +18,7 @@ class MainVC: UIViewController {
 
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!
-    // private var tvDataSource: TVDataSource!
+    private var tvDataSource: TVShowDataSource!
     // private var favouritesDataSource: FavouritesDataSource!s
     
     private var firstTimeDataLoading = true
@@ -82,37 +82,110 @@ class MainVC: UIViewController {
 
         // Default filters
         let movieFilter = MovieFilter.all[0]
+        let tvFilter = TVShowFilter.all[0]
+        // TODO - Fav filter
 
-        // Header (section & filter labels)
-        mainView.sectionLabel.text = section.localizedName
-        mainView.filterLabel.text = movieFilter.localizedName
-
-        // Set filter
-        let filterNames: [String] = MovieFilter.all.map { $0.localizedName }
-        mainView.filterView.setFilters(names: filterNames, selectIndex: 0)
-
-        // Default data source(Movies)
+        // Create data sources
         movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
-        movieDataSource.delegate = self
+        tvDataSource = TVShowDataSource(collectionView: mainView.collectionView)
+        // TODO: - favouriteDataSource
+
+        // Set default filters
         movieDataSource.filter = movieFilter
+        tvDataSource.filter = tvFilter
+        // TODO: - favouriteDataSource
+
+        // Set default section
+        selectSection(section: section)
 
         // CollectionView setup
         mainView.collectionView.delegate = self
-        mainView.collectionView.dataSource = movieDataSource
-        mainView.collectionView.prefetchDataSource = movieDataSource
-        mainView.coverFlowLayout.delegate = movieDataSource
-        
+
         // Button actions
-        mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
-        mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
-        mainView.filtersBtn.addTarget(self, action: #selector(showFilterAction), for: .touchUpInside)
-        mainView.filterView.hideFilterBtn.addTarget(self, action: #selector(hideFilterAction), for: .touchUpInside)
-        for filterBtn in mainView.filterView.filterBtns {
-            filterBtn.addTarget(self, action: #selector(filterAction), for: .touchUpInside)
-        }
+        setupActions()
 
         // Setup SearchField
         setupSearchField()
+    }
+
+    private func selectSection(section: MovieSection) {
+
+        self.section = section
+
+        movieDataSource.delegate = nil
+        tvDataSource.delegate = nil
+        // TODO: - favouriteDataSource.delegate = nil
+
+        switch section {
+        case .movies:
+            mainView.coverFlowLayout.delegate = movieDataSource
+            mainView.collectionView.dataSource = movieDataSource
+            mainView.collectionView.prefetchDataSource = movieDataSource
+            if !firstTimeDataLoading {
+                mainView.collectionView.isUserInteractionEnabled = !movieDataSource.isLoadingData
+                mainView.collectionView.alpha = movieDataSource.isLoadingData ? 0.5 : 1.0
+            }
+            movieDataSource.delegate = self
+            movieDataSource.focus()
+
+        case .tvShows:
+
+            mainView.coverFlowLayout.delegate = tvDataSource
+            mainView.collectionView.dataSource = tvDataSource
+            mainView.collectionView.prefetchDataSource = tvDataSource
+            if !firstTimeDataLoading {
+                mainView.collectionView.isUserInteractionEnabled = !tvDataSource.isLoadingData
+                mainView.collectionView.alpha = tvDataSource.isLoadingData ? 0.5 : 1.0
+            }
+            tvDataSource.delegate = self
+            tvDataSource.focus()
+            
+        case .favourites: print("TODO: - setupVC -> set default")
+        }
+
+        updateFilterOptions()
+        updateFilterField()
+        mainView.filterView.selectSection(section: section)
+    }
+
+    private func updateFilterField() {
+
+        switch section {
+        case .movies:
+            switch movieDataSource.filter {
+            case .search(let searchTerm): mainView.filterLabel.text = "\(movieDataSource.filter.localizedName): \(searchTerm)"
+            case .genres(let genres): self.mainView.filterLabel.text = "\(movieDataSource.filter.localizedName): \(genres.map { $0.name }.joined(separator: ", "))"
+            default: mainView.filterLabel.text = movieDataSource.filter.localizedName
+            }
+
+        case .tvShows:
+            switch tvDataSource.filter {
+            case .search(let searchTerm): mainView.filterLabel.text = "\(tvDataSource.filter.localizedName): \(searchTerm)"
+            case .genres(let genres): self.mainView.filterLabel.text = "\(tvDataSource.filter.localizedName): \(genres.map { $0.name }.joined(separator: ", "))"
+            default: mainView.filterLabel.text = tvDataSource.filter.localizedName
+            }
+
+        case .favourites:
+            print("TODO - updateHeaderFields() Favourites")
+        }
+    }
+
+    private func updateFilterOptions() {
+
+        mainView.sectionLabel.text = section.localizedName
+        updateFilterField()
+
+        switch section {
+        case .movies:
+            let filterNames: [String] = MovieFilter.all.map { $0.localizedName }
+            mainView.filterView.setFilters(names: filterNames, selectIndex: movieDataSource.filter.index)
+
+        case .tvShows:
+            let filterNames: [String] = TVShowFilter.all.map { $0.localizedName }
+            mainView.filterView.setFilters(names: filterNames, selectIndex: tvDataSource.filter.index)
+
+        case .favourites: print("TODO - updateFilterOptions() Favourites")
+        }
     }
 
     private func selectMovieFilter(index: Int, skipHideFilter: Bool = false) {
@@ -141,15 +214,14 @@ class MainVC: UIViewController {
 
                 if !selectedGenres.isEmpty {
                     let genresFilter = MovieFilter.genres(selectedGenres)
-                    let genreNameString = selectedGenres.map { $0.name }.joined(separator: ", ")
                     self.movieDataSource.filter = genresFilter
-                    self.mainView.filterLabel.text = "\(genresFilter.localizedName): \(genreNameString)"
                     self.mainView.filterView.selectFilter(selectIndex: genresFilter.index)
+                    self.updateFilterField()
                     if self.hideFilterMenuOnChange, !skipHideFilter {
                         self.mainView.hideFilter()
                     }
                 }
-            }, selected: selectedGenres)
+                }, selected: selectedGenres)
 
 
         case .search(_):
@@ -163,7 +235,62 @@ class MainVC: UIViewController {
         default:
 
             movieDataSource.filter = filter
-            mainView.filterLabel.text = filter.localizedName
+            updateFilterField()
+            mainView.filterView.selectFilter(selectIndex: index)
+            if hideFilterMenuOnChange, !skipHideFilter {
+                mainView.hideFilter()
+            }
+        }
+    }
+
+    private func selectTVShowFilter(index: Int, skipHideFilter: Bool = false) {
+
+        let filter = TVShowFilter.all[index]
+
+        switch filter {
+
+        case .genres(_):
+            var selectedGenres: [Genre] = []
+            if case TVShowFilter.genres(let genres) = tvDataSource.filter {
+                selectedGenres = genres
+            }
+            delegate?.pickGenres(genreType: .tvShow, completion: { [weak self] (selectedGenres) in
+
+                guard let self = self else { return }
+
+                switch self.tvDataSource.filter {
+                case .genres(_):
+                    if selectedGenres.isEmpty {
+                        self.selectTVShowFilter(index: 0)
+                        return
+                    }
+                default: break
+                }
+
+                if !selectedGenres.isEmpty {
+                    let genresFilter = TVShowFilter.genres(selectedGenres)
+                    self.tvDataSource.filter = genresFilter
+                    self.mainView.filterView.selectFilter(selectIndex: genresFilter.index)
+                    self.updateFilterField()
+                    if self.hideFilterMenuOnChange, !skipHideFilter {
+                        self.mainView.hideFilter()
+                    }
+                }
+                }, selected: selectedGenres)
+
+
+        case .search(_):
+            if case TVShowFilter.search(_) = tvDataSource.filter {} else {
+                tvShowsSearchTerm = ""
+                mainView.searchView.searchField.text = ""
+            }
+            mainView.searchView.searchField.becomeFirstResponder()
+            break
+
+        default:
+
+            tvDataSource.filter = filter
+            updateFilterField()
             mainView.filterView.selectFilter(selectIndex: index)
             if hideFilterMenuOnChange, !skipHideFilter {
                 mainView.hideFilter()
@@ -176,7 +303,20 @@ class MainVC: UIViewController {
 // MARK: - Actions
 
 extension MainVC {
-    
+
+    private func setupActions() {
+        mainView.scrollToTopBtn.addTarget(self, action: #selector(scrollToTopAction), for: .touchUpInside)
+        mainView.toggleLayoutBtn.addTarget(self, action: #selector(toggleLayoutAction), for: .touchUpInside)
+        mainView.filtersBtn.addTarget(self, action: #selector(showFilterAction), for: .touchUpInside)
+        mainView.filterView.hideFilterBtn.addTarget(self, action: #selector(hideFilterAction), for: .touchUpInside)
+        for filterBtn in mainView.filterView.filterBtns {
+            filterBtn.addTarget(self, action: #selector(filterAction), for: .touchUpInside)
+        }
+        mainView.filterView.moviesBtn.addTarget(self, action: #selector(sectionAction), for: .touchUpInside)
+        mainView.filterView.tvShowsBtn.addTarget(self, action: #selector(sectionAction), for: .touchUpInside)
+        mainView.filterView.favouritesBtn.addTarget(self, action: #selector(sectionAction), for: .touchUpInside)
+    }
+
     @objc private func scrollToTopAction(_ sender: Any) {
         mainView.scrollToTop()
     }
@@ -193,10 +333,20 @@ extension MainVC {
         mainView.hideFilter()
     }
 
+    @objc private func sectionAction(_ sender: UIButton) {
+
+        switch sender.tag {
+        case 0: if section != .movies { selectSection(section: .movies) }
+        case 1: if section != .tvShows { selectSection(section: .tvShows) }
+        case 2: print("favourites")
+        default: break
+        }
+    }
+
     @objc private func filterAction(_ sender: UIButton) {
         switch section {
         case .movies: selectMovieFilter(index: sender.tag)
-        case .tvShows: print("TV Shows Filter: \(sender.tag)")
+        case .tvShows: selectTVShowFilter(index: sender.tag)
         case .favourites: print("Favourites Filter: \(sender.tag)")
         }
     }
@@ -278,9 +428,23 @@ extension MainVC: UITextFieldDelegate {
                     selectMovieFilter(index: 0, skipHideFilter: true)
                 } else {
                     let searchFilter = MovieFilter.search(movieSearchTerm)
-                    self.mainView.filterLabel.text = "\(searchFilter.localizedName): \(movieSearchTerm)"
                     self.mainView.filterView.selectFilter(selectIndex: searchFilter.index)
                     self.movieDataSource.filter = searchFilter
+                    self.updateFilterField()
+                }
+            }
+
+        case .tvShows:
+            if searchTerm != tvShowsSearchTerm {
+
+                tvShowsSearchTerm = searchTerm
+                if tvShowsSearchTerm.isEmpty {
+                    selectTVShowFilter(index: 0, skipHideFilter: true)
+                } else {
+                    let searchFilter = TVShowFilter.search(tvShowsSearchTerm)
+                    self.mainView.filterView.selectFilter(selectIndex: searchFilter.index)
+                    self.tvDataSource.filter = searchFilter
+                    self.updateFilterField()
                 }
             }
 

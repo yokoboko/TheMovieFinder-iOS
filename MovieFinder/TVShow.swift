@@ -15,17 +15,17 @@ struct TVShow: Codable {
     let originalName: String
     //let genres: [Genre]?
     let genreIds: [Int]?
-    let overview: String
+    let overview: String?
     let posterPath: String?
     let backdropPath: String?
-    let firstAirDate: String
+    let firstAirDate: String?
     let voteAverage: Double?
     
     // Details
     let homepage: String?
     let videos: MovieVideosResponse?
     let images: ImagesResponse?
-    let credits: CreditsResponse
+    let credits: CreditsResponse?
     let similar: TVShowResponse?
     
     enum CodingKeys: String, CodingKey {

@@ -230,7 +230,7 @@ extension MainView {
         switch recognizer.state {
         case .began:
             let velocity = recognizer.velocity(in: self)
-            if !filterStartDrag, velocity.y != 0 && abs(velocity.y) > abs(velocity.x) {
+            if searchView.isHidden, !filterStartDrag, velocity.y != 0 && abs(velocity.y) > abs(velocity.x) {
                 filterStartDrag = true
                 filterDragShift = filterViewTopConstraint.constant
             }

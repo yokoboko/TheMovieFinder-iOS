@@ -60,6 +60,8 @@
 		F10F42CD2327894700C31869 /* Ring.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42CB2327894700C31869 /* Ring.swift */; };
 		F10F42CF23279DA300C31869 /* TrailerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42CE23279DA300C31869 /* TrailerDataSource.swift */; };
 		F10F42D123279F2800C31869 /* TrailerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10F42D023279F2800C31869 /* TrailerCell.swift */; };
+		F110F07B232FB54D0029B7FA /* TVShowDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F110F07A232FB54D0029B7FA /* TVShowDataSource.swift */; };
+		F110F07E232FB5A30029B7FA /* TVShowFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F110F07D232FB5A30029B7FA /* TVShowFilter.swift */; };
 		F113BECA231D30DE00F88244 /* MovieSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BEC9231D30DD00F88244 /* MovieSection.swift */; };
 		F113BECC231D333100F88244 /* MainView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113BECB231D333100F88244 /* MainView+Animations.swift */; };
 		F1142B2D23152AEF006D7A5F /* PosterSmallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */; };
@@ -164,6 +166,8 @@
 		F10F42CB2327894700C31869 /* Ring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ring.swift; sourceTree = "<group>"; };
 		F10F42CE23279DA300C31869 /* TrailerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailerDataSource.swift; sourceTree = "<group>"; };
 		F10F42D023279F2800C31869 /* TrailerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailerCell.swift; sourceTree = "<group>"; };
+		F110F07A232FB54D0029B7FA /* TVShowDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDataSource.swift; sourceTree = "<group>"; };
+		F110F07D232FB5A30029B7FA /* TVShowFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowFilter.swift; sourceTree = "<group>"; };
 		F113BEC9231D30DD00F88244 /* MovieSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSection.swift; sourceTree = "<group>"; };
 		F113BECB231D333100F88244 /* MainView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainView+Animations.swift"; sourceTree = "<group>"; };
 		F1142B2C23152AEE006D7A5F /* PosterSmallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterSmallCell.swift; sourceTree = "<group>"; };
@@ -478,6 +482,25 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		F110F07C232FB5730029B7FA /* Section & Filters */ = {
+			isa = PBXGroup;
+			children = (
+				F113BEC9231D30DD00F88244 /* MovieSection.swift */,
+				F1894E71231670A400A20902 /* MovieFilter.swift */,
+				F110F07D232FB5A30029B7FA /* TVShowFilter.swift */,
+			);
+			name = "Section & Filters";
+			sourceTree = "<group>";
+		};
+		F110F07F232FB5BD0029B7FA /* Delegate & Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
+				F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */,
+			);
+			name = "Delegate & Protocol";
+			sourceTree = "<group>";
+		};
 		F16D4EDD232A72CA00737C06 /* Images Viewer View */ = {
 			isa = PBXGroup;
 			children = (
@@ -489,15 +512,14 @@
 		F1A14659230E8DB600A874DA /* Data Source */ = {
 			isa = PBXGroup;
 			children = (
-				F113BEC9231D30DD00F88244 /* MovieSection.swift */,
-				F1894E71231670A400A20902 /* MovieFilter.swift */,
+				F110F07C232FB5730029B7FA /* Section & Filters */,
+				F110F07F232FB5BD0029B7FA /* Delegate & Protocol */,
 				F1A14657230E88FF00A874DA /* MovieDataSource.swift */,
+				F110F07A232FB54D0029B7FA /* TVShowDataSource.swift */,
 				F10F42CE23279DA300C31869 /* TrailerDataSource.swift */,
 				F101AEAF2328D62B002B49A9 /* ImageDataSource.swift */,
 				F101AEB32328EDF1002B49A9 /* CastDataSource.swift */,
 				F101AEB52328FE15002B49A9 /* SimilarMovieDataSource.swift */,
-				F1A14666230EB78C00A874DA /* DataSourceDelegate.swift */,
-				F1FBCA5023224150002157F6 /* DataSourceProtocol.swift */,
 			);
 			name = "Data Source";
 			sourceTree = "<group>";
@@ -758,6 +780,7 @@
 				F101E13323210941007E3F7E /* AppCoordinator.swift in Sources */,
 				F1FBCA5323225649002157F6 /* MainNoResultFoundView.swift in Sources */,
 				F101E13723210FCF007E3F7E /* BaseCoordinator.swift in Sources */,
+				F110F07B232FB54D0029B7FA /* TVShowDataSource.swift in Sources */,
 				F10F42C92327893D00C31869 /* FaveButton.swift in Sources */,
 				F10D9557230D302B00D48239 /* AppDelegate.swift in Sources */,
 				F10D95A1230D715700D48239 /* TVShowResponse.swift in Sources */,
@@ -777,6 +800,7 @@
 				F1894E72231670A400A20902 /* MovieFilter.swift in Sources */,
 				F1FBCA4F23223093002157F6 /* MainSearchView.swift in Sources */,
 				F101E13F23211E2A007E3F7E /* GenrePickerView.swift in Sources */,
+				F110F07E232FB5A30029B7FA /* TVShowFilter.swift in Sources */,
 				F113BECC231D333100F88244 /* MainView+Animations.swift in Sources */,
 				F101E141232127F0007E3F7E /* GenreCell.swift in Sources */,
 				F10D959B230D70F700D48239 /* Genre.swift in Sources */,
