@@ -32,6 +32,8 @@ class ImagesViewerVC: UIPageViewController {
 
         dataSource = self
 
+        view.backgroundColor = .black
+
         let closeBtn = UIButton(frame: .zero)
         closeBtn.translatesAutoresizingMaskIntoConstraints = false
         //UIButton(frame: CGRect(x: view.frame.width - 50, y: 0, width: 50, height: 50))
