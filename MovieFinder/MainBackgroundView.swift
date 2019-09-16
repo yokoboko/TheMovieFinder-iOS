@@ -24,7 +24,7 @@ class BackgroundMoviesView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .black //UIColor(netHex: 0x191C1F) //0x222B31
+        backgroundColor =  UIColor(netHex: 0x555555) // .black
         
         imageView = UIImageView(frame: frame)
         imageView.backgroundColor = .black
@@ -37,40 +37,48 @@ class BackgroundMoviesView: UIView {
         imageView.setContentCompressionResistancePriority(.init(1), for: .vertical)
         imageView.alpha = 0.38
         addSubview(imageView)
-        imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
-        imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 2).isActive = true
 
         let blurEffect = UIBlurEffect(style: .regular)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = frame
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(blurEffectView)
-        blurEffectView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        blurEffectView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        blurEffectView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        blurEffectView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        
+
         let topGradient = GradientView(frame: frame)
-        topGradient.startColor = UIColor.black.withAlphaComponent(0.75)
+        topGradient.startColor = UIColor.black.withAlphaComponent(0.8)
         topGradient.endColor = UIColor.black.withAlphaComponent(0.0)
         topGradient.translatesAutoresizingMaskIntoConstraints = false
         addSubview(topGradient)
-        topGradient.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        topGradient.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        topGradient.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        topGradient.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        
+
         let bottomGradient = GradientView(frame: frame)
         bottomGradient.startColor = UIColor.black.withAlphaComponent(0.0)
-        bottomGradient.endColor = UIColor.black.withAlphaComponent(0.75)
+        bottomGradient.endColor = UIColor.black.withAlphaComponent(0.8)
         bottomGradient.translatesAutoresizingMaskIntoConstraints = false
         addSubview(bottomGradient)
-        bottomGradient.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        bottomGradient.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        bottomGradient.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        bottomGradient.heightAnchor.constraint(equalToConstant: 200).isActive = true
+
+
+        NSLayoutConstraint.activate([
+
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            imageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2),
+            imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 2),
+
+            blurEffectView.topAnchor.constraint(equalTo: topAnchor),
+            blurEffectView.leftAnchor.constraint(equalTo: leftAnchor),
+            blurEffectView.rightAnchor.constraint(equalTo: rightAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            topGradient.topAnchor.constraint(equalTo: topAnchor),
+            topGradient.leftAnchor.constraint(equalTo: leftAnchor),
+            topGradient.rightAnchor.constraint(equalTo: rightAnchor),
+            topGradient.heightAnchor.constraint(equalToConstant: 200),
+
+            bottomGradient.bottomAnchor.constraint(equalTo: bottomAnchor),
+            bottomGradient.leftAnchor.constraint(equalTo: leftAnchor),
+            bottomGradient.rightAnchor.constraint(equalTo: rightAnchor),
+            bottomGradient.heightAnchor.constraint(equalToConstant: 200)
+            ])
     }
     
     func setImage(image: UIImage) {
