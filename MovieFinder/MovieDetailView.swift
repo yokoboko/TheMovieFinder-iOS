@@ -141,12 +141,19 @@ extension MovieDetailView {
         addSubview(posterClipContainer)
 
         posterView = UIView()
-        posterView.layer.cornerRadius = 5
-        posterView.layer.shadowOffset = CGSize(width: 0, height: 15)
-        posterView.layer.shadowRadius = 15
-        posterView.layer.shadowOpacity = 0.64
         posterView.translatesAutoresizingMaskIntoConstraints = false
         posterClipContainer.addSubview(posterView)
+
+        let shadowImage = UIImage(named: "shadow")?.resizableImage(withCapInsets: UIEdgeInsets(top: 20, left: 33, bottom: 39, right: 33), resizingMode: .stretch)
+        let imageShadowView = UIImageView(image: shadowImage)
+        imageShadowView.contentMode = .scaleToFill
+        imageShadowView.translatesAutoresizingMaskIntoConstraints = false
+        imageShadowView.isUserInteractionEnabled = false
+        imageShadowView.setContentHuggingPriority(.init(1), for: .horizontal)
+        imageShadowView.setContentHuggingPriority(.init(1), for: .vertical)
+        imageShadowView.setContentCompressionResistancePriority(.init(1), for: .horizontal)
+        imageShadowView.setContentCompressionResistancePriority(.init(1), for: .vertical)
+        posterView.addSubview(imageShadowView)
 
         posterImageView = UIImageView(frame: posterViewOriginalFrame)
         posterImageView.backgroundColor = UIColor.black
@@ -178,6 +185,11 @@ extension MovieDetailView {
             posterLeftConstraint,
             posterWidthConstraint,
             posterHeightConstraint,
+
+            imageShadowView.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: -14),
+            imageShadowView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: 38),
+            imageShadowView.leftAnchor.constraint(equalTo: posterImageView.leftAnchor, constant: -27),
+            imageShadowView.rightAnchor.constraint(equalTo: posterImageView.rightAnchor, constant: 27),
 
             posterImageView.topAnchor.constraint(equalTo: posterView.topAnchor),
             posterImageView.bottomAnchor.constraint(equalTo: posterView.bottomAnchor),

@@ -26,16 +26,16 @@ class TrailerCell: UICollectionViewCell {
 
     private func setupViews() {
 
-        //contentView.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-
-        imageContainerView = UIView()
-        imageContainerView.translatesAutoresizingMaskIntoConstraints = false
-        imageContainerView.backgroundColor = .black
-        imageContainerView.layer.cornerRadius = 5
-        imageContainerView.layer.shadowOffset = CGSize(width: 0, height: 15)
-        imageContainerView.layer.shadowRadius = 15
-        imageContainerView.layer.shadowOpacity = 0.64
-        contentView.addSubview(imageContainerView)
+        let shadowImage = UIImage(named: "shadow")?.resizableImage(withCapInsets: UIEdgeInsets(top: 20, left: 33, bottom: 39, right: 33), resizingMode: .stretch)
+        let imageShadowView = UIImageView(image: shadowImage)
+        imageShadowView.contentMode = .scaleToFill
+        imageShadowView.translatesAutoresizingMaskIntoConstraints = false
+        imageShadowView.isUserInteractionEnabled = false
+        imageShadowView.setContentHuggingPriority(.init(1), for: .horizontal)
+        imageShadowView.setContentHuggingPriority(.init(1), for: .vertical)
+        imageShadowView.setContentCompressionResistancePriority(.init(1), for: .horizontal)
+        imageShadowView.setContentCompressionResistancePriority(.init(1), for: .vertical)
+        contentView.addSubview(imageShadowView)
 
         imageView = UIImageView()
         imageView.backgroundColor = .black
@@ -47,7 +47,7 @@ class TrailerCell: UICollectionViewCell {
         imageView.setContentCompressionResistancePriority(.init(1), for: .vertical)
         imageView.layer.cornerRadius = 5
         imageView.clipsToBounds = true
-        imageContainerView.addSubview(imageView)
+        contentView.addSubview(imageView)
 
         titleLabel = UILabel()
         titleLabel.textColor = UIColor.movieFinder.tertiery
@@ -62,18 +62,18 @@ class TrailerCell: UICollectionViewCell {
 
         NSLayoutConstraint.activate([
 
-            imageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageContainerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            imageContainerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            imageContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -28),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -28),
 
-            imageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor),
-            imageView.leftAnchor.constraint(equalTo: imageContainerView.leftAnchor),
-            imageView.rightAnchor.constraint(equalTo: imageContainerView.rightAnchor),
-
-            playImage.rightAnchor.constraint(equalTo: imageContainerView.rightAnchor, constant: -2),
-            playImage.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: -2),
+            imageShadowView.topAnchor.constraint(equalTo: imageView.topAnchor, constant: -14),
+            imageShadowView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 38),
+            imageShadowView.leftAnchor.constraint(equalTo: imageView.leftAnchor, constant: -27),
+            imageShadowView.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: 27),
+            
+            playImage.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -2),
+            playImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -2),
 
             titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor),

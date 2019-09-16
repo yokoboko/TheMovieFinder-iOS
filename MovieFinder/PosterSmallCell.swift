@@ -27,19 +27,23 @@ class PosterSmallCell: UICollectionViewCell, PosterCell {
     
     private func setupViews() {
 
-        contentView.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-        contentView.layer.cornerRadius = 5
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 15)
-        contentView.layer.shadowRadius = 15
-        contentView.layer.shadowOpacity = 0.64
+        let shadowImage = UIImage(named: "shadow")?.resizableImage(withCapInsets: UIEdgeInsets(top: 20, left: 33, bottom: 39, right: 33), resizingMode: .stretch)
+        let imageShadowView = UIImageView(image: shadowImage)
+        imageShadowView.contentMode = .scaleToFill
+        imageShadowView.translatesAutoresizingMaskIntoConstraints = false
+        imageShadowView.isUserInteractionEnabled = false
+        imageShadowView.setContentHuggingPriority(.init(1), for: .horizontal)
+        imageShadowView.setContentHuggingPriority(.init(1), for: .vertical)
+        imageShadowView.setContentCompressionResistancePriority(.init(1), for: .horizontal)
+        imageShadowView.setContentCompressionResistancePriority(.init(1), for: .vertical)
+        contentView.addSubview(imageShadowView)
 
-        imageView.backgroundColor = UIColor.black
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.setContentHuggingPriority(.init(1), for: .horizontal)
-        imageView.setContentHuggingPriority(.init(1), for: .vertical)
-        imageView.setContentCompressionResistancePriority(.init(1), for: .horizontal)
-        imageView.setContentCompressionResistancePriority(.init(1), for: .vertical)
+        imageView.setContentHuggingPriority(.init(2), for: .horizontal)
+        imageView.setContentHuggingPriority(.init(2), for: .vertical)
+        imageView.setContentCompressionResistancePriority(.init(2), for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.init(2), for: .vertical)
         imageView.layer.cornerRadius = 5
         imageView.clipsToBounds = true
         contentView.addSubview(imageView)
@@ -80,6 +84,11 @@ class PosterSmallCell: UICollectionViewCell, PosterCell {
             imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -38),
+
+            imageShadowView.topAnchor.constraint(equalTo: imageView.topAnchor, constant: -14),
+            imageShadowView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 38),
+            imageShadowView.leftAnchor.constraint(equalTo: imageView.leftAnchor, constant: -27),
+            imageShadowView.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: 27),
             
             ratingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             ratingLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -7),
