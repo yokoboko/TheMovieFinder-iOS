@@ -246,6 +246,10 @@ extension MovieDetailView {
         ratingLabel.bottomInset = 4
         posterInfoSV.addArrangedSubview(ratingLabel)
 
+        let genreView = UIView()
+        genreView.translatesAutoresizingMaskIntoConstraints = false
+        posterInfoSV.addArrangedSubview(genreView)
+
         genreLabel = UIPaddedLabel()
         genreLabel.textColor = UIColor.movieFinder.tertiery
         genreLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
@@ -253,7 +257,7 @@ extension MovieDetailView {
         genreLabel.numberOfLines = 4
         genreLabel.topInset = 4
         genreLabel.bottomInset = 4
-        posterInfoSV.addArrangedSubview(genreLabel)
+        genreView.addSubview(genreLabel)
 
         dateLabel = UIPaddedLabel()
         dateLabel.textColor = UIColor.movieFinder.tertiery
@@ -284,10 +288,15 @@ extension MovieDetailView {
             posterInfoSV.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: posterViewOriginalFrame.maxX + 20),
             posterInfoSV.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -(margin * 2) - posterViewOriginalFrame.width -  20),
 
+            genreLabel.topAnchor.constraint(equalTo: genreView.topAnchor),
+            genreLabel.bottomAnchor.constraint(equalTo: genreView.bottomAnchor),
+            genreLabel.leftAnchor.constraint(equalTo: genreView.leftAnchor),
+            genreLabel.rightAnchor.constraint(equalTo: genreView.rightAnchor, constant: -28),
+
             favouriteBtn.widthAnchor.constraint(equalToConstant: 44),
             favouriteBtn.heightAnchor.constraint(equalToConstant: 44),
             favouriteBtn.rightAnchor.constraint(equalTo: posterInfoSV.rightAnchor, constant: 12),
-            favouriteBtn.centerYAnchor.constraint(equalTo: ratingLabel.centerYAnchor, constant: -4)
+            favouriteBtn.topAnchor.constraint(equalTo: posterInfoSV.topAnchor, constant: -10)
             ])
     }
 
