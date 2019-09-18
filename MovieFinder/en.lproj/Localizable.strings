@@ -26,3 +26,10 @@
 "images" = "Images";
 "cast" = "Cast";
 "similar" = "Similar";
+
+"airDate" = "Air Date: {DATE}";
+"lastAirDate" = "Last Air: {DATE}";
+"seasons" = "{INT} seasons";
+"season" = "1 season";
+"episodes" = "{INT} episodes";
+"episode" = "1 episode";

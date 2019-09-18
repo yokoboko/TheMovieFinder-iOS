@@ -31,6 +31,7 @@ class MovieDetailView: UIView {
     var favouriteBtn: FaveButton!
     var genreLabel: UIPaddedLabel!
     var dateLabel: UIPaddedLabel!
+    var seasonsLabel: UIPaddedLabel!
     var durationLabel: UIPaddedLabel!
     var homepageBtn: UIButton!
 
@@ -225,6 +226,8 @@ extension MovieDetailView {
 
     private func setupPosterInfoView() {
 
+        let inset: CGFloat = 3
+
         posterInfoSV = UIStackView()
         posterInfoSV.translatesAutoresizingMaskIntoConstraints = false
         posterInfoSV.distribution = .equalSpacing
@@ -243,7 +246,7 @@ extension MovieDetailView {
         ratingLabel.font = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.black)
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
         ratingLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        ratingLabel.bottomInset = 4
+        ratingLabel.bottomInset = inset
         posterInfoSV.addArrangedSubview(ratingLabel)
 
         let genreView = UIView()
@@ -255,24 +258,34 @@ extension MovieDetailView {
         genreLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
         genreLabel.translatesAutoresizingMaskIntoConstraints = false
         genreLabel.numberOfLines = 4
-        genreLabel.topInset = 4
-        genreLabel.bottomInset = 4
+        genreLabel.topInset = inset
+        genreLabel.bottomInset = inset
         genreView.addSubview(genreLabel)
 
         dateLabel = UIPaddedLabel()
         dateLabel.textColor = UIColor.movieFinder.tertiery
         dateLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.topInset = 4
-        dateLabel.bottomInset = 4
+        dateLabel.numberOfLines = 2
+        dateLabel.topInset = inset
+        dateLabel.bottomInset = inset
         posterInfoSV.addArrangedSubview(dateLabel)
+
+        seasonsLabel = UIPaddedLabel()
+        seasonsLabel.textColor = UIColor.movieFinder.tertiery
+        seasonsLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        seasonsLabel.translatesAutoresizingMaskIntoConstraints = false
+        seasonsLabel.numberOfLines = 2
+        seasonsLabel.topInset = inset
+        seasonsLabel.bottomInset = inset
+        posterInfoSV.addArrangedSubview(seasonsLabel)
 
         durationLabel = UIPaddedLabel()
         durationLabel.textColor = UIColor.movieFinder.tertiery
         durationLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
         durationLabel.translatesAutoresizingMaskIntoConstraints = false
-        durationLabel.topInset = 4
-        durationLabel.bottomInset = 4
+        durationLabel.topInset = inset
+        durationLabel.bottomInset = inset
         posterInfoSV.addArrangedSubview(durationLabel)
 
         homepageBtn = UIButton()
@@ -495,7 +508,8 @@ extension MovieDetailView {
                               description: String?,
                               rating: Double?,
                               genresNames: [String],
-                              date: String?) {
+                              date: String?,
+                              tvDate: Bool = false) {
 
         titleLabel.text = title
 
@@ -532,12 +546,67 @@ extension MovieDetailView {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         if let date = date, let dateObject = dateFormatter.date(from: date) {
             dateFormatter.dateFormat = "dd-MM-yyyy"
-            dateLabel.text = dateFormatter.string(from: dateObject)
+            let dateString = dateFormatter.string(from: dateObject)
+            dateLabel.text = tvDate ? "airDate".localized.replacingOccurrences(of: "{DATE}", with: dateString) : dateString
         } else {
             dateLabel.isHidden = true
         }
 
+        seasonsLabel.isHidden = true
         durationLabel.isHidden = true
         homepageBtn.isHidden = true
+    }
+
+    func setDetailInfo(runtime: Int? = nil, homepage: URL? = nil, lastAirDate: String? = nil, seasons: Int? = nil, episodes: Int? = nil) {
+
+        // TV Show last air time date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let date = lastAirDate, let dateObject = dateFormatter.date(from: date) {
+            dateFormatter.dateFormat = "dd-MM-yyyy"
+            let dateString = dateFormatter.string(from: dateObject)
+            let lastAirDateString = "lastAirDate".localized.replacingOccurrences(of: "{DATE}", with: dateString)
+            var labelString =  dateLabel.text ?? ""
+            if labelString.count > 0 { labelString += "\r\n" }
+            labelString += lastAirDateString
+            dateLabel.text = labelString
+            dateLabel.isHidden = false
+        }
+
+        // Seasons/Episodes
+        if let seasons = seasons, seasons > 0 {
+            var seasonsString = seasons == 1 ? "season".localized : "seasons".localized.replacingOccurrences(of: "{INT}", with: String(seasons))
+            if let episodes = episodes {
+                seasonsString += "\r\n"
+                seasonsString += episodes == 1 ? "episode".localized : "episodes".localized.replacingOccurrences(of: "{INT}", with: String(episodes))
+            }
+            seasonsLabel.isHidden = false
+            seasonsLabel.text = seasonsString
+            seasonsLabel.alpha = 0
+        }
+
+        // Runtime
+        if let minutes = runtime {
+            let h: Int = Int(minutes) / 60
+            let m: Int = Int(minutes) % 60
+            var runtimeString = ""
+            if h > 0 { runtimeString += "\(h)h " }
+            if m > 0 { runtimeString += "\(m)min" }
+            durationLabel.text = runtimeString
+            durationLabel.isHidden = false
+            durationLabel.alpha = 0
+        }
+
+        // Homepage link
+        if let homepage = homepage, let host = homepage.host {
+            let homepageAttributes: [NSAttributedString.Key: Any] = [ NSAttributedString.Key.foregroundColor: UIColor.movieFinder.tertiery,
+                                                                      .underlineStyle: NSUnderlineStyle.single.rawValue] //.double.rawValue, .thick.rawValue
+            let homepageString = NSMutableAttributedString(string: host, attributes: homepageAttributes)
+            homepageBtn.setAttributedTitle(homepageString, for: .normal)
+            homepageBtn.isHidden = false
+            homepageBtn.alpha = 0
+        }
+
+
     }
 }

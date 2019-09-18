@@ -44,6 +44,10 @@ class MainVC: UIViewController {
 //                    if let movie = self.movieDataSource.getItem(index: indexPath.item) {
 //                        self.delegate?.detail(movie: movie, posterCell: cell)
 //                    }
+//                case .tvShows:
+//                    if let tvShow = self.tvDataSource.getItem(index: indexPath.item) {
+//                        self.delegate?.detail(tvShow: tvShow, posterCell: cell)
+//                    }
 //                default: break
 //                }
 //            }
@@ -477,7 +481,10 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
                 if let movie = movieDataSource.getItem(index: indexPath.item) {
                     delegate?.detail(movie: movie, posterCell: cell)
                 }
-
+            case .tvShows:
+                if let tvShow = tvDataSource.getItem(index: indexPath.item) {
+                    delegate?.detail(tvShow: tvShow, posterCell: cell)
+                }
             default: break
             }
         }

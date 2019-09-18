@@ -13,16 +13,20 @@ struct TVShow: Codable {
     let id: Int
     let name: String
     let originalName: String
-    //let genres: [Genre]?
+
     let genreIds: [Int]?
     let overview: String?
     let posterPath: String?
     let backdropPath: String?
     let firstAirDate: String?
     let voteAverage: Double?
-    
+
     // Details
-    let homepage: String?
+    let homepage: URL?
+    let lastAirDate: String?
+    let episodeRuntime: [Int]?
+    let seasons: Int?
+    let episodes: Int?
     let videos: MovieVideosResponse?
     let images: ImagesResponse?
     let credits: CreditsResponse?
@@ -33,7 +37,7 @@ struct TVShow: Codable {
         case name
         case originalName = "original_name"
         case overview
-        //case genres
+      
         case genreIds = "genre_ids"
         case posterPath = "poster_path"
         case backdropPath = "backdrop_path"
@@ -41,6 +45,10 @@ struct TVShow: Codable {
         case voteAverage = "vote_average"
         
         case homepage
+        case lastAirDate = "last_air_date"
+        case episodeRuntime = "episode_run_time"
+        case seasons = "number_of_seasons"
+        case episodes = "number_of_episodes"
         case videos
         case images
         case credits

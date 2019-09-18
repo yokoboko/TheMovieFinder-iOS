@@ -16,7 +16,7 @@ enum MovieAPIEndpoint {
     case movieTrending
     case movieDiscover
     case movieSearch
-    case movieDetail(movie: Int)
+    case movieDetail(id: Int)
     case movieGenres
     
     case tvPopular
@@ -25,7 +25,7 @@ enum MovieAPIEndpoint {
     case tvTrending
     case tvDiscover
     case tvSearch
-    case tvDetail(movie: Int)
+    case tvDetail(id: Int)
     case tvGenres
     
     var path: String {

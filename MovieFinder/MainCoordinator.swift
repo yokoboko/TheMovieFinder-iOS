@@ -12,6 +12,7 @@ protocol MainCoordinatorDelegate: class {
 
     func pickGenres(genreType: GenreType, completion: @escaping (_ selected: [Genre]) -> Void, selected: [Genre]?)
     func detail(movie: Movie, posterCell: PosterCell)
+    func detail(tvShow: TVShow, posterCell: PosterCell)
 }
 
 class MainCoordinator: BaseCoordinator {
@@ -38,6 +39,16 @@ extension MainCoordinator: MainCoordinatorDelegate {
         let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: mainVC,
                                                              movie: movie,
                                                              posterCell: posterCell)
+        self.store(coordinator: movieDetailCoordinator)
+        movieDetailCoordinator.delegate = self
+        movieDetailCoordinator.start()
+    }
+
+    func detail(tvShow: TVShow, posterCell: PosterCell) {
+
+        let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: mainVC,
+                                                            tvShow: tvShow,
+                                                            posterCell: posterCell)
         self.store(coordinator: movieDetailCoordinator)
         movieDetailCoordinator.delegate = self
         movieDetailCoordinator.start()

@@ -13,7 +13,7 @@ class MovieDetailVC: UIViewController {
     weak var delegate: MovieDetailCoordinatorDelegate?
 
     private var movie: Movie?
-    // TODO private var tvShow: TVShow?
+    private var tvShow: TVShow?
     // TODO private var favourite: Favourite?
 
     let detailView = MovieDetailView()
@@ -22,6 +22,7 @@ class MovieDetailVC: UIViewController {
     private var imageDataSource: ImageDataSource?
     private var castDataSource: CastDataSource?
     private var similarMovieDataSource: SimilarMovieDataSource?
+    private var similarTVShowDataSource: SimilarTVShowDataSource?
 
     private var disablePosterDragging = false
     private var collectionViewDragging = false
@@ -29,6 +30,13 @@ class MovieDetailVC: UIViewController {
 
     init(movie: Movie, image: UIImage?, showSimilar: Bool = true) {
         self.movie = movie
+        self.showSimilar = showSimilar
+        super.init(nibName: nil, bundle: nil)
+        detailView.posterImageView.image = image
+    }
+
+    init(tvShow: TVShow, image: UIImage?, showSimilar: Bool = true) {
+        self.tvShow = tvShow
         self.showSimilar = showSimilar
         super.init(nibName: nil, bundle: nil)
         detailView.posterImageView.image = image
@@ -83,6 +91,8 @@ extension MovieDetailVC {
     @objc func homepageAction(_ sender: Any) {
         if let movie = movie, let homepage = movie.homepage {
             UIApplication.shared.open(homepage)
+        } else if let tvShow = tvShow, let homepage = tvShow.homepage {
+            UIApplication.shared.open(homepage)
         }
     }
 
@@ -103,34 +113,23 @@ extension MovieDetailVC {
                                     rating: movie.voteAverage,
                                     genresNames: GenresData.movieGenreNames(ids: movie.genreIds),
                                     date: movie.releaseDate)
+        } else if let tvShow = tvShow {
+            detailView.genreLabel.numberOfLines = 2
+            detailView.setBasicInfo(title: tvShow.originalName,
+                                    description: tvShow.overview,
+                                    rating: tvShow.voteAverage,
+                                    genresNames: GenresData.movieGenreNames(ids: tvShow.genreIds),
+                                    date: tvShow.firstAirDate, tvDate: true)
         }
-        // TODO else if let tvShow = tvShow
-        // TODO else if let favourite = favourite
     }
 
     private func setDetailInfo(movie: Movie) {
 
         self.movie = movie
 
-        // Runtime
-        if let minutes = movie.runtime {
-            let h: Int = Int(minutes) / 60
-            let m: Int = Int(minutes) % 60
-            let runtimeString = h > 0 ? "\(h)h \(m)min" : "\(m)min"
-            detailView.durationLabel.text = runtimeString
-            detailView.durationLabel.isHidden = false
-            detailView.durationLabel.alpha = 0
-        }
-
-        // Homepage link
-        if let homepage = movie.homepage, let host = homepage.host {
-            let homepageAttributes: [NSAttributedString.Key: Any] = [ NSAttributedString.Key.foregroundColor: UIColor.movieFinder.tertiery,
-                                                                      .underlineStyle: NSUnderlineStyle.single.rawValue] //.double.rawValue, .thick.rawValue
-            let homepageString = NSMutableAttributedString(string: host, attributes: homepageAttributes)
-            detailView.homepageBtn.setAttributedTitle(homepageString, for: .normal)
-            detailView.homepageBtn.isHidden = false
-            detailView.homepageBtn.alpha = 0
-        }
+        // Set detail info
+        detailView.setDetailInfo(runtime: movie.runtime,
+                                 homepage: movie.homepage)
 
         // Trailers
         if let videosResponse = movie.videos, !videosResponse.results.isEmpty {
@@ -185,6 +184,70 @@ extension MovieDetailVC {
         }
     }
 
+    private func setDetailInfo(tvShow: TVShow) {
+
+        self.tvShow = tvShow
+
+        // Set detail info
+        detailView.setDetailInfo(runtime: tvShow.episodeRuntime?.last,
+                                 homepage: tvShow.homepage,
+                                 lastAirDate: tvShow.lastAirDate,
+                                 seasons: tvShow.seasons,
+                                 episodes: tvShow.episodes)
+
+        // Trailers
+        if let videosResponse = tvShow.videos, !videosResponse.results.isEmpty {
+            let filteredTrailers = videosResponse.results.filter { $0.site == "YouTube" }
+            if !filteredTrailers.isEmpty {
+                trailerDataSource = TrailerDataSource(trailers: filteredTrailers)
+                detailView.trailersSV.isHidden = false
+                detailView.trailersSV.alpha = 0
+                detailView.trailersCV.delegate = self
+                detailView.trailersCV.dataSource = trailerDataSource
+            }
+        }
+
+        // Photos
+        if let images = tvShow.images, !images.backdrops.isEmpty {
+            let filteredBackgropImages = images.backdrops.filter { $0.aspect != nil && $0.filePath != nil }
+            if !filteredBackgropImages.isEmpty {
+                imageDataSource = ImageDataSource(images: filteredBackgropImages)
+                detailView.imagesSV.isHidden = false
+                detailView.imagesSV.alpha = 0
+                detailView.imagesCV.delegate = self
+                detailView.imagesCV.dataSource = imageDataSource
+            }
+        }
+
+        // Cast
+        if let credits = tvShow.credits, !credits.cast.isEmpty {
+            castDataSource = CastDataSource(cast: credits.cast)
+            detailView.castSV.isHidden = false
+            detailView.castSV.alpha = 0
+            detailView.castCV.delegate = self
+            detailView.castCV.dataSource = castDataSource
+        }
+
+        // Similar
+        if showSimilar, let similarResponse = tvShow.similar, !similarResponse.results.isEmpty {
+            similarTVShowDataSource = SimilarTVShowDataSource(tvShows: similarResponse.results)
+            detailView.similarSV.isHidden = false
+            detailView.similarSV.alpha = 0
+            detailView.similarCV.delegate = self
+            detailView.similarCV.dataSource = similarTVShowDataSource
+        }
+
+        // FadeIn Animation
+        UIView.animate(withDuration: 0.3) {
+            if !self.detailView.seasonsLabel.isHidden { self.detailView.seasonsLabel.alpha = 1 }
+            if !self.detailView.durationLabel.isHidden { self.detailView.durationLabel.alpha = 1 }
+            if !self.detailView.homepageBtn.isHidden { self.detailView.homepageBtn.alpha = 1 }
+            if !self.detailView.trailersSV.isHidden { self.detailView.trailersSV.alpha = 1 }
+            if !self.detailView.imagesSV.isHidden { self.detailView.imagesSV.alpha = 1 }
+            if !self.detailView.castSV.isHidden { self.detailView.castSV.alpha = 1 }
+            if !self.detailView.similarSV.isHidden { self.detailView.similarSV.alpha = 1 }
+        }
+    }
 }
 
 // MARK: - Load detail data
@@ -195,16 +258,30 @@ extension MovieDetailVC {
 
         if let movie = movie {
             loadMovieDetail(id: movie.id)
+        } else if let tvShow = tvShow {
+            loadTVShowDetail(id: tvShow.id)
         }
     }
 
     private func loadMovieDetail(id: Int) {
-        MovieAPI.shared.GET(endpoint: .movieDetail(movie: id),
+        MovieAPI.shared.GET(endpoint: .movieDetail(id: id),
                             params: ["append_to_response": "credits,images,videos,similar", "include_image_language": "en,null"],
                              printDebug: false) { [weak self] (result: Result<Movie,MovieAPIError>) in
                                 guard let self = self else { return }
                                 switch result {
                                 case .success(let movie): self.setDetailInfo(movie: movie)
+                                case .failure(let error): print(error)
+                                }
+        }
+    }
+
+    private func loadTVShowDetail(id: Int) {
+        MovieAPI.shared.GET(endpoint: .tvDetail(id: id),
+                            params: ["append_to_response": "credits,images,videos,similar", "include_image_language": "en,null"],
+                            printDebug: false) { [weak self] (result: Result<TVShow,MovieAPIError>) in
+                                guard let self = self else { return }
+                                switch result {
+                                case .success(let tvShow): self.setDetailInfo(tvShow: tvShow)
                                 case .failure(let error): print(error)
                                 }
         }
@@ -316,10 +393,15 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
 
         case detailView.similarCV:
             if let cell = collectionView.cellForItem(at: indexPath) as? PosterCell,
-                let _ = cell.imageView.image,
-                let similarMovieDataSource = similarMovieDataSource,
-                let movie = similarMovieDataSource.item(at: indexPath.item) {
-                    delegate?.detail(movie: movie, posterCell: cell)
+                let _ = cell.imageView.image {
+
+                    if let similarMovieDataSource = similarMovieDataSource,
+                    let movie = similarMovieDataSource.item(at: indexPath.item) {
+                        delegate?.detail(movie: movie, posterCell: cell)
+                    } else if let similarTVShowDataSource = similarTVShowDataSource,
+                        let tvShow = similarTVShowDataSource.item(at: indexPath.item) {
+                        delegate?.detail(tvShow: tvShow, posterCell: cell)
+                    }
                 }
 
         default: break

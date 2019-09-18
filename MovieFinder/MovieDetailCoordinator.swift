@@ -12,6 +12,7 @@ protocol MovieDetailCoordinatorDelegate: class {
     func dismissMovieDetail()
     func handleGestureDismissTransition(gesture: UIPanGestureRecognizer)
     func detail(movie: Movie, posterCell: PosterCell)
+    func detail(tvShow: TVShow, posterCell: PosterCell)
     func imagesViewer(imageURLs: [URL], firstIndex: Int)
     func playYoutubeVideo(videoID: String)
 }
@@ -22,6 +23,7 @@ class MovieDetailCoordinator: BaseCoordinator {
     private unowned var detailVC: MovieDetailVC!
     private unowned var posterCell: PosterCell
     private var movie: Movie?
+    private var tvShow: TVShow?
     private var showSimilar: Bool
 
     private var interactor = Interactor()
@@ -33,11 +35,20 @@ class MovieDetailCoordinator: BaseCoordinator {
         self.showSimilar = showSimilar
     }
 
+    init(rootViewController: UIViewController, tvShow: TVShow, posterCell: PosterCell, showSimilar: Bool = true) {
+        self.rootViewController = rootViewController
+        self.tvShow = tvShow
+        self.posterCell = posterCell
+        self.showSimilar = showSimilar
+    }
+
     override func start() {
 
         var detailVC: MovieDetailVC?
         if let movie = movie {
             detailVC = MovieDetailVC(movie: movie, image: posterCell.imageView.image, showSimilar: showSimilar)
+        } else if let tvShow = tvShow {
+            detailVC = MovieDetailVC(tvShow: tvShow, image: posterCell.imageView.image, showSimilar: showSimilar)
         }
         if let detailVC = detailVC {
             self.detailVC = detailVC
@@ -78,6 +89,17 @@ extension MovieDetailCoordinator: MovieDetailCoordinatorDelegate {
 
         let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: detailVC,
                                                             movie: movie,
+                                                            posterCell: posterCell,
+                                                            showSimilar: false)
+        self.store(coordinator: movieDetailCoordinator)
+        movieDetailCoordinator.delegate = self
+        movieDetailCoordinator.start()
+    }
+
+    func detail(tvShow: TVShow, posterCell: PosterCell) {
+
+        let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: detailVC,
+                                                            tvShow: tvShow,
                                                             posterCell: posterCell,
                                                             showSimilar: false)
         self.store(coordinator: movieDetailCoordinator)
