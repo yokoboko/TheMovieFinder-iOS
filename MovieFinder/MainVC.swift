@@ -152,6 +152,10 @@ class MainVC: UIViewController {
         case .favourites: print("TODO: - setupVC -> set default")
         }
 
+        if let dataSource =  mainView.collectionView.dataSource as? DataSourceProtocol,
+            !firstTimeDataLoading {
+            mainView.noResultFoundView.isHidden = !dataSource.isEmpty
+        }
         updateFilterOptions()
         updateFilterField()
         mainView.filterView.selectSection(section: section)
