@@ -33,7 +33,7 @@ extension SimilarMovieDataSource: UICollectionViewDataSource {
             itemPosterURL = MovieImagePath.medium.path(poster: posterPath)
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterSmallCell.reuseIdentifier, for: indexPath) as! PosterSmallCell
-        cell.setData(title: item.title, genreNames: GenresData.movieGenreNames(ids: item.genreIds), rating: item.voteAverage, posterURL: itemPosterURL)
+        cell.setData(title: item.title, genreNames: GenresData.movieGenreNames(ids: item.genreIDs), rating: item.voteAverage, posterURL: itemPosterURL)
         return cell
     }
 

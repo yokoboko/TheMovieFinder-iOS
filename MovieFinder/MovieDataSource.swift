@@ -178,7 +178,7 @@ class MovieDataSource: NSObject, DataSourceProtocol {
                 posterURL = MovieImagePath.large.path(poster: posterPath)
             }
 
-            delegate?.itemOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.releaseDate, imageURL: posterURL)
+            delegate?.itemOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIDs), year: item.releaseDate, imageURL: posterURL)
         }
     }
 
@@ -223,7 +223,7 @@ extension MovieDataSource: UICollectionViewDataSource {
 
         // Small poster cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterSmallCell.reuseIdentifier, for: indexPath) as! PosterSmallCell
-        cell.setData(title: item.title, genreNames: GenresData.movieGenreNames(ids: item.genreIds), rating: item.voteAverage, posterURL: itemPosterURL)
+        cell.setData(title: item.title, genreNames: GenresData.movieGenreNames(ids: item.genreIDs), rating: item.voteAverage, posterURL: itemPosterURL)
         return cell
     }
 }

@@ -11,13 +11,11 @@ import Foundation
 struct TVShow: Codable {
     
     let id: Int
-    let name: String
-    let originalName: String
+    let title: String
 
-    let genreIds: [Int]?
+    let genreIDs: [Int]?
     let overview: String?
     let posterPath: String?
-    let backdropPath: String?
     let firstAirDate: String?
     let voteAverage: Double?
 
@@ -34,13 +32,11 @@ struct TVShow: Codable {
     
     enum CodingKeys: String, CodingKey {
         case id
-        case name
-        case originalName = "original_name"
+        case title = "original_name"
         case overview
       
-        case genreIds = "genre_ids"
+        case genreIDs = "genre_ids"
         case posterPath = "poster_path"
-        case backdropPath = "backdrop_path"
         case firstAirDate = "first_air_date"
         case voteAverage = "vote_average"
         

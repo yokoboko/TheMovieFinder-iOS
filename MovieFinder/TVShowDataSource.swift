@@ -177,7 +177,7 @@ class TVShowDataSource: NSObject, DataSourceProtocol {
                 posterURL = MovieImagePath.large.path(poster: posterPath)
             }
 
-            delegate?.itemOnFocus(name: item.originalName, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIds), year: item.firstAirDate, imageURL: posterURL)
+            delegate?.itemOnFocus(name: item.title, voteAverage: item.voteAverage, genres: GenresData.movieGenreNames(ids: item.genreIDs), year: item.firstAirDate, imageURL: posterURL)
         }
     }
 
@@ -222,7 +222,7 @@ extension TVShowDataSource: UICollectionViewDataSource {
 
         // Small poster cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterSmallCell.reuseIdentifier, for: indexPath) as! PosterSmallCell
-        cell.setData(title: item.originalName, genreNames: GenresData.movieGenreNames(ids: item.genreIds), rating: item.voteAverage, posterURL: itemPosterURL)
+        cell.setData(title: item.title, genreNames: GenresData.movieGenreNames(ids: item.genreIDs), rating: item.voteAverage, posterURL: itemPosterURL)
         return cell
     }
 }

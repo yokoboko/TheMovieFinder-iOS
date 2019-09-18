@@ -12,7 +12,7 @@ struct Movie: Codable {
     
     let id: Int
     let title: String
-    let genreIds: [Int]?
+    let genreIDs: [Int]?
     let overview: String?
     let posterPath: String?
     let releaseDate: String?
@@ -30,7 +30,7 @@ struct Movie: Codable {
         case id
         case title
         case overview
-        case genreIds = "genre_ids"
+        case genreIDs = "genre_ids"
         case posterPath = "poster_path"
         case releaseDate = "release_date"
         case voteAverage = "vote_average"

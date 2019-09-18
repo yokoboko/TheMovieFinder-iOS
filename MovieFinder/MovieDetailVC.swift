@@ -97,9 +97,23 @@ extension MovieDetailVC {
     }
 
     @objc func favouriteAction(_ sender: Any) {
-        //print(detailView.favouriteBtn.isSelected)
+        let save = detailView.favouriteBtn.isSelected
+        if let movie = movie {
+            if save {
+                CoreDataManager.shared.saveFavourite(movie: movie)
+            } else {
+                CoreDataManager.shared.deleteFavourite(movie: movie)
+            }
+        } else if let tvShow = tvShow {
+            if save {
+                CoreDataManager.shared.saveFavourite(tvShow: tvShow)
+            } else {
+                CoreDataManager.shared.deleteFavourite(tvShow: tvShow)
+            }
+        }
     }
 }
+
 
 // MARK: - Set data
 
@@ -108,17 +122,21 @@ extension MovieDetailVC {
     private func setBasicInfo() {
 
         if let movie = movie {
+            let isFavourite = CoreDataManager.shared.favouriteExists(movie: movie)
+            detailView.favouriteBtn.setSelected(selected: isFavourite, animated: false)
             detailView.setBasicInfo(title: movie.title,
                                     description: movie.overview,
                                     rating: movie.voteAverage,
-                                    genresNames: GenresData.movieGenreNames(ids: movie.genreIds),
+                                    genresNames: GenresData.movieGenreNames(ids: movie.genreIDs),
                                     date: movie.releaseDate)
         } else if let tvShow = tvShow {
+            let isFavourite = CoreDataManager.shared.favouriteExists(tvShow: tvShow)
+            detailView.favouriteBtn.setSelected(selected: isFavourite, animated: false)
             detailView.genreLabel.numberOfLines = 2
-            detailView.setBasicInfo(title: tvShow.originalName,
+            detailView.setBasicInfo(title: tvShow.title,
                                     description: tvShow.overview,
                                     rating: tvShow.voteAverage,
-                                    genresNames: GenresData.movieGenreNames(ids: tvShow.genreIds),
+                                    genresNames: GenresData.movieGenreNames(ids: tvShow.genreIDs),
                                     date: tvShow.firstAirDate, tvDate: true)
         }
     }
