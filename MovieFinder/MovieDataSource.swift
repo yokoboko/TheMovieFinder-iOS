@@ -182,8 +182,12 @@ class MovieDataSource: NSObject, DataSourceProtocol {
         }
     }
 
-    func focus() {
-        callOnFocusDelegate()
+    func updateItemOnFocus() {
+        if let coverFlowLayout = collectionView.collectionViewLayout as? CoverFlowLayout,
+            let focusedIndexPath = coverFlowLayout.getFocused() {
+            itemOnFocus = focusedIndexPath.item
+            callOnFocusDelegate()
+        }
     }
 
     private func imageURLForPosterPath(_ path: String) -> URL {

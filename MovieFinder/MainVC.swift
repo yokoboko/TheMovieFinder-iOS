@@ -122,28 +122,33 @@ class MainVC: UIViewController {
 
         switch section {
         case .movies:
+            mainView.collectionView.contentOffset = .zero
+            (mainView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
             mainView.coverFlowLayout.delegate = movieDataSource
             mainView.collectionView.dataSource = movieDataSource
             mainView.collectionView.prefetchDataSource = movieDataSource
+            movieDataSource.delegate = self
             if !firstTimeDataLoading {
                 mainView.collectionView.isUserInteractionEnabled = !movieDataSource.isLoadingData
                 mainView.collectionView.alpha = movieDataSource.isLoadingData ? 0.5 : 1.0
+                movieDataSource.updateItemOnFocus()
             }
-            movieDataSource.delegate = self
-            movieDataSource.focus()
 
         case .tvShows:
 
+            mainView.collectionView.contentOffset = .zero
+            (mainView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
             mainView.coverFlowLayout.delegate = tvDataSource
             mainView.collectionView.dataSource = tvDataSource
             mainView.collectionView.prefetchDataSource = tvDataSource
+            mainView.collectionView.contentOffset = .zero
+            tvDataSource.delegate = self
             if !firstTimeDataLoading {
                 mainView.collectionView.isUserInteractionEnabled = !tvDataSource.isLoadingData
                 mainView.collectionView.alpha = tvDataSource.isLoadingData ? 0.5 : 1.0
+                tvDataSource.updateItemOnFocus()
             }
-            tvDataSource.delegate = self
-            tvDataSource.focus()
-            
+
         case .favourites: print("TODO: - setupVC -> set default")
         }
 
