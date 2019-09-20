@@ -10,9 +10,9 @@ import Foundation
 
 enum TVShowFilter {
 
+    case popular
     case onTheAir
     case trending
-    case popular
     case topRated
     case genres([Genre])
     case search(String)
@@ -21,7 +21,7 @@ enum TVShowFilter {
 extension TVShowFilter {
 
     static var list: [TVShowFilter] {
-        return [onTheAir, trending,  popular, topRated, genres([]), search("")]
+        return [popular, onTheAir, trending, topRated, genres([]), search("")]
     }
 
     var localizedName: String {
