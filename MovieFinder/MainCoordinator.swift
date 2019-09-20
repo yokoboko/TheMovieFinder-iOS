@@ -13,6 +13,7 @@ protocol MainCoordinatorDelegate: class {
     func pickGenres(genreType: GenreType, completion: @escaping (_ selected: [Genre]) -> Void, selected: [Genre]?)
     func detail(movie: Movie, posterCell: PosterCell, fromFavourite: Bool)
     func detail(tvShow: TVShow, posterCell: PosterCell, fromFavourite: Bool)
+    func about()
 }
 
 class MainCoordinator: BaseCoordinator {
@@ -62,5 +63,13 @@ extension MainCoordinator: MainCoordinatorDelegate {
         genrePickerVC.modalPresentationStyle = .overCurrentContext
         genrePickerVC.modalTransitionStyle = .coverVertical
         navigationController.present(genrePickerVC, animated: true, completion: nil)
+    }
+
+    func about() {
+
+        let aboutVC = AboutVC()
+        aboutVC.modalPresentationStyle = .overCurrentContext
+        aboutVC.modalTransitionStyle = .coverVertical
+        navigationController.present(aboutVC, animated: true, completion: nil)
     }
 }

@@ -175,6 +175,8 @@ extension MainView {
                 self.toggleLayoutBtn.alpha = 0
                 self.filtersBtn.alpha = 0
                 self.filterView.alpha = 1
+                self.aboutLabel.alpha = 0
+                self.aboutLabel.transform = .identity
                 self.layoutIfNeeded()
             })
         }
@@ -220,6 +222,8 @@ extension MainView {
                 self.toggleLayoutBtn.alpha = 1
                 self.filtersBtn.alpha = 1
                 self.filterView.alpha = 0
+                self.aboutLabel.alpha = 0
+                self.aboutLabel.transform = .identity
                 self.layoutIfNeeded()
             })
         }
@@ -253,7 +257,7 @@ extension MainView {
 
         let translationY = recognizer.translation(in: self).y + filterDragShift
         let velocityY = recognizer.velocity(in: self).y
-        let limitDown: CGFloat = 16
+        let limitDown: CGFloat = isFilterHidden ? 42 : 16
         let limitUp = -filterView.frame.height - filterViewMargin
 
         if velocityY < 0 {
@@ -280,15 +284,28 @@ extension MainView {
             infoGenresLabel.alpha = 1 - min(1, progress * 2)
             infoRatingLabel.alpha = 1 - min(1, progress * 2)
         }
-        sectionLabel.alpha = 1 - progress
-        filterLabel.alpha = 1 - progress
+
         scrollToTopContainer.alpha = 1 - progress
         toggleLayoutBtn.alpha = 1 - progress
         filtersBtn.alpha = 1 - progress
         filterView.alpha = progress
 
-        sectionLabel.transform = CGAffineTransform(translationX: 0, y: -32 * progress)
-        filterLabel.transform = CGAffineTransform(translationX: 0, y: -32 * progress)
+        let sectionMovement: CGFloat = isFilterHidden && progress == 0 ? -240 :-32
+        let sectionOffset = sectionMovement * (max(limitUp, filterViewTopConstraint.constant) / limitUp)
+        sectionLabel.transform = CGAffineTransform(translationX: 0, y: sectionOffset)
+        filterLabel.transform = CGAffineTransform(translationX: 0, y: sectionOffset)
+        aboutLabel.transform = CGAffineTransform(translationX: 0, y: sectionOffset)
+        if isFilterHidden && progress == 0  {
+            let progress = min(1, sectionOffset / limitDown)
+            let alpha = 1 - progress
+            sectionLabel.alpha = alpha
+            filterLabel.alpha = alpha
+            aboutLabel.alpha = progress
+        } else {
+            sectionLabel.alpha = 1 - progress
+            filterLabel.alpha = 1 - progress
+            aboutLabel.alpha = 0
+        }
 
         let startConstant = isCoverFlowLayout ? collectionViewBottomMarginCoverFlow : collectionViewBottomMarginFlow
         let endConstant = collectionViewBottomMarginFilters
@@ -304,6 +321,9 @@ extension MainView {
 
     private func stopDraging() {
         filterStartDrag = false
+        if isFilterHidden, aboutLabel.alpha == 1 {
+            aboutAction?()
+        }
         if filterDragDirectionUp {
             isFilterHidden = true
             showFilter(duration: 0.35)

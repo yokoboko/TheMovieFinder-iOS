@@ -24,6 +24,8 @@
 		F101E13F23211E2A007E3F7E /* GenrePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E13E23211E2A007E3F7E /* GenrePickerView.swift */; };
 		F101E141232127F0007E3F7E /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101E140232127F0007E3F7E /* GenreCell.swift */; };
 		F10211F92334CDB20006B54E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10211F82334CDB10006B54E /* Throttler.swift */; };
+		F10211FB2334E5230006B54E /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10211FA2334E5230006B54E /* AboutVC.swift */; };
+		F10211FE2334E5E30006B54E /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10211FD2334E5E30006B54E /* AboutView.swift */; };
 		F10D9557230D302B00D48239 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D9556230D302B00D48239 /* AppDelegate.swift */; };
 		F10D9559230D302B00D48239 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10D9558230D302B00D48239 /* MainVC.swift */; };
 		F10D955F230D302B00D48239 /* MovieFinder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F10D955D230D302B00D48239 /* MovieFinder.xcdatamodeld */; };
@@ -134,6 +136,8 @@
 		F101E13E23211E2A007E3F7E /* GenrePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenrePickerView.swift; sourceTree = "<group>"; };
 		F101E140232127F0007E3F7E /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
 		F10211F82334CDB10006B54E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
+		F10211FA2334E5230006B54E /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
+		F10211FD2334E5E30006B54E /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		F10D9553230D302B00D48239 /* MovieFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F10D9556230D302B00D48239 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F10D9558230D302B00D48239 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -287,6 +291,14 @@
 			name = "Genre Picker View";
 			sourceTree = "<group>";
 		};
+		F10211FC2334E5BE0006B54E /* About View */ = {
+			isa = PBXGroup;
+			children = (
+				F10211FD2334E5E30006B54E /* AboutView.swift */,
+			);
+			name = "About View";
+			sourceTree = "<group>";
+		};
 		F10D954A230D302B00D48239 = {
 			isa = PBXGroup;
 			children = (
@@ -371,8 +383,9 @@
 			isa = PBXGroup;
 			children = (
 				F1A1465A230E8DD500A874DA /* Main View */,
-				F101E13D23211E09007E3F7E /* Genre Picker View */,
 				F1FBCA5423225E0C002157F6 /* Movie Detail View */,
+				F101E13D23211E09007E3F7E /* Genre Picker View */,
+				F10211FC2334E5BE0006B54E /* About View */,
 				F16D4EDD232A72CA00737C06 /* Images Viewer View */,
 				F1A1465B230E8DF100A874DA /* Cell */,
 				F10F42BC2327891900C31869 /* Fave Button */,
@@ -387,11 +400,12 @@
 			isa = PBXGroup;
 			children = (
 				F10D9558230D302B00D48239 /* MainVC.swift */,
-				F101E1392321174A007E3F7E /* GenrePickerVC.swift */,
 				F1FBCA5523225E40002157F6 /* MovieDetailVC.swift */,
+				F101E1392321174A007E3F7E /* GenrePickerVC.swift */,
 				F101AEB723291E78002B49A9 /* YoutubePlayerVC.swift */,
 				F16D4ED9232A727300737C06 /* ImagesViewerVC.swift */,
 				F16D4EE2232A734600737C06 /* ImageViewerVC.swift */,
+				F10211FA2334E5230006B54E /* AboutVC.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -807,6 +821,8 @@
 				F10211F92334CDB20006B54E /* Throttler.swift in Sources */,
 				F10F42C32327893300C31869 /* Easing.swift in Sources */,
 				F113BECA231D30DE00F88244 /* MovieSection.swift in Sources */,
+				F10211FB2334E5230006B54E /* AboutVC.swift in Sources */,
+				F10211FE2334E5E30006B54E /* AboutView.swift in Sources */,
 				F1FBCA5D23226823002157F6 /* Interactor.swift in Sources */,
 				F10D9595230D704B00D48239 /* Crew.swift in Sources */,
 				F1A14663230E90C700A874DA /* UIColor+Extension.swift in Sources */,

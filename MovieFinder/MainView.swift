@@ -10,7 +10,10 @@ import UIKit
 
 class MainView: UIView {
 
+    var aboutAction: (() -> Void)?
+
     var backgroundView: BackgroundMoviesView!
+    var aboutLabel: UILabel!
     var sectionLabel: UILabel!
     var filterLabel: UILabel!
 
@@ -147,15 +150,31 @@ extension MainView {
     }
     
     private func setupSectionAndFilterView() {
-        
-        sectionLabel = UILabel(frame: .zero)
+
+        let infoAttachment = NSTextAttachment()
+        infoAttachment.image = UIImage(named: "icon_info")
+        infoAttachment.bounds = CGRect(x: 0, y: 2, width: infoAttachment.image!.size.width, height: infoAttachment.image!.size.height)
+        let attachmentString = NSAttributedString(attachment: infoAttachment)
+        let completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        completeText.append(NSAttributedString(string: " \("about".localized)"))
+
+        aboutLabel = UILabel()
+        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
+        aboutLabel.textColor = UIColor.movieFinder.secondary
+        aboutLabel.font = UIFont.systemFont(ofSize: 28, weight: UIFont.Weight.light)
+        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
+        aboutLabel.attributedText = completeText
+        aboutLabel.alpha = 0
+        addSubview(aboutLabel)
+
+        sectionLabel = UILabel()
         sectionLabel.textColor = UIColor.movieFinder.secondary
         sectionLabel.font = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.light)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(sectionLabel)
-
         
-        filterLabel = UILabel(frame: .zero)
+        filterLabel = UILabel()
         filterLabel.textColor = UIColor.movieFinder.tertiery
         filterLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.light)
         filterLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -168,6 +187,8 @@ extension MainView {
             filterLabel.topAnchor.constraint(equalTo: sectionLabel.bottomAnchor, constant: -2),
             filterLabel.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: 40),
             filterLabel.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -40),
+            aboutLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            aboutLabel.bottomAnchor.constraint(equalTo: sectionLabel.topAnchor, constant: -8),
             ])
 
     }

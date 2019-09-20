@@ -32,7 +32,7 @@ struct TVShow: Codable {
     
     enum CodingKeys: String, CodingKey {
         case id
-        case title = "original_name"
+        case title = "name" //"original_name"
         case overview
       
         case genreIDs = "genre_ids"

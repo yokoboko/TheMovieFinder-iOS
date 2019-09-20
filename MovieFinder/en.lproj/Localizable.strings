@@ -35,3 +35,8 @@
 "episode" = "1 episode";
 
 "allFavourites" = "All Favourites";
+
+"about" = "About";
+"appName" = "Movie Finder";
+"appInfo" = "Movie Finder is the most confortable way to find proper movie for relaxed night. Here you can easily manage all movies you want to see.";
+"tmdbInfo" = "This product uses the TMDb API but is not endorsed or certified by TMDb.";
