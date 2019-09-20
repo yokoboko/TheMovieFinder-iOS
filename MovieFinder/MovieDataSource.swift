@@ -32,7 +32,7 @@ class MovieDataSource: NSObject, DataSourceProtocol {
     
     private let preheater = ImagePreheater()
 
-    private var movieFilter: MovieFilter = .popular
+    private var movieFilter: MovieFilter = MovieFilter.list[0]
     var filter: MovieFilter {
         get {
             return movieFilter

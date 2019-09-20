@@ -20,7 +20,7 @@ enum MovieFilter {
 
 extension MovieFilter {
 
-    static var all: [MovieFilter] {
+    static var list: [MovieFilter] {
         return [upcoming, trending,  popular, topRated, genres([]), search("")]
     }
 
@@ -36,7 +36,7 @@ extension MovieFilter {
     }
 
     var index: Int {
-        for (i, filter) in MovieFilter.all.enumerated() {
+        for (i, filter) in MovieFilter.list.enumerated() {
             if filter.localizedName == self.localizedName {
                 return i
             }

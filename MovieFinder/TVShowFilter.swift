@@ -20,7 +20,7 @@ enum TVShowFilter {
 
 extension TVShowFilter {
 
-    static var all: [TVShowFilter] {
+    static var list: [TVShowFilter] {
         return [onTheAir, trending,  popular, topRated, genres([]), search("")]
     }
 
@@ -36,7 +36,7 @@ extension TVShowFilter {
     }
 
     var index: Int {
-        for (i, filter) in TVShowFilter.all.enumerated() {
+        for (i, filter) in TVShowFilter.list.enumerated() {
             if filter.localizedName == self.localizedName {
                 return i
             }

@@ -32,7 +32,7 @@ class TVShowDataSource: NSObject, DataSourceProtocol {
 
     private let preheater = ImagePreheater()
 
-    private var tvShowFilter: TVShowFilter = .onTheAir
+    private var tvShowFilter: TVShowFilter = TVShowFilter.list[0]
     var filter: TVShowFilter {
         get {
             return tvShowFilter

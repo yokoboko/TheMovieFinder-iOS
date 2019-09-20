@@ -44,6 +44,7 @@ class MainFilterView: UIStackView {
                 filterBtn.setTitle(name, for: .normal)
             }
         }
+        secondFilterRow.isHidden = names.count <= 3
         selectFilter(selectIndex: selectIndex)
     }
 
@@ -213,7 +214,7 @@ extension MainFilterView {
 
         let row = UIView()
         row.translatesAutoresizingMaskIntoConstraints = false
-        row.heightAnchor.constraint(equalToConstant: 36)
+        //row.heightAnchor.constraint(equalToConstant: 36)
 
         let leftBtn = createFilterBtn()
         let midBtn = createFilterBtn()

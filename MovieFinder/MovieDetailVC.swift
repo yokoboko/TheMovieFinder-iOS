@@ -68,6 +68,7 @@ class MovieDetailVC: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        detailView.updateFade()
     }
 }
 
@@ -141,16 +142,14 @@ extension MovieDetailVC {
         }
     }
 
-    private func setDetailInfo(movie: Movie) {
-
-        self.movie = movie
+    private func setDetailInfo(movieDetail: Movie) {
 
         // Set detail info
-        detailView.setDetailInfo(runtime: movie.runtime,
-                                 homepage: movie.homepage)
+        detailView.setDetailInfo(runtime: movieDetail.runtime,
+                                 homepage: movieDetail.homepage)
 
         // Trailers
-        if let videosResponse = movie.videos, !videosResponse.results.isEmpty {
+        if let videosResponse = movieDetail.videos, !videosResponse.results.isEmpty {
             let filteredTrailers = videosResponse.results.filter { $0.site == "YouTube" }
             if !filteredTrailers.isEmpty {
                 trailerDataSource = TrailerDataSource(trailers: filteredTrailers)
@@ -162,7 +161,7 @@ extension MovieDetailVC {
         }
 
         // Photos
-        if let images = movie.images, !images.backdrops.isEmpty {
+        if let images = movieDetail.images, !images.backdrops.isEmpty {
             let filteredBackgropImages = images.backdrops.filter { $0.aspect != nil && $0.filePath != nil }
              if !filteredBackgropImages.isEmpty {
                 imageDataSource = ImageDataSource(images: filteredBackgropImages)
@@ -174,7 +173,7 @@ extension MovieDetailVC {
         }
 
         // Cast
-        if let credits = movie.credits, !credits.cast.isEmpty {
+        if let credits = movieDetail.credits, !credits.cast.isEmpty {
             castDataSource = CastDataSource(cast: credits.cast)
             detailView.castSV.isHidden = false
             detailView.castSV.alpha = 0
@@ -183,7 +182,7 @@ extension MovieDetailVC {
         }
 
         // Similar
-        if showSimilar, let similarResponse = movie.similar, !similarResponse.results.isEmpty {
+        if showSimilar, let similarResponse = movieDetail.similar, !similarResponse.results.isEmpty {
             similarMovieDataSource = SimilarMovieDataSource(movies: similarResponse.results)
             detailView.similarSV.isHidden = false
             detailView.similarSV.alpha = 0
@@ -202,19 +201,17 @@ extension MovieDetailVC {
         }
     }
 
-    private func setDetailInfo(tvShow: TVShow) {
-
-        self.tvShow = tvShow
+    private func setDetailInfo(tvShowDetail: TVShow) {
 
         // Set detail info
-        detailView.setDetailInfo(runtime: tvShow.episodeRuntime?.last,
-                                 homepage: tvShow.homepage,
-                                 lastAirDate: tvShow.lastAirDate,
-                                 seasons: tvShow.seasons,
-                                 episodes: tvShow.episodes)
+        detailView.setDetailInfo(runtime: tvShowDetail.episodeRuntime?.last,
+                                 homepage: tvShowDetail.homepage,
+                                 lastAirDate: tvShowDetail.lastAirDate,
+                                 seasons: tvShowDetail.seasons,
+                                 episodes: tvShowDetail.episodes)
 
         // Trailers
-        if let videosResponse = tvShow.videos, !videosResponse.results.isEmpty {
+        if let videosResponse = tvShowDetail.videos, !videosResponse.results.isEmpty {
             let filteredTrailers = videosResponse.results.filter { $0.site == "YouTube" }
             if !filteredTrailers.isEmpty {
                 trailerDataSource = TrailerDataSource(trailers: filteredTrailers)
@@ -226,7 +223,7 @@ extension MovieDetailVC {
         }
 
         // Photos
-        if let images = tvShow.images, !images.backdrops.isEmpty {
+        if let images = tvShowDetail.images, !images.backdrops.isEmpty {
             let filteredBackgropImages = images.backdrops.filter { $0.aspect != nil && $0.filePath != nil }
             if !filteredBackgropImages.isEmpty {
                 imageDataSource = ImageDataSource(images: filteredBackgropImages)
@@ -238,7 +235,7 @@ extension MovieDetailVC {
         }
 
         // Cast
-        if let credits = tvShow.credits, !credits.cast.isEmpty {
+        if let credits = tvShowDetail.credits, !credits.cast.isEmpty {
             castDataSource = CastDataSource(cast: credits.cast)
             detailView.castSV.isHidden = false
             detailView.castSV.alpha = 0
@@ -247,7 +244,7 @@ extension MovieDetailVC {
         }
 
         // Similar
-        if showSimilar, let similarResponse = tvShow.similar, !similarResponse.results.isEmpty {
+        if showSimilar, let similarResponse = tvShowDetail.similar, !similarResponse.results.isEmpty {
             similarTVShowDataSource = SimilarTVShowDataSource(tvShows: similarResponse.results)
             detailView.similarSV.isHidden = false
             detailView.similarSV.alpha = 0
@@ -287,7 +284,7 @@ extension MovieDetailVC {
                              printDebug: false) { [weak self] (result: Result<Movie,MovieAPIError>) in
                                 guard let self = self else { return }
                                 switch result {
-                                case .success(let movie): self.setDetailInfo(movie: movie)
+                                case .success(let movie): self.setDetailInfo(movieDetail: movie)
                                 case .failure(let error): print(error)
                                 }
         }
@@ -299,7 +296,7 @@ extension MovieDetailVC {
                             printDebug: false) { [weak self] (result: Result<TVShow,MovieAPIError>) in
                                 guard let self = self else { return }
                                 switch result {
-                                case .success(let tvShow): self.setDetailInfo(tvShow: tvShow)
+                                case .success(let tvShow): self.setDetailInfo(tvShowDetail: tvShow)
                                 case .failure(let error): print(error)
                                 }
         }

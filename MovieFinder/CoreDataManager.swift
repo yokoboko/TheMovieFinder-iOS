@@ -9,6 +9,11 @@
 import Foundation
 import CoreData
 
+extension Notification.Name {
+    static let favouriteAdded = Notification.Name("favouriteAdded")
+    static let favouriteDeleted = Notification.Name("favouriteRemoved")
+}
+
 final class CoreDataManager {
 
     // MARK: - Properties
@@ -19,6 +24,10 @@ final class CoreDataManager {
     // MARK: - Initialization
 
     private init() {}
+
+    private func notify(notification: Notification.Name, object: Any? = nil) {
+        NotificationCenter.default.post(name: notification, object: object)
+    }
 
 
     // MARK: - Public
@@ -42,6 +51,7 @@ final class CoreDataManager {
             favourite.genreIDs = movie.genreIDs
             self.saveOrRollback()
         }
+        notify(notification: Notification.Name.favouriteAdded, object: movie)
     }
 
     func saveFavourite(tvShow: TVShow, completion: ((_ result: Result<Bool, Error>) -> Void)? = nil) {
@@ -63,19 +73,22 @@ final class CoreDataManager {
             favourite.genreIDs = tvShow.genreIDs
             self.saveOrRollback()
         }
+        notify(notification: Notification.Name.favouriteAdded, object: tvShow)
     }
 
-    func deleteFavourite(movie: Movie, completion: ((_ result: Result<Bool, Error>) -> Void)? = nil) {
+    func deleteFavourite(movie: Movie) {
 
         guard let favourite = fetchFavourite(for: Int64(movie.id), type: .movie) else { return }
-        remove(with: favourite.objectID, completion: completion)
+        remove(with: favourite.objectID)
+        notify(notification: Notification.Name.favouriteDeleted, object: favourite.getMovie())
     }
 
 
-    func deleteFavourite(tvShow: TVShow, completion: ((_ result: Result<Bool, Error>) -> Void)? = nil) {
+    func deleteFavourite(tvShow: TVShow) {
 
         guard let favourite = fetchFavourite(for: Int64(tvShow.id), type: .tvShow) else { return }
-        remove(with: favourite.objectID, completion: completion)
+        remove(with: favourite.objectID)
+        notify(notification: Notification.Name.favouriteDeleted, object: favourite.getTVShow())
     }
 
     func favouriteExists(movie: Movie) -> Bool {
@@ -93,23 +106,9 @@ final class CoreDataManager {
         if let results = try? persistentContainer.viewContext.fetch(request) {
             results.forEach { (favourite) in
                 if favourite.type == FavouriteType.movie.rawValue {
-                    favourites.append(Movie(id: Int(favourite.id),
-                                            title: favourite.title ?? "",
-                                            genreIDs: favourite.genreIDs,
-                                            overview: favourite.overview,
-                                            posterPath: favourite.posterPath,
-                                            releaseDate: favourite.date,
-                                            voteAverage: favourite.voteAverage,
-                                            homepage: nil, videos: nil, images: nil, credits: nil, similar: nil, runtime: nil))
+                    favourites.append(favourite.getMovie())
                 } else {
-                    favourites.append(TVShow(id: Int(favourite.id),
-                                             title: favourite.title ?? "",
-                                             genreIDs: favourite.genreIDs,
-                                             overview: favourite.overview,
-                                             posterPath: favourite.posterPath,
-                                             firstAirDate: favourite.date,
-                                             voteAverage: favourite.voteAverage,
-                                             homepage: nil, lastAirDate: nil, episodeRuntime: nil, seasons: nil, episodes: nil, videos: nil, images: nil, credits: nil, similar: nil))
+                    favourites.append(favourite.getTVShow())
                 }
             }
         }

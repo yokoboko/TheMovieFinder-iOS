@@ -11,8 +11,8 @@ import UIKit
 protocol MainCoordinatorDelegate: class {
 
     func pickGenres(genreType: GenreType, completion: @escaping (_ selected: [Genre]) -> Void, selected: [Genre]?)
-    func detail(movie: Movie, posterCell: PosterCell)
-    func detail(tvShow: TVShow, posterCell: PosterCell)
+    func detail(movie: Movie, posterCell: PosterCell, fromFavourite: Bool)
+    func detail(tvShow: TVShow, posterCell: PosterCell, fromFavourite: Bool)
 }
 
 class MainCoordinator: BaseCoordinator {
@@ -34,21 +34,23 @@ class MainCoordinator: BaseCoordinator {
 
 extension MainCoordinator: MainCoordinatorDelegate {
 
-    func detail(movie: Movie, posterCell: PosterCell) {
+    func detail(movie: Movie, posterCell: PosterCell, fromFavourite: Bool) {
 
         let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: mainVC,
                                                              movie: movie,
-                                                             posterCell: posterCell)
+                                                             posterCell: posterCell,
+                                                             fromFavourite: fromFavourite)
         self.store(coordinator: movieDetailCoordinator)
         movieDetailCoordinator.delegate = self
         movieDetailCoordinator.start()
     }
 
-    func detail(tvShow: TVShow, posterCell: PosterCell) {
+    func detail(tvShow: TVShow, posterCell: PosterCell, fromFavourite: Bool) {
 
         let movieDetailCoordinator = MovieDetailCoordinator(rootViewController: mainVC,
                                                             tvShow: tvShow,
-                                                            posterCell: posterCell)
+                                                            posterCell: posterCell,
+                                                            fromFavourite: fromFavourite)
         self.store(coordinator: movieDetailCoordinator)
         movieDetailCoordinator.delegate = self
         movieDetailCoordinator.start()

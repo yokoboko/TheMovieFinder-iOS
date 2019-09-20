@@ -14,18 +14,19 @@ class MainVC: UIViewController {
     
     let mainView = MainView()
 
-    private var section: MovieSection = .movies
+    private var section: MovieSection = .movies // Default
 
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!
     private var tvDataSource: TVShowDataSource!
-    // private var favouritesDataSource: FavouritesDataSource!s
+    private var favouriteDataSource: FavouriteDataSource!
     
     private var firstTimeDataLoading = true
 
     private var hideKeyboardOnTap: UITapGestureRecognizer?
     private var movieSearchTerm = ""
     private var tvShowsSearchTerm = ""
+    private let searchThrottler = Throttler(minimumDelay: 0.5)
 
     private let hideFilterMenuOnChange = false
 
@@ -84,32 +85,27 @@ class MainVC: UIViewController {
 
     private func setupVC() {
 
-        // Default filters
-        let movieFilter = MovieFilter.all[0]
-        let tvFilter = TVShowFilter.all[0]
-        // TODO - Fav filter
-
-        // Create data sources
-        movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
-        tvDataSource = TVShowDataSource(collectionView: mainView.collectionView)
-        // TODO: - favouriteDataSource
-
-        // Set default filters
-        movieDataSource.filter = movieFilter
-        tvDataSource.filter = tvFilter
-        // TODO: - favouriteDataSource
-
-        // Set default section
-        selectSection(section: section)
-
-        // CollectionView setup
-        mainView.collectionView.delegate = self
-
         // Button actions
         setupActions()
 
         // Setup SearchField
         setupSearchField()
+
+        // CollectionView setup
+        mainView.collectionView.delegate = self
+
+        // Create data sources
+        movieDataSource = MovieDataSource(collectionView: mainView.collectionView)
+        tvDataSource = TVShowDataSource(collectionView: mainView.collectionView)
+        favouriteDataSource = FavouriteDataSource(collectionView: mainView.collectionView)
+
+        // Set default section
+        selectSection(section: section)
+
+        // Load with default filters(After selectSection!)
+        movieDataSource.filter = movieDataSource.filter
+        tvDataSource.filter = tvDataSource.filter
+        favouriteDataSource.filter = favouriteDataSource.filter
     }
 
     private func selectSection(section: MovieSection) {
@@ -118,7 +114,7 @@ class MainVC: UIViewController {
 
         movieDataSource.delegate = nil
         tvDataSource.delegate = nil
-        // TODO: - favouriteDataSource.delegate = nil
+        favouriteDataSource.delegate = nil
 
         switch section {
         case .movies:
@@ -135,7 +131,6 @@ class MainVC: UIViewController {
             }
 
         case .tvShows:
-
             mainView.collectionView.contentOffset = .zero
             (mainView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
             mainView.coverFlowLayout.delegate = tvDataSource
@@ -149,13 +144,28 @@ class MainVC: UIViewController {
                 tvDataSource.updateItemOnFocus()
             }
 
-        case .favourites: print("TODO: - setupVC -> set default")
+        case .favourites:
+            mainView.collectionView.contentOffset = .zero
+            (mainView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
+            mainView.coverFlowLayout.delegate = favouriteDataSource
+            mainView.collectionView.dataSource = favouriteDataSource
+            mainView.collectionView.prefetchDataSource = favouriteDataSource
+            favouriteDataSource.delegate = self
+            if !firstTimeDataLoading {
+                mainView.collectionView.isUserInteractionEnabled = !favouriteDataSource.isLoadingData
+                mainView.collectionView.alpha = favouriteDataSource.isLoadingData ? 0.5 : 1.0
+                favouriteDataSource.updateItemOnFocus()
+            }
         }
 
-        if let dataSource =  mainView.collectionView.dataSource as? DataSourceProtocol,
-            !firstTimeDataLoading {
+        if !firstTimeDataLoading, let dataSource =  mainView.collectionView.dataSource as? DataSourceProtocol {
             mainView.noResultFoundView.isHidden = !dataSource.isEmpty
         }
+
+        if let dataSource = mainView.collectionView.dataSource as? DataSourceProtocol, dataSource.isEmpty {
+            mainView.setInfo(name: "noResultFound".localized, rating: nil, genres: [], date: nil)
+        }
+
         updateFilterOptions()
         updateFilterField()
         mainView.filterView.selectSection(section: section)
@@ -179,7 +189,7 @@ class MainVC: UIViewController {
             }
 
         case .favourites:
-            print("TODO - updateHeaderFields() Favourites")
+            mainView.filterLabel.text = favouriteDataSource.filter.localizedName
         }
     }
 
@@ -190,20 +200,22 @@ class MainVC: UIViewController {
 
         switch section {
         case .movies:
-            let filterNames: [String] = MovieFilter.all.map { $0.localizedName }
+            let filterNames: [String] = MovieFilter.list.map { $0.localizedName }
             mainView.filterView.setFilters(names: filterNames, selectIndex: movieDataSource.filter.index)
 
         case .tvShows:
-            let filterNames: [String] = TVShowFilter.all.map { $0.localizedName }
+            let filterNames: [String] = TVShowFilter.list.map { $0.localizedName }
             mainView.filterView.setFilters(names: filterNames, selectIndex: tvDataSource.filter.index)
 
-        case .favourites: print("TODO - updateFilterOptions() Favourites")
+        case .favourites:
+            let filterNames: [String] = FavouriteFilter.list.map { $0.localizedName }
+            mainView.filterView.setFilters(names: filterNames, selectIndex: favouriteDataSource.filter.index)
         }
     }
 
     private func selectMovieFilter(index: Int, skipHideFilter: Bool = false) {
 
-        let filter = MovieFilter.all[index]
+        let filter = MovieFilter.list[index]
 
         switch filter {
 
@@ -258,7 +270,7 @@ class MainVC: UIViewController {
 
     private func selectTVShowFilter(index: Int, skipHideFilter: Bool = false) {
 
-        let filter = TVShowFilter.all[index]
+        let filter = TVShowFilter.list[index]
 
         switch filter {
 
@@ -310,6 +322,14 @@ class MainVC: UIViewController {
             }
         }
     }
+
+    private func selectFavouriteFilter(index: Int) {
+
+        favouriteDataSource.filter = FavouriteFilter.list[index]
+        updateFilterField()
+        mainView.filterView.selectFilter(selectIndex: index)
+        if hideFilterMenuOnChange { mainView.hideFilter()  }
+    }
 }
 
 
@@ -351,7 +371,7 @@ extension MainVC {
         switch sender.tag {
         case 0: if section != .movies { selectSection(section: .movies) }
         case 1: if section != .tvShows { selectSection(section: .tvShows) }
-        case 2: print("favourites")
+        case 2: if section != .favourites { selectSection(section: .favourites) }
         default: break
         }
     }
@@ -360,7 +380,7 @@ extension MainVC {
         switch section {
         case .movies: selectMovieFilter(index: sender.tag)
         case .tvShows: selectTVShowFilter(index: sender.tag)
-        case .favourites: print("Favourites Filter: \(sender.tag)")
+        case .favourites: selectFavouriteFilter(index: sender.tag)
         }
     }
 }
@@ -435,29 +455,33 @@ extension MainVC: UITextFieldDelegate {
         switch section {
         case .movies:
             if searchTerm != movieSearchTerm {
-
                 movieSearchTerm = searchTerm
                 if movieSearchTerm.isEmpty {
                     selectMovieFilter(index: 0, skipHideFilter: true)
                 } else {
-                    let searchFilter = MovieFilter.search(movieSearchTerm)
-                    self.mainView.filterView.selectFilter(selectIndex: searchFilter.index)
-                    self.movieDataSource.filter = searchFilter
-                    self.updateFilterField()
+                    searchThrottler.throttle { [weak self] in
+                        guard let self = self else { return }
+                        let searchFilter = MovieFilter.search(self.movieSearchTerm)
+                        self.mainView.filterView.selectFilter(selectIndex: searchFilter.index)
+                        self.movieDataSource.filter = searchFilter
+                        self.updateFilterField()
+                    }
                 }
             }
 
         case .tvShows:
             if searchTerm != tvShowsSearchTerm {
-
                 tvShowsSearchTerm = searchTerm
                 if tvShowsSearchTerm.isEmpty {
                     selectTVShowFilter(index: 0, skipHideFilter: true)
                 } else {
-                    let searchFilter = TVShowFilter.search(tvShowsSearchTerm)
-                    self.mainView.filterView.selectFilter(selectIndex: searchFilter.index)
-                    self.tvDataSource.filter = searchFilter
-                    self.updateFilterField()
+                    searchThrottler.throttle { [weak self] in
+                        guard let self = self else { return }
+                        let searchFilter = TVShowFilter.search(self.tvShowsSearchTerm)
+                        self.mainView.filterView.selectFilter(selectIndex: searchFilter.index)
+                        self.tvDataSource.filter = searchFilter
+                        self.updateFilterField()
+                    }
                 }
             }
 
@@ -488,13 +512,19 @@ extension MainVC: UICollectionViewDelegateFlowLayout {
             switch section {
             case .movies:
                 if let movie = movieDataSource.getItem(index: indexPath.item) {
-                    delegate?.detail(movie: movie, posterCell: cell)
+                    delegate?.detail(movie: movie, posterCell: cell, fromFavourite: false)
                 }
             case .tvShows:
                 if let tvShow = tvDataSource.getItem(index: indexPath.item) {
-                    delegate?.detail(tvShow: tvShow, posterCell: cell)
+                    delegate?.detail(tvShow: tvShow, posterCell: cell, fromFavourite: false)
                 }
-            default: break
+            case .favourites:
+                let item = favouriteDataSource.getItem(index: indexPath.item)
+                if let movie = item as? Movie {
+                    delegate?.detail(movie: movie, posterCell: cell, fromFavourite: true)
+                } else if let tvShow = item as? TVShow {
+                    delegate?.detail(tvShow: tvShow, posterCell: cell, fromFavourite: true)
+                }
             }
         }
     }
@@ -542,7 +572,7 @@ extension MainVC: DataSourceDelegate {
         let dataSource = mainView.collectionView.dataSource as! DataSourceProtocol
         if dataSource.isEmpty {
             mainView.noResultFoundView.isHidden = false
-            mainView.setInfo(name: "", rating: nil, genres: [], date: nil)
+            mainView.setInfo(name: "noResultFound".localized, rating: nil, genres: [], date: nil)
         } else if !firstTimeDataLoading {
             mainView.collectionView.isUserInteractionEnabled = mainView.searchView.isHidden
             mainView.collectionView.alpha = 1

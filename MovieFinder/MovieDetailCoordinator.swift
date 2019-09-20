@@ -28,18 +28,32 @@ class MovieDetailCoordinator: BaseCoordinator {
 
     private var interactor = Interactor()
 
-    init(rootViewController: UIViewController, movie: Movie, posterCell: PosterCell, showSimilar: Bool = true) {
+    private var dismissPosterAnimationEnabled = true
+
+    init(rootViewController: UIViewController, movie: Movie, posterCell: PosterCell, showSimilar: Bool = true, fromFavourite: Bool = false) {
         self.rootViewController = rootViewController
         self.movie = movie
         self.posterCell = posterCell
         self.showSimilar = showSimilar
+        super.init()
+        if fromFavourite {
+            NotificationCenter.default.addObserver(self, selector: #selector(onFavouriteDeleted(_:)), name: .favouriteDeleted, object: nil)
+        }
     }
 
-    init(rootViewController: UIViewController, tvShow: TVShow, posterCell: PosterCell, showSimilar: Bool = true) {
+    init(rootViewController: UIViewController, tvShow: TVShow, posterCell: PosterCell, showSimilar: Bool = true, fromFavourite: Bool = false) {
         self.rootViewController = rootViewController
         self.tvShow = tvShow
         self.posterCell = posterCell
         self.showSimilar = showSimilar
+        super.init()
+        if fromFavourite {
+            NotificationCenter.default.addObserver(self, selector: #selector(onFavouriteDeleted(_:)), name: .favouriteDeleted, object: nil)
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func start() {
@@ -60,6 +74,21 @@ class MovieDetailCoordinator: BaseCoordinator {
             fatalError("MovieDetailCoordinator: MovieDetailVC no valid data")
         }
     }
+
+    @objc func onFavouriteDeleted(_ notification:Notification) {
+
+        if let object = notification.object {
+            if let movie = movie, let deletedMovie = object as? Movie {
+                if movie.id == deletedMovie.id {
+                    dismissPosterAnimationEnabled = false
+                }
+            } else if let tvShow = tvShow, let deletedTVShow = object as? TVShow {
+                if tvShow.id == deletedTVShow.id {
+                    dismissPosterAnimationEnabled = false
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Custom Transition (MainVC -> MovieDetailVC)
@@ -73,7 +102,7 @@ extension MovieDetailCoordinator: UIViewControllerTransitioningDelegate {
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         guard let _ = dismissed as? MovieDetailVC else { return nil }
-        return MovieDetailDismissTransition(posterCell: posterCell)
+        return MovieDetailDismissTransition(posterCell: posterCell, posterAnimationEnabled: dismissPosterAnimationEnabled)
     }
 
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

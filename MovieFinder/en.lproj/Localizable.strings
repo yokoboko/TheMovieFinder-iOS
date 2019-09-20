@@ -33,3 +33,5 @@
 "season" = "1 season";
 "episodes" = "{INT} episodes";
 "episode" = "1 episode";
+
+"allFavourites" = "All Favourites";

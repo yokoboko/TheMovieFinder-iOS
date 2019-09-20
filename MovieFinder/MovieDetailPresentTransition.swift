@@ -49,10 +49,10 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
             detailView.favouriteBtn.alpha = 0
             detailView.infoSV.alpha = 0
 
-            detailView.dismissBtn.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.posterInfoSV.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.favouriteBtn.transform = CGAffineTransform(translationX: 0, y: fromFrame.minY - toFrame.minY)
             detailView.infoSV.transform = CGAffineTransform(translationX: 0, y: fromFrame.maxY - toFrame.maxY)
+            detailView.dismissBtn.transform = CGAffineTransform(translationX: 0, y: fromFrame.maxY - toFrame.maxY)
             detailView.visualEffectView.effect = nil
             let damping: CGFloat = transitionContext.isInteractive ? 1.0 : 0.74
             UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 0, options: [.curveEaseOut], animations: {

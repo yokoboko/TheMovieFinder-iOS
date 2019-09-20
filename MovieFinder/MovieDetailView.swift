@@ -11,10 +11,13 @@ import UIKit
 class MovieDetailView: UIView {
 
     private let margin: CGFloat = 30
+    private let topMargin: CGFloat = 36
 
+    var fadeView: UIView!
+    var fadeGradient: CAGradientLayer!
     var posterView: UIView!
     var posterImageView: UIImageView!
-    var posterViewOriginalFrame: CGRect { return CGRect(x: safeInsets.left + margin, y: safeInsets.top + 48, width: 130, height: 195) }
+    var posterViewOriginalFrame: CGRect { return CGRect(x: safeInsets.left + margin, y: safeInsets.top + topMargin, width: 130, height: 195) }
     var posterTopConstraint: NSLayoutConstraint!
     var posterLeftConstraint: NSLayoutConstraint!
     var posterWidthConstraint: NSLayoutConstraint!
@@ -70,6 +73,14 @@ class MovieDetailView: UIView {
             self.layoutIfNeeded()
         }, completion: nil)
     }
+
+    func updateFade() {
+        fadeGradient.frame = fadeView.bounds
+        let height: Double = Double(fadeView.frame.height)
+        let topGradientPosition = NSNumber(value: Double(16) / height)
+        let bottomGradientPosition = NSNumber(value: Double(1.0) - (Double(80) / height))
+        fadeGradient.locations = [0, topGradientPosition, bottomGradientPosition, 1]
+    }
 }
 
 extension MovieDetailView {
@@ -77,6 +88,7 @@ extension MovieDetailView {
     private func setupViews() {
 
         setupBackgroundView()
+        setupFadeView()
         setupScrollView()
         setupPosterView()
         setupDismissButton()
@@ -105,12 +117,31 @@ extension MovieDetailView {
             ])
     }
 
+    private func setupFadeView() {
+
+        fadeView = UIView()
+        fadeView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(fadeView)
+
+        fadeGradient = CAGradientLayer()
+        fadeGradient.frame = fadeView.bounds
+        fadeGradient.colors = [UIColor.clear.cgColor, UIColor.black.cgColor, UIColor.black.cgColor, UIColor.clear.cgColor]
+        fadeView.layer.mask = fadeGradient
+
+        NSLayoutConstraint.activate([
+            fadeView.topAnchor.constraint(equalTo: safeTopAnchor),
+            fadeView.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -44),
+            fadeView.leftAnchor.constraint(equalTo: leftAnchor),
+            fadeView.rightAnchor.constraint(equalTo: rightAnchor),
+            ])
+    }
+
     private func setupScrollView() {
 
         scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = false
-        addSubview(scrollView)
+        fadeView.addSubview(scrollView)
         
         containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -119,10 +150,10 @@ extension MovieDetailView {
         let containerHeightAnchor = containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         containerHeightAnchor.priority = .defaultLow
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: safeTopAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: safeBottomAnchor),
-            scrollView.leftAnchor.constraint(equalTo: leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: rightAnchor),
+            scrollView.topAnchor.constraint(equalTo: fadeView.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: fadeView.bottomAnchor),
+            scrollView.leftAnchor.constraint(equalTo: fadeView.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: fadeView.rightAnchor),
 
             containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -135,15 +166,10 @@ extension MovieDetailView {
 
     private func setupPosterView() {
 
-        let posterClipContainer = UIView() // clip layer for safe top
-        posterClipContainer.translatesAutoresizingMaskIntoConstraints = false
-        posterClipContainer.clipsToBounds = true
-        posterClipContainer.isUserInteractionEnabled = false
-        addSubview(posterClipContainer)
-
         posterView = UIView()
         posterView.translatesAutoresizingMaskIntoConstraints = false
-        posterClipContainer.addSubview(posterView)
+        posterView.isUserInteractionEnabled = false
+        fadeView.addSubview(posterView)
 
         let shadowImage = UIImage(named: "shadow")?.resizableImage(withCapInsets: UIEdgeInsets(top: 20, left: 33, bottom: 39, right: 33), resizingMode: .stretch)
         let imageShadowView = UIImageView(image: shadowImage)
@@ -177,11 +203,6 @@ extension MovieDetailView {
 
         NSLayoutConstraint.activate([
 
-            posterClipContainer.topAnchor.constraint(equalTo: safeTopAnchor),
-            posterClipContainer.bottomAnchor.constraint(equalTo: safeBottomAnchor),
-            posterClipContainer.leftAnchor.constraint(equalTo: safeLeftAnchor),
-            posterClipContainer.rightAnchor.constraint(equalTo: safeRightAnchor),
-
             posterTopConstraint,
             posterLeftConstraint,
             posterWidthConstraint,
@@ -201,26 +222,27 @@ extension MovieDetailView {
 
     private func setupDismissButton() {
 
-        dismissBtn = UIButton()
-        dismissBtn.setImage(UIImage(named: "icon_swipe_down"), for: .normal)
-        dismissBtn.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(dismissBtn)
-
         posterDismissBtn = UIButton()
         posterDismissBtn.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(posterDismissBtn)
 
+        dismissBtn = UIButton(type: .custom)
+        dismissBtn.translatesAutoresizingMaskIntoConstraints = false
+        dismissBtn.setImage(UIImage(named: "btn_close"), for: .normal)
+        addSubview(dismissBtn)
+
         let posterFrame = posterViewOriginalFrame
         NSLayoutConstraint.activate([
-            dismissBtn.widthAnchor.constraint(equalToConstant: 44),
-            dismissBtn.heightAnchor.constraint(equalToConstant: 44),
-            dismissBtn.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            dismissBtn.topAnchor.constraint(equalTo: containerView.topAnchor),
 
             posterDismissBtn.widthAnchor.constraint(equalToConstant: posterFrame.width),
             posterDismissBtn.heightAnchor.constraint(equalToConstant: posterFrame.height),
             posterDismissBtn.topAnchor.constraint(equalTo: containerView.topAnchor, constant: posterFrame.minY - safeInsets.top),
-            posterDismissBtn.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: posterFrame.minX - safeInsets.left)
+            posterDismissBtn.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: posterFrame.minX - safeInsets.left),
+
+            dismissBtn.widthAnchor.constraint(equalToConstant: 44),
+            dismissBtn.heightAnchor.constraint(equalToConstant: 44),
+            dismissBtn.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            dismissBtn.bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -6),
             ])
     }
 
@@ -296,7 +318,7 @@ extension MovieDetailView {
         posterInfoSV.addArrangedSubview(homepageBtn)
 
         NSLayoutConstraint.activate([
-            posterInfoSV.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 48),
+            posterInfoSV.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topMargin - 4),
             //posterInfoSV.leftAnchor.constraint(equalTo: posterView.rightAnchor, constant: 20),
             posterInfoSV.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: posterViewOriginalFrame.maxX + 20),
             posterInfoSV.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -(margin * 2) - posterViewOriginalFrame.width -  20),
@@ -348,7 +370,7 @@ extension MovieDetailView {
         NSLayoutConstraint.activate([
             infoSV.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             infoSV.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            infoSV.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 48 + 195 + 24),
+            infoSV.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topMargin + 195 + 24),
             infoSV.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -40)
             ])
     }
