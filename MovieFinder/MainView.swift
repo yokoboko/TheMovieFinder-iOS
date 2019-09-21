@@ -53,8 +53,8 @@ class MainView: UIView {
     let collectionViewBottomMarginCoverFlow: CGFloat = -128
     let collectionViewBottomMarginFlow: CGFloat = -64
 
-    let filterViewMargin: CGFloat = 6
-    
+    let filterViewOpenOffset: CGFloat = -(170 + 6) // 170 height - 6 margin
+
     private var coverFlowLayoutMode = true
     var isCoverFlowLayout: Bool {
         get {
@@ -345,10 +345,10 @@ extension MainView {
         addSubview(searchView)
 
         NSLayoutConstraint.activate([
-            searchView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 16),
+            searchView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 38),
             searchView.leftAnchor.constraint(equalTo: leftAnchor),
             searchView.rightAnchor.constraint(equalTo: rightAnchor),
-            searchView.heightAnchor.constraint(equalToConstant: 58)
+            searchView.heightAnchor.constraint(equalToConstant: 80)
             ])
     }
 }

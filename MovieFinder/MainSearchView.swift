@@ -65,7 +65,7 @@ extension MainSearchView {
 
             searchField.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: 16),
             searchField.rightAnchor.constraint(equalTo: safeRightAnchor, constant: -16),
-            searchField.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -8)
+            searchField.topAnchor.constraint(equalTo: topAnchor, constant: 12)
             ])
     }
 }

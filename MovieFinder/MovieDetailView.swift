@@ -17,7 +17,7 @@ class MovieDetailView: UIView {
     var fadeGradient: CAGradientLayer!
     var posterView: UIView!
     var posterImageView: UIImageView!
-    var posterViewOriginalFrame: CGRect { return CGRect(x: safeInsets.left + margin, y: safeInsets.top + topMargin, width: 130, height: 195) }
+    var posterViewOriginalFrame: CGRect { return CGRect(x: margin, y: topMargin, width: 130, height: 195) }
     var posterTopConstraint: NSLayoutConstraint!
     var posterLeftConstraint: NSLayoutConstraint!
     var posterWidthConstraint: NSLayoutConstraint!
@@ -196,8 +196,8 @@ extension MovieDetailView {
 
         let originalFrame = posterViewOriginalFrame
 
-        posterTopConstraint = posterView.topAnchor.constraint(equalTo: topAnchor, constant: originalFrame.minY)
-        posterLeftConstraint =  posterView.leftAnchor.constraint(equalTo: leftAnchor, constant: originalFrame.minX)
+        posterTopConstraint = posterView.topAnchor.constraint(equalTo: safeTopAnchor, constant: originalFrame.minY)
+        posterLeftConstraint =  posterView.leftAnchor.constraint(equalTo: safeLeftAnchor, constant: originalFrame.minX)
         posterWidthConstraint = posterView.widthAnchor.constraint(equalToConstant: originalFrame.width)
         posterHeightConstraint = posterView.heightAnchor.constraint(equalToConstant: originalFrame.height)
 

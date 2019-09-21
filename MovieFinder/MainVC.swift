@@ -23,7 +23,6 @@ class MainVC: UIViewController {
     
     private var firstTimeDataLoading = true
 
-    private var hideKeyboardOnTap: UITapGestureRecognizer?
     private var movieSearchTerm = ""
     private var tvShowsSearchTerm = ""
     private let searchThrottler = Throttler(minimumDelay: 0.5)
@@ -89,6 +88,8 @@ class MainVC: UIViewController {
     }
 
     private func selectSection(section: MovieSection) {
+
+        if mainView.searchView.searchField.isFirstResponder { return }
 
         self.section = section
 
@@ -378,40 +379,43 @@ extension MainVC {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name:UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    }
 
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        gesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(gesture)
-        hideKeyboardOnTap = gesture
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        dismissKeyboard()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self)
-        if let gesture = hideKeyboardOnTap {
-            view.removeGestureRecognizer(gesture)
-            hideKeyboardOnTap = nil
-        }
     }
 
     @objc private func keyboardNotification(notification: Notification) {
 
-        if notification.name == UIResponder.keyboardWillShowNotification { // Show search bar
+        guard let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+
+        if notification.name == UIResponder.keyboardWillShowNotification
+            || notification.name == UIResponder.keyboardWillChangeFrameNotification { // Show search bar
             mainView.collectionView.isUserInteractionEnabled = false
             mainView.searchView.isHidden = false
             mainView.searchView.alpha = 1
-        } else if notification.name == UIResponder.keyboardWillHideNotification { // Hide searchBar
+
+            let isHardwareKeyboard = keyboardRect.maxY > view.frame.height // fix for hardware keyboards
+            if isHardwareKeyboard {
+                mainView.searchView.transform = CGAffineTransform(translationX: 0, y: -view.safeInsets.bottom)
+            } else {
+                mainView.searchView.transform = CGAffineTransform(translationX: 0, y: -keyboardRect.height)
+            }
+        } else if notification.name == UIResponder.keyboardWillHideNotification
+            && (keyboardRect.height > 100 || keyboardRect.height == 0) // hardware keyboard fix
+            { // Hide searchBar
             mainView.searchView.isHidden = true
             mainView.searchView.alpha = 0
             mainView.collectionView.isUserInteractionEnabled = !(mainView.collectionView.dataSource as! DataSourceProtocol).isLoadingData
             if hideFilterMenuOnChange {
                 mainView.hideFilter()
             }
-        }
-        guard let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
-            mainView.searchView.transform = CGAffineTransform(translationX: 0, y: -keyboardRect.height)
-        } else {
             mainView.searchView.transform = CGAffineTransform(translationX: 0, y: 0)
         }
     }

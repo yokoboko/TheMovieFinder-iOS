@@ -34,7 +34,12 @@ class MovieDetailPresentTransition: NSObject, UIViewControllerAnimatedTransition
 
             let detailView = movieDetailVC.detailView
 
-            let fromFrame = posterCell.imageView.convert(posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
+            let safeAreaInsets = UIApplication.shared.keyWindow?.safeInsets ?? UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            let cellFrameToWindow = posterCell.imageView.convert(posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
+            let fromFrame = CGRect(x: cellFrameToWindow.minX - safeAreaInsets.left,
+                                   y: cellFrameToWindow.minY - safeAreaInsets.top,
+                                   width: cellFrameToWindow.width,
+                                   height: cellFrameToWindow.height)
             let toFrame = movieDetailVC.detailView.posterViewOriginalFrame
 
             detailView.posterTopConstraint.constant = fromFrame.minY

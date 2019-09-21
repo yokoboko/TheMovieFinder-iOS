@@ -52,7 +52,12 @@ class MovieDetailDismissTransition: NSObject, UIViewControllerAnimatedTransition
                                         duration: TimeInterval) {
 
         let detailView = movieDetailVC.detailView
-        let toFrame = posterCell.imageView.convert(posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
+        let safeAreaInsets = UIApplication.shared.keyWindow?.safeInsets ?? UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let cellFrameToWindow = posterCell.imageView.convert(posterCell.imageView.frame, to: UIApplication.shared.keyWindow)
+        let toFrame = CGRect(x: cellFrameToWindow.minX - safeAreaInsets.left,
+                               y: cellFrameToWindow.minY - safeAreaInsets.top,
+                               width: cellFrameToWindow.width,
+                               height: cellFrameToWindow.height)
 
         let originalFrame = detailView.posterViewOriginalFrame
         detailView.posterTopConstraint.constant = originalFrame.minY

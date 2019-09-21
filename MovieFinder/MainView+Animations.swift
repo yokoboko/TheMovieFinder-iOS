@@ -142,7 +142,7 @@ extension MainView {
             isFilterHidden = false
 
             filterView.isUserInteractionEnabled = true
-            filterViewTopConstraint.constant = -filterView.frame.height - filterViewMargin
+            filterViewTopConstraint.constant = filterViewOpenOffset
 
             collectionViewBottomConstraint.constant = collectionViewBottomMarginFilters
             if !isCoverFlowLayout {
@@ -258,7 +258,7 @@ extension MainView {
         let translationY = recognizer.translation(in: self).y + filterDragShift
         let velocityY = recognizer.velocity(in: self).y
         let limitDown: CGFloat = isFilterHidden ? 42 : 16
-        let limitUp = -filterView.frame.height - filterViewMargin
+        let limitUp = filterViewOpenOffset
 
         if velocityY < 0 {
             filterDragDirectionUp = true
