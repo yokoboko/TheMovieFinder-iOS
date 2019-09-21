@@ -412,7 +412,7 @@ extension MainView {
     }
     
     func scrollToTop() {
-        if collectionView.contentOffset.x >= collectionView.bounds.width {
+        if collectionView.contentOffset.x > 0 {
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
             if coverFlowLayoutMode { coverFlowLayout.updateFocusedToFirstItem() }
         }

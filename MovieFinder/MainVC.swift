@@ -14,7 +14,7 @@ class MainVC: UIViewController {
     
     let mainView = MainView()
 
-    private var section: MovieSection = .movies // Default
+    private var section: MovieSection = .favourites // Default
 
     // Data Sources for collection view(Movies, TV Shows and Favourites)
     private var movieDataSource: MovieDataSource!

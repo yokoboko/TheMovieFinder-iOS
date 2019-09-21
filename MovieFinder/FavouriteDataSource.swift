@@ -64,7 +64,7 @@ class FavouriteDataSource: NSObject, DataSourceProtocol {
     @objc func onFavouriteAdded(_ notification:Notification) {
 
         if let object = notification.object {
-             delegate?.dataIsLoading()
+            delegate?.dataIsLoading()
             items.insert(object, at: 0)
             if favouriteFilter == .movies, let _ = object as? Movie {
                 filteredItems.insert(object, at: 0)
@@ -75,6 +75,7 @@ class FavouriteDataSource: NSObject, DataSourceProtocol {
                 collectionView.insertItems(at: [IndexPath(item: 0, section: 0)])
             }
             delegate?.dataLoaded()
+            updateItemOnFocus()
         }
     }
 
@@ -118,7 +119,8 @@ class FavouriteDataSource: NSObject, DataSourceProtocol {
                     }
                 }
             }
-             delegate?.dataLoaded()
+            delegate?.dataLoaded()
+            updateItemOnFocus()
         }
     }
 
