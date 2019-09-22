@@ -41,7 +41,7 @@ extension ImageDataSource: UICollectionViewDataSource {
         let item = items[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.reuseIdentifier, for: indexPath) as! ImageCell
         if let imagePath = item.filePath {
-            cell.loadImage(imageURL: MovieImagePath.backdropMedium.path(poster: imagePath) )
+            cell.loadImage(imageURL: MovieImagePath.xlarge.path(poster: imagePath) )
         }
         return cell
     }

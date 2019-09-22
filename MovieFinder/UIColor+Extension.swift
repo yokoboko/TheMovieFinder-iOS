@@ -25,7 +25,7 @@ extension UIColor {
 extension UIColor {
     struct movieFinder {
         static let primary = UIColor.white
-        static let secondary = UIColor.white.withAlphaComponent(0.85) // .74
-        static let tertiery = UIColor.white.withAlphaComponent(0.60) // .42
+        static let secondary = UIColor.white.withAlphaComponent(0.9) // .74
+        static let tertiery = UIColor.white.withAlphaComponent(0.7) // .42
     }
 }

@@ -192,9 +192,9 @@ class MovieDataSource: NSObject, DataSourceProtocol {
 
     private func imageURLForPosterPath(_ path: String) -> URL {
         if let _ = collectionView.collectionViewLayout as? CoverFlowLayout {
-            return MovieImagePath.large.path(poster: path)
+            return UIDevice.current.userInterfaceIdiom == .pad ? MovieImagePath.xlarge.path(poster: path) : MovieImagePath.large.path(poster: path)
         }
-        return MovieImagePath.medium.path(poster: path)
+        return UIDevice.current.userInterfaceIdiom == .pad ?  MovieImagePath.large.path(poster: path) : MovieImagePath.medium.path(poster: path)
     }
 }
 
