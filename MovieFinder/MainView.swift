@@ -126,6 +126,8 @@ extension MainView {
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleFilterShowHidePanGesture))
         addGestureRecognizer(panGestureRecognizer)
 
+        coverFlowLayoutMode = !(UIDevice.current.userInterfaceIdiom == .pad)
+
         self.backgroundColor = .black
         setupBackgroundView()
         setupBottomFilterView()
@@ -194,12 +196,14 @@ extension MainView {
     }
     
     private func setupCollectionView() {
-        
-        collectionView = UICollectionView(frame: frame, collectionViewLayout: coverFlowLayout)
+
+        collectionView = UICollectionView(frame: frame,
+                                          collectionViewLayout: coverFlowLayoutMode ? coverFlowLayout : flowLayout)
         collectionView.delaysContentTouches = false
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.clipsToBounds = false
+        collectionView.showsHorizontalScrollIndicator = false
         addSubview(collectionView)
         collectionView.isPrefetchingEnabled = true
         
@@ -215,8 +219,10 @@ extension MainView {
 
         guard collectionViewHeightConstraint == nil else { return }
 
-        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: safeAreaFrame.height - collectionViewHeightCoverFlowMargin)
-        collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: collectionViewBottomMarginCoverFlow)
+        let height = coverFlowLayoutMode ? collectionViewHeightCoverFlowMargin : collectionViewHeightFlowMargin
+        let bottom = coverFlowLayoutMode ? collectionViewBottomMarginCoverFlow : collectionViewBottomMarginFlow
+        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: safeAreaFrame.height - height)
+        collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: bottom)
 
         NSLayoutConstraint.activate([
             collectionViewHeightConstraint,
@@ -253,6 +259,12 @@ extension MainView {
         infoNameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         infoNameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         addSubview(infoNameLabel)
+
+        if coverFlowLayoutMode {
+            infoNameLabel.alpha = 0
+            infoRatingLabel.alpha = 0
+            infoGenresLabel.alpha = 0
+        }
 
         NSLayoutConstraint.activate([
             infoGenresLabel.bottomAnchor.constraint(equalTo: filterView.topAnchor, constant: -64),

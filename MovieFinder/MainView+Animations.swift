@@ -52,9 +52,11 @@ extension MainView {
         sectionLabel.transform = CGAffineTransform(translationX: 0, y: 32)
         filterLabel.transform = CGAffineTransform(translationX: 0, y: 32)
         collectionView.transform = CGAffineTransform(translationX: 0, y: 56)
-        infoNameLabel.transform = CGAffineTransform(translationX: 0, y: 66)
-        infoRatingLabel.transform = CGAffineTransform(translationX: 0, y: 66)
-        infoGenresLabel.transform = CGAffineTransform(translationX: 0, y: 74)
+        if !(UIDevice.current.userInterfaceIdiom == .pad) {
+            infoNameLabel.transform = CGAffineTransform(translationX: 0, y: 66)
+            infoRatingLabel.transform = CGAffineTransform(translationX: 0, y: 66)
+            infoGenresLabel.transform = CGAffineTransform(translationX: 0, y: 74)
+        }
         scrollToTopContainer.transform = CGAffineTransform(translationX: 0, y: 80)
         toggleLayoutBtn.transform = CGAffineTransform(translationX: 0, y: 80)
         filtersBtn.transform = CGAffineTransform(translationX: 0, y: 80)
@@ -66,12 +68,14 @@ extension MainView {
             self.filterLabel.transform = .identity
             self.collectionView.alpha = 1
             self.collectionView.transform = .identity
-            self.infoNameLabel.alpha = 1
-            self.infoNameLabel.transform = .identity
-            self.infoRatingLabel.alpha = 1
-            self.infoRatingLabel.transform = .identity
-            self.infoGenresLabel.alpha = 1
-            self.infoGenresLabel.transform = .identity
+            if !(UIDevice.current.userInterfaceIdiom == .pad) {
+                self.infoNameLabel.alpha = 1
+                self.infoNameLabel.transform = .identity
+                self.infoRatingLabel.alpha = 1
+                self.infoRatingLabel.transform = .identity
+                self.infoGenresLabel.alpha = 1
+                self.infoGenresLabel.transform = .identity
+            }
             self.scrollToTopContainer.alpha = 1
             self.scrollToTopContainer.transform = .identity
             self.toggleLayoutBtn.alpha = 1
