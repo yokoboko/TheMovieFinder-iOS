@@ -15,7 +15,7 @@
  - **[Nuke] library for loading and caching images**
  - **Designed in Adobe XD**
 
-
+<a href='https://apps.apple.com/us/app/the-movie-finder/id1480979399'><img alt='Download on the App Store' img src='https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg' width="152" height="45"/></a>
 
 ## Design
 
