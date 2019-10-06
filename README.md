@@ -1,5 +1,5 @@
 
-# Movie Finder (iOS)
+# The Movie Finder (iOS)
 
 **An iOS application to find and manage movies you would like to see.**
 
